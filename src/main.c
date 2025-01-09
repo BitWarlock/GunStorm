@@ -26,7 +26,7 @@ int	find(char *str, char *substr)
 void	texture_error(char *error)
 {
 	ft_printf(2, RED"Error\n");
-	ft_printf(2, "%s texture file not provided\n"RESET, error);
+	ft_printf(2, "%s texture file either missing or invalid\n"RESET, error);
 	exit(EXIT_FAILURE);
 }
 
@@ -40,7 +40,7 @@ void	fatal_error(char *error, char *msg)
 	exit(EXIT_FAILURE);
 }
 
-void	validate_file(char *str, char *texture)
+char	*get_file_name(char *str, char *texture)
 {
 	int		i;
 	int		fd;
@@ -52,18 +52,59 @@ void	validate_file(char *str, char *texture)
 		i++;
 	tmp = ft_substr(str, 0, i);
 	file = ft_strtrim(tmp, " \n\t");
+	if (!tmp || !file)
+		fatal_error("malloc", strerror(errno));
 	free(tmp);
 	fd = open(file, O_RDONLY);
-	if (fd == -1)
-		fatal_error(file, strerror(errno));
-	free(file);
+	if (fd != -1)
+		return (file);
+	return (free(file), NULL);
 }
 
-void	validate_textures(char *str)
+char	*find_substr(char *str, char *substr)
 {
+	char	*next_tmp;
+	char	*file;
+	char	*tmp;
+	int		start;
+
+	tmp = ft_strdup(str);
+	if (!tmp)
+		fatal_error("malloc", strerror(errno));
+	start = find(tmp, substr);
+	while (start != -1)
+	{
+		file = get_file_name(tmp + start + 2, substr);
+		if (file)
+			return (free(tmp), file);
+		next_tmp = ft_substr(tmp, start + 2, ft_strlen(tmp));
+		if (!next_tmp)
+			fatal_error("malloc", strerror(errno));
+		free(tmp);
+		tmp = next_tmp;
+		start = find(tmp, substr);
+	}
+	return (free(tmp), NULL);
+}
+
+void	fill_texture_file(t_game *gunstorm, char *file, char texture)
+{
+	if (texture == 'N')
+		gunstorm->texture.north = file;
+	if (texture == 'S')
+		gunstorm->texture.south = file;
+	if (texture == 'W')
+		gunstorm->texture.west = file;
+	if (texture == 'E')
+		gunstorm->texture.east = file;
+}
+
+void	validate_textures(char *str, t_game *gunstorm)
+{
+	char	*textures[5];
+	char	*file;
 	int		start;
 	int		i;
-	char	*textures[5];
 
 	textures[0] = "NO";
 	textures[1] = "SO";
@@ -72,16 +113,15 @@ void	validate_textures(char *str)
 	i = 0;
 	while (i < 4)
 	{
-		start = find(str, textures[i]);
-		if (start != -1)
-			validate_file(str + start + 2, textures[i]);
-		else
+		file = find_substr(str, textures[i]);
+		if (!file)
 			texture_error(textures[i]);
+		fill_texture_file(gunstorm, file, textures[i][0]);
 		i++;
 	}
 }
 
-void	map_validation(int map_fd)
+char	*get_map_content(int map_fd)
 {
 	char	*map;
 	char	*str;
@@ -89,19 +129,163 @@ void	map_validation(int map_fd)
 
 	map = ft_strdup("");
 	if (!map)
-		return;
+		fatal_error("malloc", strerror(errno));
 	str = get_next_line(map_fd);
 	while (str)
 	{
 		tmp = map;
 		map = ft_strjoin(map, str);
+		if (!map)
+			fatal_error("malloc", strerror(errno));
 		free(tmp);
 		free(str);
 		str = get_next_line(map_fd);
 	}
-	/*printf("map\n%s", map);*/
-	validate_textures(map);
+	return (map);
+}
+
+void	free_game(t_game *gunstorm)
+{
+	free(gunstorm->texture.north);
+	free(gunstorm->texture.east);
+	free(gunstorm->texture.south);
+	free(gunstorm->texture.west);
+	free(gunstorm);
+}
+
+char	*get_color_line(char *map)
+{
+	int		i;
+	int		comma;
+	char	*line;
+
+	i = 0;
+	comma = 0;
+	while (map[i] && map[i] != '\n')
+		i++;
+	line = ft_substr(map, 0, i);
+	i = -1;
+	while (line[++i])
+		if (line[i] == ',')
+			comma++;
+	if (comma == 2)
+		return (line);
+	return (free(line), NULL);
+}
+
+char	*find_color_values(char *map, char *substr)
+{
+	char	*next_tmp;
+	char	*file;
+	char	*tmp;
+	int		start;
+
+	tmp = ft_strdup(map);
+	if (!tmp)
+		fatal_error("malloc", strerror(errno));
+	start = find(tmp, substr);
+	while (start != -1)
+	{
+		file = get_color_line(tmp + start + 1);
+		if (file)
+			return (free(tmp), file);
+		next_tmp = ft_substr(tmp, start + 1, ft_strlen(tmp));
+		if (!next_tmp)
+			fatal_error("malloc", strerror(errno));
+		free(tmp);
+		tmp = next_tmp;
+		start = find(tmp, substr);
+	}
+	return (free(tmp), NULL);
+}
+
+char	*color_string(char *color)
+{
+	int	i;
+	int	e;
+	int	s;
+
+	s = 0;
+	while (color[s] && (color[s] == ' ' || color[s] == '\t'))
+		s++;
+	e = s;
+	while (color[e] && ft_isdigit(color[e]))
+		e++;
+	i = e;
+	while (color[i] && (color[i] == ' ' || color[i] == '\t'))
+		i++;
+	if (color[i] != '\0')
+		return (NULL);
+	return (ft_substr(color, s, e - s));
+}
+
+int	color_value(char *color)
+{
+	int		value;
+	char	*color_value;
+
+	color_value = color_string(color);
+	if (!color_value || !color_value[0]
+		|| ft_strlen(color_value) > 3)
+		return (free(color_value), -1);
+	value = ft_atoi(color);
+	return (free(color_value), value);
+}
+
+void	free_split(char **strs)
+{
+	int	i;
+
+	i = -1;
+	while (strs[++i])
+		free(strs[i]);
+	free(strs);
+}
+
+t_rgb	get_color_values(char *line)
+{
+	t_rgb	values;
+	char	**colors;
+
+	colors = ft_split(line, ',');
+	if (!colors)
+		(free(line)), fatal_error("malloc", strerror(errno));
+	if (!colors[0] || !colors[1] || !colors[2])
+		return (free(line), free_split(colors), (t_rgb){-1, -1, -1});
+	values.r = color_value(colors[0]);
+	values.g = color_value(colors[1]);
+	values.b = color_value(colors[2]);
+	if (values.r > 255 || values.r < 0
+		|| values.g > 255 || values.g < 0
+		|| values.b > 255 || values.b < 0)
+		return (free(line), free_split(colors), (t_rgb){-1, -1, -1});
+	return (free(line), free_split(colors), values);
+}
+
+void	validate_colors(char *map, t_game *gunstorm)
+{
+	t_rgb	floor;
+	t_rgb	ceiling;
+
+	floor = get_color_values(find_color_values(map, "F"));
+	if (floor.r == -1)
+		fatal_error("Floor color either missing or invalid", 0);
+	ceiling = get_color_values(find_color_values(map, "C"));
+	if (ceiling.r == -1)
+		fatal_error("Ceiling color either missing or invalid", 0);
+	gunstorm->floor = floor;
+	gunstorm->ceiling = ceiling;
+}
+
+void	map_content_validation(int map_fd, t_game *gunstorm)
+{
+	char	*map;
+
+	map = get_map_content(map_fd);
+	validate_textures(map, gunstorm);
+	validate_colors(map, gunstorm);
 	free(map);
+	free_game(gunstorm);
 }
 
 void	input_validation(char *argv[])
@@ -115,18 +299,36 @@ void	input_validation(char *argv[])
 		fatal_error("Too many arguments.\nUsage: ./cub3D ./map_file.cub", 0);
 	ext = ft_substr(argv[1], ft_strlen(argv[1]) - 4, 4);
 	if (ft_strncmp(ext, ".cub", 4))
-		fatal_error("The file extension must be '.cub'", 0);
+		(free(ext)), fatal_error("The file extension must be '.cub'", 0);
 	free(ext);
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
 		fatal_error(argv[1], strerror(errno));
-	map_validation(fd);
 	close(fd);
+}
+
+void	input_parsing(char *map_file, t_game *gunstorm)
+{
+	int	fd;
+
+	fd = open(map_file, O_RDONLY);
+	map_content_validation(fd, gunstorm);
+	close(fd);
+}
+
+void	start_game(char *map_file)
+{
+	t_game	*gunstorm;
+
+	gunstorm = malloc(sizeof(t_game));
+	if (!gunstorm)
+		fatal_error("malloc", strerror(errno));
+	input_parsing(map_file, gunstorm);
 }
 
 int	main(int argc, char *argv[])
 {
 	input_validation(argv);
-	/*input_parsing();*/
-	return EXIT_SUCCESS;
+	start_game(argv[1]);
+	return (EXIT_SUCCESS);
 }
