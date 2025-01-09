@@ -62,6 +62,14 @@ CFLAGS_R += -L/Users/$(USER)/.brew/opt/readline/lib
 	# @printf "%b\n" "$(value MINISHELL_ART)"
 	# @echo "\t\t\t$(GREEN)IS READY$(RESET)"
 all: $(NAME)
+	@printf "\n"
+	@printf "$(GREEN)██████╗  ██████╗ ███╗   ██╗███████╗██╗\n"
+	@printf "██╔══██╗██╔═══██╗████╗  ██║██╔════╝██║\n"
+	@printf "██║  ██║██║   ██║██╔██╗ ██║█████╗  ██║\n"
+	@printf "██║  ██║██║   ██║██║╚██╗██║██╔══╝  ╚═╝\n"
+	@printf "██████╔╝╚██████╔╝██║ ╚████║███████╗██╗\n"
+	@printf "╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚══════╝╚═╝$(RESET)\n"
+	@printf "\n$(TEAL)$(BOLD)$(NAME) is ready!$(RESET)\n\n"
 
 libft: $(LIBFT)
 
@@ -76,7 +84,7 @@ $(LIBFT):
 	@$(MAKE) -sC $(LIB_DIR)
 
 clean:
-	@echo "$(RED)Cleaning up...$(RESET)"
+	@echo "$(RED)Cleaning up $(NAME)...$(RESET)"
 	$(CLEAN_LOADING)
 	@$(RM) $(MAIN_OBJ)
 	@$(MAKE) -sC libft/ clean
