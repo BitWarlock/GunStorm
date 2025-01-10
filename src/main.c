@@ -1,6 +1,8 @@
 #include "../include/gunstorm.h"
 #include <errno.h>
 
+void	free_game(t_game *gunstorm);
+
 #define RED "\e[0;31m"
 #define RESET "\e[0m"
 
@@ -99,7 +101,19 @@ void	fill_texture_file(t_game *gunstorm, char *file, char texture)
 		gunstorm->texture.east = file;
 }
 
-void	validate_textures(char *str, t_game *gunstorm)
+void	free_textures(char *map, t_game *gunstorm, int index)
+{
+	if (index >= 1)
+		free(gunstorm->texture.north);
+	if (index >= 2)
+		free(gunstorm->texture.south);
+	if (index >= 3)
+		free(gunstorm->texture.west);
+	free(gunstorm);
+	free(map);
+}
+
+void	validate_textures(char *map, t_game *gunstorm)
 {
 	char	*textures[5];
 	char	*file;
@@ -113,9 +127,9 @@ void	validate_textures(char *str, t_game *gunstorm)
 	i = 0;
 	while (i < 4)
 	{
-		file = find_substr(str, textures[i]);
+		file = find_substr(map, textures[i]);
 		if (!file)
-			texture_error(textures[i]);
+			(free_textures(map, gunstorm, i)), texture_error(textures[i]);
 		fill_texture_file(gunstorm, file, textures[i][0]);
 		i++;
 	}
@@ -269,12 +283,137 @@ void	validate_colors(char *map, t_game *gunstorm)
 
 	floor = get_color_values(find_color_values(map, "F"));
 	if (floor.r == -1)
-		fatal_error("Floor color either missing or invalid", 0);
+		(free_game(gunstorm)), free(map),
+			fatal_error("Floor color either missing or invalid", 0);
 	ceiling = get_color_values(find_color_values(map, "C"));
 	if (ceiling.r == -1)
-		fatal_error("Ceiling color either missing or invalid", 0);
+		(free_game(gunstorm)), free(map),
+			fatal_error("Ceiling color either missing or invalid", 0);
 	gunstorm->floor = floor;
 	gunstorm->ceiling = ceiling;
+}
+
+void	print_gunstorm(t_game *gunstorm)
+{
+	printf("Textures:\n\nNorth: %s\nSouth: %s\nWest: %s\nEast: %s\n\n",
+		gunstorm->texture.north, gunstorm->texture.south,
+		gunstorm->texture.west, gunstorm->texture.east);
+	printf("Ceiling color:\t(%3d, %3d, %3d)\n", gunstorm->ceiling.r,
+		gunstorm->ceiling.g, gunstorm->ceiling.b);
+	printf("Floor color:\t(%3d, %3d, %3d)\n", gunstorm->floor.r,
+		gunstorm->floor.g, gunstorm->floor.b);
+}
+
+bool	valid_map_char(char a)
+{
+	return (a == ' ' || a == '1'
+		|| a == '0' || a == 'E'
+		|| a == 'W' || a == 'N'
+		|| a == 'S');
+}
+
+bool	empty_line(char *line, int s)
+{
+	while (line[s] && line[s] != '\n')
+	{
+		if (line[s] != ' ')
+			return (false);
+		s++;
+	}
+	return (true);
+}
+
+int	check_line(char *line, int s)
+{
+	int	i;
+
+	if (empty_line(line, s))
+		return (-1);
+	i = s;
+	while (line[i] && line[i] != '\n')
+	{
+		if (!valid_map_char(line[i]))
+			return (-1);
+		i++;
+	}
+	return (s);
+}
+
+bool	player_char(char a)
+{
+	return (a == 'E'
+		|| a == 'S' || a == 'W'
+		|| a == 'N');
+}
+
+char	*get_map(char *scene)
+{
+	int	start;
+	int	i;
+
+	i = 0;
+	start = -1;
+	while (scene[i])
+	{
+		if (scene[i] == '\n')
+			start = check_line(scene, i + 1);
+		if (start != -1)
+			break ;
+		i++;
+	}
+	if (start == -1)
+		return (NULL);
+	return (ft_strtrim(scene + start, " \n"));
+}
+
+void	map_error(char *error_msg,
+			t_game *gunstorm, char *map, char *scene)
+{
+	free_game(gunstorm);
+	free(scene);
+	free(map);
+	ft_printf(2, RED"Error\n");
+	ft_printf(2, "Map error: %s\n"RESET, error_msg);
+	exit(EXIT_FAILURE);
+}
+
+int	validate_map_chars(char*scene, char *map, t_game *gunstorm)
+{
+	int	player;
+	int	i;
+
+	i = 0;
+	player = 0;
+	while (map[i])
+	{
+		if (map[i] == '\n' && map[i + 1] == '\n')
+			map_error("Empty lines not allowed", gunstorm, map, scene);
+		if (player_char(map[i]))
+			player++;
+		if (!valid_map_char(map[i]) && map[i] != '\n')
+			map_error("Invalid character detected. Map should only contain:\n"
+				"- 0 for empty space\n"
+				"- 1 for walls\n"
+				"- N, E, S, or W for player direction", gunstorm, map, scene);
+		i++;
+	}
+	return (player);
+}
+
+void	validate_map(char *scene, t_game *gunstorm)
+{
+	int		player;
+	char	*map;
+
+	map = get_map(scene);
+	if (!map)
+		map_error("Empty map", gunstorm, map, scene);
+	player = validate_map_chars(scene, map, gunstorm);
+	if (player == 0)
+		map_error("Missing player start position", gunstorm, map, scene);
+	if (player > 1)
+		map_error("Multiple player positions found", gunstorm, map, scene);
+	free(map);
 }
 
 void	map_content_validation(int map_fd, t_game *gunstorm)
@@ -284,6 +423,8 @@ void	map_content_validation(int map_fd, t_game *gunstorm)
 	map = get_map_content(map_fd);
 	validate_textures(map, gunstorm);
 	validate_colors(map, gunstorm);
+	validate_map(map, gunstorm);
+	/*print_gunstorm(gunstorm);*/
 	free(map);
 	free_game(gunstorm);
 }
