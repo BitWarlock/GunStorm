@@ -49,14 +49,6 @@ define CLEAN_LOADING
 	printf "\n"
 endef
 
-define MINISHELL_ART
-\n\033[38;5;214;7m\033[0m\
-\t\t\033[33;92;1m╔╦╗╦╔╗╔╦╔═╗╦ ╦╔═╗╦  ╦  \033[0m\n\
-\t\t\033[33;92;1m║║║║║║║║╚═╗╠═╣║╣ ║  ║  \033[0m\n\
-\t\t\033[33;92;1m╩ ╩╩╝╚╝╩╚═╝╩ ╩╚═╝╩═╝╩═╝\033[0m\n\
-\033[0m
-endef
-
 CFLAGS_R += -L/Users/$(USER)/.brew/opt/readline/lib
 
 	# @printf "%b\n" "$(value MINISHELL_ART)"
