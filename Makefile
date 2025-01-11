@@ -15,7 +15,7 @@ FLAGS			= -O3 -g -Wshadow -Wnull-dereference
 NAME			= cub3D
 LIB_DIR			= ./libft
 LIBFT			= $(LIB_DIR)/libft.a
-MAIN_SOURCES 	= src/main.c
+MAIN_SOURCES 	= src/main.c src/flood_fill.c
 
 MAIN_OBJ 		= $(MAIN_SOURCES:.c=.o)
 

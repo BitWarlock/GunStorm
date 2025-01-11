@@ -302,6 +302,8 @@ void	print_gunstorm(t_game *gunstorm)
 		gunstorm->ceiling.g, gunstorm->ceiling.b);
 	printf("Floor color:\t(%3d, %3d, %3d)\n", gunstorm->floor.r,
 		gunstorm->floor.g, gunstorm->floor.b);
+	for (int i = 0; gunstorm->map.rows[i]; i++)
+		printf("Row %d => %s\n", i, gunstorm->map.rows[i]);
 }
 
 bool	valid_map_char(char a)
@@ -346,6 +348,27 @@ bool	player_char(char a)
 		|| a == 'N');
 }
 
+char	*trim_map(char *map)
+{
+	char	*new_map;
+	int		e;
+	int		i;
+
+	i = ft_strlen(map) - 1;
+	while (map[i])
+	{
+		if (map[i] == '1' || map[i] == '0')
+		{
+			e = i;
+			break ;
+		}
+		i--;
+	}
+	new_map = ft_substr(map, 0, e + 1);
+	free(map);
+	return (new_map);
+}
+
 char	*get_map(char *scene)
 {
 	int	start;
@@ -363,21 +386,44 @@ char	*get_map(char *scene)
 	}
 	if (start == -1)
 		return (NULL);
-	return (ft_strtrim(scene + start, " \n"));
+	return (trim_map(ft_strtrim(scene + start, "\n")));
 }
 
 void	map_error(char *error_msg,
-			t_game *gunstorm, char *map, char *scene)
+			t_game *gunstorm, char *map)
 {
 	free_game(gunstorm);
-	free(scene);
 	free(map);
 	ft_printf(2, RED"Error\n");
 	ft_printf(2, "Map error: %s\n"RESET, error_msg);
 	exit(EXIT_FAILURE);
 }
 
-int	validate_map_chars(char*scene, char *map, t_game *gunstorm)
+void	store_player(t_game *gunstorm)
+{
+	int	y;
+	int	x;
+
+	y = 0;
+	while (y < gunstorm->map.height)
+	{
+		x = 0;
+		while (x < ft_strlen(gunstorm->map.rows[y]))
+		{
+			if (player_char(gunstorm->map.rows[y][x]))
+			{
+				gunstorm->player.direction = gunstorm->map.rows[y][x];
+				gunstorm->player.position.x = x;
+				gunstorm->player.position.y = y;
+				return ;
+			}
+			x++;
+		}
+		y++;
+	}
+}
+
+int	validate_map_chars(char *map, t_game *gunstorm)
 {
 	int	player;
 	int	i;
@@ -387,17 +433,38 @@ int	validate_map_chars(char*scene, char *map, t_game *gunstorm)
 	while (map[i])
 	{
 		if (map[i] == '\n' && map[i + 1] == '\n')
-			map_error("Empty lines not allowed", gunstorm, map, scene);
+			map_error("Empty lines not allowed", gunstorm, map);
 		if (player_char(map[i]))
 			player++;
 		if (!valid_map_char(map[i]) && map[i] != '\n')
 			map_error("Invalid character detected. Map should only contain:\n"
 				"- 0 for empty space\n"
 				"- 1 for walls\n"
-				"- N, E, S, or W for player direction", gunstorm, map, scene);
+				"- N, E, S, or W for player direction", gunstorm, map);
 		i++;
 	}
 	return (player);
+}
+
+void	load_map(char *map, t_game *gunstorm)
+{
+	char	**rows;
+	int		i;
+
+	i = 0;
+	rows = ft_split(map, '\n');
+	if (!rows)
+		map_error("Malloc failed", gunstorm, map);
+	while (rows[i])
+		i++;
+	gunstorm->map.rows = rows;
+	gunstorm->map.height = i;
+}
+
+void	map_error_split(char *error_msg, t_game *gunstorm, char *map)
+{
+	free_split(gunstorm->map.rows);
+	map_error(error_msg, gunstorm, map);
 }
 
 void	validate_map(char *scene, t_game *gunstorm)
@@ -406,14 +473,24 @@ void	validate_map(char *scene, t_game *gunstorm)
 	char	*map;
 
 	map = get_map(scene);
+	free(scene);
 	if (!map)
-		map_error("Empty map", gunstorm, map, scene);
-	player = validate_map_chars(scene, map, gunstorm);
+		map_error("Empty map", gunstorm, map);
+	player = validate_map_chars(map, gunstorm);
 	if (player == 0)
-		map_error("Missing player start position", gunstorm, map, scene);
+		map_error("Missing player start position", gunstorm, map);
 	if (player > 1)
-		map_error("Multiple player positions found", gunstorm, map, scene);
+		map_error("Multiple player positions found", gunstorm, map);
+	load_map(map, gunstorm);
 	free(map);
+	store_player(gunstorm);
+	validate_map_walls(gunstorm, gunstorm->map);
+}
+
+void	free_all(t_game *gunstorm)
+{
+	free_split(gunstorm->map.rows);
+	free_game(gunstorm);
 }
 
 void	map_content_validation(int map_fd, t_game *gunstorm)
@@ -424,9 +501,6 @@ void	map_content_validation(int map_fd, t_game *gunstorm)
 	validate_textures(map, gunstorm);
 	validate_colors(map, gunstorm);
 	validate_map(map, gunstorm);
-	/*print_gunstorm(gunstorm);*/
-	free(map);
-	free_game(gunstorm);
 }
 
 void	input_validation(char *argv[])
@@ -448,12 +522,41 @@ void	input_validation(char *argv[])
 	close(fd);
 }
 
+void	validate_player_access(t_game *gunstorm, t_map *map)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	flood_fill(gunstorm, &gunstorm->map,
+		gunstorm->player.position);
+	while (y < map->height)
+	{
+		x = 0;
+		while (x < ft_strlen(map->rows[y]))
+		{
+			if (map->rows[y][x] == '0')
+			{
+				printf(MAG"Warning: Certain areas are"
+					"inaccessible to the player\n"RESET);
+				return ;
+			}
+			if (map->rows[y][x] == 'x')
+				map->rows[y][x] = '0';
+			x++;
+		}
+		y++;
+	}
+}
+
 void	input_parsing(char *map_file, t_game *gunstorm)
 {
 	int	fd;
 
 	fd = open(map_file, O_RDONLY);
 	map_content_validation(fd, gunstorm);
+	validate_player_access(gunstorm, &gunstorm->map);
+	print_gunstorm(gunstorm);
 	close(fd);
 }
 
@@ -465,6 +568,7 @@ void	start_game(char *map_file)
 	if (!gunstorm)
 		fatal_error("malloc", strerror(errno));
 	input_parsing(map_file, gunstorm);
+	free_all(gunstorm);
 }
 
 int	main(int argc, char *argv[])
