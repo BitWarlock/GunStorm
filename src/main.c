@@ -8,7 +8,7 @@ void	free_game(t_game *gunstorm);
 
 bool	is_space(char c)
 {
-	return (c == ' ' || c == '\n' || c == '\n');
+	return (c == ' ' || c == '\t' || c == '\n');
 }
 
 int	find(char *str, char *substr)
@@ -348,7 +348,7 @@ bool	player_char(char a)
 		|| a == 'N');
 }
 
-char	*trim_map(char *map)
+char	*trim_map(char *map, t_game *gunstorm)
 {
 	char	*new_map;
 	int		e;
@@ -363,6 +363,12 @@ char	*trim_map(char *map)
 			break ;
 		}
 		i--;
+	}
+	while (map[++i])
+	{
+		if (!is_space(map[i]))
+			map_error("The map has to be the last element",
+				gunstorm, map);
 	}
 	new_map = ft_substr(map, 0, e + 1);
 	free(map);
@@ -386,7 +392,7 @@ char	*get_map(char *scene)
 	}
 	if (start == -1)
 		return (NULL);
-	return (trim_map(ft_strtrim(scene + start, "\n")));
+	return (ft_strtrim(scene + start, "\n"));
 }
 
 void	map_error(char *error_msg,
@@ -476,6 +482,7 @@ void	validate_map(char *scene, t_game *gunstorm)
 	free(scene);
 	if (!map)
 		map_error("Empty map", gunstorm, map);
+	map = trim_map(map, gunstorm);
 	player = validate_map_chars(map, gunstorm);
 	if (player == 0)
 		map_error("Missing player start position", gunstorm, map);
@@ -493,11 +500,104 @@ void	free_all(t_game *gunstorm)
 	free_game(gunstorm);
 }
 
+static void	check_texture(t_game *gunstorm, 
+	char *map, char *id, bool *key_flag)
+{
+	if (*key_flag)
+	{
+		free(map);
+		free(gunstorm);
+		ft_printf(2, RED"Error\n");
+		ft_printf(2, "Duplicated texture identifier '%s'\n"RESET, id);
+		exit(EXIT_FAILURE);
+	}
+	*key_flag = true;
+}
+
+static void	check_color(t_game *gunstorm, 
+	char *map, char *id, bool *key_flag)
+{
+	if (*key_flag)
+	{
+		free(map);
+		free(gunstorm);
+		ft_printf(2, RED"Error\n");
+		ft_printf(2, "Duplicated color identifier '%s'\n"RESET, id);
+		exit(EXIT_FAILURE);
+	}
+	*key_flag = true;
+}
+
+void	check_unknown(t_game *gunstorm, char *map, int index)
+{
+	while (map[index]
+		&& map[index] != '\n'
+		&& (map[index] == ' ' || map[index] == '\t'))
+		index++;
+	if (map[index] == '\n' || !map[index])
+		return ;
+	free(gunstorm);
+	ft_printf(2, RED"Error\n");
+	ft_printf(2, "Unknown identifier '");
+	while (map[index] && map[index] != '\n')
+		ft_printf(2, "%c", map[index++]);
+	ft_printf(2, "'\n"RESET);
+	free(map);
+	exit(EXIT_FAILURE);
+}
+
+void	check_duplicated(char *map, int index, t_game *gunstorm)
+{
+	static t_identifiers	keys;
+
+	if (!ft_strncmp(map + index, "NO", 2))
+		check_texture(gunstorm, map, "NO", &keys.no);
+	else if (!ft_strncmp(map + index, "SO", 2))
+		check_texture(gunstorm, map, "SO", &keys.so);
+	else if (!ft_strncmp(map + index, "EA", 2))
+		check_texture(gunstorm, map, "EA", &keys.ea);
+	else if (!ft_strncmp(map + index, "WE", 2))
+		check_texture(gunstorm, map, "WE", &keys.we);
+	else if (!ft_strncmp(map + index, "F", 1))
+		check_color(gunstorm, map, "F", &keys.f);
+	else if (!ft_strncmp(map + index, "C", 1))
+		check_color(gunstorm, map, "C", &keys.c);
+	else if (check_line(map, index) == -1)
+		check_unknown(gunstorm, map, index);
+}
+
+void	validate_line(char *map, int index, t_game *gunstorm)
+{
+	while (map[index]
+		&& (map[index] == ' ' || map[index] == '\t'))
+		index++;
+	check_duplicated(map, index, gunstorm);
+}
+
+void	validate_identifiers(char *map, t_game *gunstorm)
+{
+	int	i;
+
+	i = 0;
+	while (map[i])
+	{
+		if (map[i] == '\n')
+			if (check_line(map, i + 1) != -1)
+				break ;
+		if (i == 0)
+			validate_line(map, i, gunstorm);
+		if (map[i] == '\n')
+			validate_line(map, i + 1, gunstorm);
+		i++;
+	}
+}
+
 void	map_content_validation(int map_fd, t_game *gunstorm)
 {
 	char	*map;
 
 	map = get_map_content(map_fd);
+	validate_identifiers(map, gunstorm);
 	validate_textures(map, gunstorm);
 	validate_colors(map, gunstorm);
 	validate_map(map, gunstorm);
@@ -522,6 +622,17 @@ void	input_validation(char *argv[])
 	close(fd);
 }
 
+void   blocked_areas_warning(void)
+{
+       static int      count;
+
+       if (count != 0)
+               return ;
+       count++;
+       printf(MAG"Warning: Certain areas are"
+                       "inaccessible to the player\n"RESET);
+}
+
 void	validate_player_access(t_game *gunstorm, t_map *map)
 {
 	int	x;
@@ -536,11 +647,7 @@ void	validate_player_access(t_game *gunstorm, t_map *map)
 		while (x < ft_strlen(map->rows[y]))
 		{
 			if (map->rows[y][x] == '0')
-			{
-				printf(MAG"Warning: Certain areas are"
-					"inaccessible to the player\n"RESET);
-				return ;
-			}
+				blocked_areas_warning();
 			if (map->rows[y][x] == 'x')
 				map->rows[y][x] = '0';
 			x++;

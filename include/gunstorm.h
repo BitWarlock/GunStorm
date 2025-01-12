@@ -14,6 +14,16 @@
 
 #define MAG "\e[0;35m"
 
+typedef struct s_identifiers
+{
+	bool	no;
+	bool	so;
+	bool	ea;
+	bool	we;
+	bool	f;
+	bool	c;
+}	t_identifiers;
+
 typedef struct s_pair
 {
 	int	x;

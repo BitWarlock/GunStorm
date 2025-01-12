@@ -1,0 +1,46 @@
+FILE VALIDATION
+[x] .cub extension
+[x] file exists
+[x] read permissions
+[x] not empty
+
+TEXTURE VALIDATION
+[x] valid texture paths 
+[x] paths exist after identifiers
+[x] texture files exist
+[x] all textures present (NO,SO,WE,EA)
+[x] no duplicate identifiers
+[x] valid path characters
+[x] correct identifiers format
+
+COLOR VALIDATION (F,C)
+[x] RGB values 0-255
+[x] all RGB values present
+[x] no extra RGB values
+[x] comma separated
+[x] no extra commas
+[x] numeric values only
+[x] integer values only
+[x] no duplicate identifiers
+[x] both F and C present
+
+MAP VALIDATION  
+[x] is last element
+[x] surrounded by walls
+[x] single player position
+[x] has player position
+[x] valid characters only
+[x] no empty lines inside
+[x] not empty
+[x] exists
+[x] no wall gaps
+[x] no diagonal gaps
+[x] closed edges
+[x] valid space handling
+
+GENERAL FORMAT
+[x] valid identifiers only
+[x] proper element order
+[x] line breaks between elements
+[x] all elements present
+[x] valid empty lines

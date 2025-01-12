@@ -1,4 +1,4 @@
-#include "include/gunstorm.h"
+#include "../include/gunstorm.h"
 
 bool	is_within_bounds(t_map *map, t_pair pos)
 {
