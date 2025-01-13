@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   flood_fill.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
+/*   Updated: 2025/01/13 11:10:02 by mrezki           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/gunstorm.h"
 
-bool	is_within_bounds(t_map *map, t_pair pos)
+static bool	is_within_bounds(t_map *map, t_pair pos)
 {
 	return (pos.x >= 0 && pos.y >= 0
 		&& pos.y < map->height
@@ -65,48 +77,4 @@ void	flood_fill(t_game *gunstorm, t_map *map, t_pair pos)
 	flood_fill(gunstorm, map, (t_pair){pos.x + 1, pos.y});
 	flood_fill(gunstorm, map, (t_pair){pos.x, pos.y - 1});
 	flood_fill(gunstorm, map, (t_pair){pos.x, pos.y + 1});
-}
-
-bool	valid_char(char a)
-{
-	return (a == '1'
-		|| a == '0' || a == 'E'
-		|| a == 'W' || a == 'N'
-		|| a == 'S');
-}
-
-void	validate_position(t_game *gunstorm, t_map map, t_pair pos)
-{
-	if (pos.x <= 0 || pos.y <= 0
-		|| pos.y >= map.height - 1
-		|| pos.x >= (int)ft_strlen(map.rows[pos.y]) - 1)
-		map_error_split("Map must be closed/surrounded by walls",
-			gunstorm, NULL);
-	if ((pos.x - 1 < (int)ft_strlen(map.rows[pos.y - 1])
-		&& !valid_char(map.rows[pos.y][pos.x - 1]))
-		|| (pos.x + 1 < (int)ft_strlen(map.rows[pos.y + 1])
-		&& !valid_char(map.rows[pos.y][pos.x + 1]))
-		|| !valid_char(map.rows[pos.y + 1][pos.x])
-		|| !valid_char(map.rows[pos.y - 1][pos.x]))
-		map_error_split("Map must be closed/surrounded by walls",
-			gunstorm, NULL);
-}
-
-void	validate_map_walls(t_game *gunstorm, t_map map)
-{
-	int	x;
-	int	y;
-
-	y = 0;
-	while (y < map.height)
-	{
-		x = 0;
-		while (x < ft_strlen(map.rows[y]))
-		{
-			if (map.rows[y][x] == '0' || player_char(map.rows[y][x]))
-				validate_position(gunstorm, map, (t_pair){x, y});
-			x++;
-		}
-		y++;
-	}
 }

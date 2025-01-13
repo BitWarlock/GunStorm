@@ -6,7 +6,7 @@
 #    By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/02 05:47:36 by mrezki            #+#    #+#              #
-#    Updated: 2024/02/17 14:27:37 by mrezki           ###   ########.fr        #
+#    Updated: 2025/01/13 11:45:51 by mrezki           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,7 +70,7 @@ define CLEAN_LOADING
 			4) printf "$(RED)○○○○○●";; \
 			5) printf "$(RED)○○○○●○";; \
 		esac; \
-		sleep 0.008; \
+		sleep 0.01; \
 	done; \
 	printf "\n$(RESET)"
 endef
