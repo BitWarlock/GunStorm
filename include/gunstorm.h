@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/13 11:10:31 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/14 11:41:54 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void	game_core(char *map_file);
 void	texture_error(char *error);
 void	fatal_error(char *error, char *msg);
 void	map_error(char *error_msg, t_game *gunstorm, char *map);
+void	puterror(char *prefix, char *err1, char *err2, char *suffix);
 void	map_error_split(char *error_msg, t_game *gunstorm, char *map);
 
 /* MEMORY MANAGEMENT */

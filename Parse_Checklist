@@ -29,6 +29,7 @@ MAP VALIDATION
 [x] surrounded by walls
 [x] single player position
 [x] has player position
+[x] no more than one player position
 [x] valid characters only
 [x] no empty lines inside
 [x] not empty

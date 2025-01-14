@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/13 11:10:02 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/14 11:42:59 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,9 @@ void	check_color(t_game *gunstorm,
 	{
 		free(map);
 		free(gunstorm);
-		ft_printf(2, RED"Error\n");
-		ft_printf(2, "Duplicated color identifier '%s'\n"RESET, id);
+		puterror(RED"Error\n",
+			"Duplicated color identifier '", id, "'\n"RESET);
+		ft_putstr_fd("'\n"RESET, 2);
 		exit(EXIT_FAILURE);
 	}
 	*key_flag = true;

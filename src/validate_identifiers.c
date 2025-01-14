@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/13 11:10:14 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/14 11:47:24 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ static void	check_unknown(t_game *gunstorm, char *map, int index)
 	if (map[index] == '\n' || !map[index])
 		return ;
 	free(gunstorm);
-	ft_printf(2, RED"Error\n");
-	ft_printf(2, "Unknown identifier '");
+	ft_putstr_fd(RED"Error\n", 2);
+	ft_putstr_fd("Unknown identifier '", 2);
 	while (map[index] && map[index] != '\n')
-		ft_printf(2, "%c", map[index++]);
-	ft_printf(2, "'\n"RESET);
+		ft_putchar_fd(map[index++], 2);
+	ft_putstr_fd("'\n"RESET, 2);
 	free(map);
 	exit(EXIT_FAILURE);
 }
@@ -37,8 +37,8 @@ static void	check_texture(t_game *gunstorm,
 	{
 		free(map);
 		free(gunstorm);
-		ft_printf(2, RED"Error\n");
-		ft_printf(2, "Duplicated texture identifier '%s'\n"RESET, id);
+		puterror(RED"Error\n",
+			"Duplicated texture identifier '", id, "'\n"RESET);
 		exit(EXIT_FAILURE);
 	}
 	*key_flag = true;

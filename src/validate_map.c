@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/13 11:10:14 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/14 12:01:05 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,10 @@ static int	validate_map_chars(char *map, t_game *gunstorm)
 		if (player_char(map[i]))
 			player++;
 		if (!valid_map_char(map[i]) && map[i] != '\n')
-			map_error("Invalid character detected. Map should only contain:\n"
+			map_error("Invalid character detected.\nMap should only contain:\n"
 				"- 0 for empty space\n"
 				"- 1 for walls\n"
+				"- ' ' for empty areas\n"
 				"- N, E, S, or W for player direction", gunstorm, map);
 		i++;
 	}

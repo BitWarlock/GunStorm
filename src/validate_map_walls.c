@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/13 11:10:14 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/14 12:02:44 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	blocked_areas_warning(void)
 		return ;
 	count++;
 	printf(MAG"Warning: Certain areas are"
-		"inaccessible to the player\n"RESET);
+		" inaccessible to the player\n"RESET);
 }
 
 static void	validate_player_access(t_game *gunstorm, t_map *map)
