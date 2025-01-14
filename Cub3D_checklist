@@ -1,0 +1,19 @@
+BASIC CHECKS
+[ ] Norminette
+[ ] Makefile relink
+[ ] Unused headers
+[ ] Compilation flags
+[ ] No leaks
+
+
+[ ] Create window
+[ ] Draw 2d map
+[ ] Draw player
+[ ] Player movements (WASD)
+[ ] DDA line drawing
+[ ] Collision detection
+[ ] Raycaster
+[ ] Textures
+[ ] Floor and Ceiling colors
+[ ] Look left and right (left and right arrows)
+[ ] ESC cleanly and Red cross

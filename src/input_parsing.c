@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/13 11:10:02 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/14 18:10:28 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,5 @@ void	input_parsing(char *map_file, t_game *gunstorm)
 
 	fd = open(map_file, O_RDONLY);
 	validate_scene_file(fd, gunstorm);
-	print_gunstorm(gunstorm);
 	close(fd);
 }
