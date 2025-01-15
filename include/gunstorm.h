@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/14 11:41:54 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/15 16:10:21 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <math.h>
 # include <sys/time.h>
 # include "../libft/libft.h"
+#include "../MLX42/include/MLX42/MLX42.h"
 
 # define MAG "\e[0;35m"
 # define RED "\e[0;31m"
@@ -41,8 +42,8 @@ typedef struct s_identifiers
 
 typedef struct s_pair
 {
-	int	x;
-	int	y;
+	float	x;
+	float	y;
 }	t_pair;
 
 typedef struct s_player
@@ -72,15 +73,23 @@ typedef struct s_texture
 	char	*east;
 }		t_texture;
 
+typedef struct s_mlx
+{
+	mlx_t		*mlx;
+	mlx_image_t	*img;
+}	t_mlx;
+
 typedef struct s_game
 {
 	t_texture	texture;
+	t_player	player;
 	t_rgb		floor;
 	t_rgb		ceiling;
 	t_map		map;
-	t_player	player;
+	t_mlx		mlx_data;
 }	t_game;
 
+void	map_2d(t_game *gunstorm);
 void	print_gunstorm(t_game *gunstorm);
 
 void	game_core(char *map_file);
@@ -112,7 +121,7 @@ void	validate_textures(char *map, t_game *gunstorm);
 void	validate_map_walls(t_game *gunstorm, t_map map);
 void	input_parsing(char *map_file, t_game *gunstorm);
 void	validate_identifiers(char *map, t_game *gunstorm);
-void	flood_fill(t_game *gunstorm, t_map *map, t_pair pos);
+void	flood_fill(t_game *gunstorm, t_map *map, int x, int y);
 
 /* STRING UTILS */
 

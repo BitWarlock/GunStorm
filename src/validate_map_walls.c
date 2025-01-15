@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/14 12:02:44 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/15 11:35:21 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	validate_player_access(t_game *gunstorm, t_map *map)
 
 	y = 0;
 	flood_fill(gunstorm, &gunstorm->map,
-		gunstorm->player.position);
+		gunstorm->player.position.x, gunstorm->player.position.y);
 	while (y < map->height)
 	{
 		x = 0;
@@ -46,19 +46,19 @@ static void	validate_player_access(t_game *gunstorm, t_map *map)
 	}
 }
 
-static void	validate_position(t_game *gunstorm, t_map map, t_pair pos)
+static void	validate_position(t_game *gunstorm, t_map map, int x, int y)
 {
-	if (pos.x <= 0 || pos.y <= 0
-		|| pos.y >= map.height - 1
-		|| pos.x >= (int)ft_strlen(map.rows[pos.y]) - 1)
+	if (x <= 0 || y <= 0
+		|| y >= map.height - 1
+		|| x >= (int)ft_strlen(map.rows[y]) - 1)
 		map_error_split("Map must be closed/surrounded by walls",
 			gunstorm, NULL);
-	if ((pos.x - 1 < (int)ft_strlen(map.rows[pos.y - 1])
-			&& !valid_char(map.rows[pos.y][pos.x - 1]))
-		|| (pos.x + 1 < (int)ft_strlen(map.rows[pos.y + 1])
-		&& !valid_char(map.rows[pos.y][pos.x + 1]))
-		|| !valid_char(map.rows[pos.y + 1][pos.x])
-		|| !valid_char(map.rows[pos.y - 1][pos.x]))
+	if ((x - 1 < (int)ft_strlen(map.rows[y - 1])
+			&& !valid_char(map.rows[y][x - 1]))
+		|| (x + 1 < (int)ft_strlen(map.rows[y + 1])
+		&& !valid_char(map.rows[y][x + 1]))
+		|| !valid_char(map.rows[y + 1][x])
+		|| !valid_char(map.rows[y - 1][x]))
 		map_error_split("Map must be closed/surrounded by walls",
 			gunstorm, NULL);
 }
@@ -75,7 +75,7 @@ void	validate_map_walls(t_game *gunstorm, t_map map)
 		while (x < ft_strlen(map.rows[y]))
 		{
 			if (map.rows[y][x] == '0' || player_char(map.rows[y][x]))
-				validate_position(gunstorm, map, (t_pair){x, y});
+				validate_position(gunstorm, map, x, y);
 			x++;
 		}
 		y++;

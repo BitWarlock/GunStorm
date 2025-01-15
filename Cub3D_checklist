@@ -6,10 +6,10 @@ BASIC CHECKS
 [ ] No leaks
 
 
-[ ] Create window
-[ ] Draw 2d map
-[ ] Draw player
-[ ] Player movements (WASD)
+[x] Create window
+[x] Draw 2d map
+[x] Draw player
+[x] Player movements (WASD)
 [ ] DDA line drawing
 [ ] Collision detection
 [ ] Raycaster

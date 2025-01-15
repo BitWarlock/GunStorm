@@ -12,7 +12,7 @@ STRICT_FLAGS	= -Wall -Wextra -Werror -Wunused -Wconversion
 DEBUG_FLAGS 	= -g3 -O0 -DDEBUG \
 					-fno-inline -fno-omit-frame-pointer \
 					-fstack-protector-all
-FLAGS			= -O3 -g -Wshadow -Wnull-dereference
+FLAGS			= -O3 -g -Wshadow -Wnull-dereference -fsanitize=address
 NAME			= cub3D
 LIB_DIR			= ./libft
 LIBFT			= $(LIB_DIR)/libft.a
@@ -20,7 +20,7 @@ MAIN_SOURCES 	= src/main.c src/flood_fill.c src/game_core.c src/error_handling.c
 				  src/memory_free.c src/input_parsing.c src/validate_identifiers.c \
 				  src/validate_textures.c src/string_utils.c src/validate_colors.c \
 				  src/color_utils.c src/validate_map.c src/char_utils.c \
-				  src/validate_map_walls.c
+				  src/validate_map_walls.c 2dmap.c
 OBJS_DIR		= objs
 
 MAIN_OBJ 		= $(addprefix $(OBJS_DIR)/, $(MAIN_SOURCES:.c=.o))
@@ -78,7 +78,7 @@ $(OBJS_DIR)/%.o: %.c $(HEADER) Makefile
 	@cc -c $< -o $@ $(CFLAGS)
 
 $(NAME): $(MAIN_OBJ) $(LIBFT)
-	@cc $^ -o $@ $(CFLAGS)
+	@cc $^ MLX42/build/libmlx42.a -lglfw -lm -o $@ $(CFLAGS)
 
 $(LIBFT):
 	$(PRINT_LOADING)
