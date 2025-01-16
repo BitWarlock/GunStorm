@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/15 16:10:21 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/16 09:29:16 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ typedef struct s_game
 	t_rgb		ceiling;
 	t_map		map;
 	t_mlx		mlx_data;
+	double		start_time;
+	int			frames;
 }	t_game;
 
 void	map_2d(t_game *gunstorm);

@@ -63,14 +63,21 @@ size_t	map_width(t_map map)
 	return (width);
 }
 
-void	check_boundries(t_pair *player, float new_x, float new_y, t_map map)
+bool	is_colliding(float x, float y, t_map map)
 {
 	int	map_x;
 	int	map_y;
 
-	map_x = floorf(new_x / CELL_SIZE);
-	map_y = floorf(new_y / CELL_SIZE);
+	map_x = floorf(x / CELL_SIZE);
+	map_y = floorf(y / CELL_SIZE);
 	if (map.rows[map_y][map_x] == '1')
+		return (true);
+	return (false);
+}
+
+void	check_boundries(t_pair *player, float new_x, float new_y, t_map map)
+{
+	if (is_colliding(new_x, new_y, map))
 		return ;
 	player->x = new_x;
 	player->y = new_y;
@@ -103,6 +110,13 @@ void	map(void *param)
 
 	gunstorm = (t_game *)param;
 	i = 0;
+	gunstorm->frames++;
+	if (mlx_get_time() - gunstorm->start_time >= 1)
+	{
+		printf("FPS: %d\n", gunstorm->frames);
+		gunstorm->frames = 0;
+		gunstorm->start_time = mlx_get_time();
+	}
 	while (i < gunstorm->map.height)
 	{
 		j = 0;
@@ -138,7 +152,10 @@ void	map_2d(t_game *gunstorm)
 		exit(4);
 	gunstorm->mlx_data.mlx = mlx;
 	gunstorm->mlx_data.img = img;
+	gunstorm->start_time = mlx_get_time();
+	gunstorm->frames = 0;
 	mlx_loop_hook(mlx, map, gunstorm);
 	mlx_key_hook(mlx, hooks, gunstorm);
 	mlx_loop(mlx);
+	mlx_terminate(mlx);
 }
