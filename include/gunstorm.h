@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/16 09:29:16 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/17 16:57:23 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_player
 {
 	t_pair	position;
 	char	direction;
+	float	angle;
 }	t_player;
 
 typedef struct s_map

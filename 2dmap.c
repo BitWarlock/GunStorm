@@ -1,6 +1,10 @@
 #include "include/gunstorm.h"
 
-#define CELL_SIZE 40
+# define SPEED 4
+# define CELL_SIZE 40
+# define CELL_SIZE 40
+# define FOV 60.0 
+# define DEG_TO_RAD(deg) ((deg) * M_PI / 180.0)
 
 int	get_cell_color(char cell)
 {
@@ -70,7 +74,8 @@ bool	is_colliding(float x, float y, t_map map)
 
 	map_x = floorf(x / CELL_SIZE);
 	map_y = floorf(y / CELL_SIZE);
-	if (map.rows[map_y][map_x] == '1')
+	if (map_x >= 0 && map_y >= 0
+		&& map.rows[map_y][map_x] == '1')
 		return (true);
 	return (false);
 }
@@ -90,16 +95,124 @@ void	hooks(mlx_key_data_t key, void *param)
 	gunstorm = (t_game *)param;
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_W))
 		check_boundries(&gunstorm->player.position, gunstorm->player.position.x,
-				  gunstorm->player.position.y - 5, gunstorm->map);
+				  gunstorm->player.position.y - SPEED, gunstorm->map);
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_S))
 		check_boundries(&gunstorm->player.position, gunstorm->player.position.x,
-				  gunstorm->player.position.y + 5, gunstorm->map);
+				  gunstorm->player.position.y + SPEED, gunstorm->map);
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_D))
-		check_boundries(&gunstorm->player.position, gunstorm->player.position.x + 5,
+		check_boundries(&gunstorm->player.position, gunstorm->player.position.x + SPEED,
 				  gunstorm->player.position.y, gunstorm->map);
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_A))
-		check_boundries(&gunstorm->player.position, gunstorm->player.position.x - 5,
+		check_boundries(&gunstorm->player.position, gunstorm->player.position.x - SPEED,
 				  gunstorm->player.position.y, gunstorm->map);
+	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_LEFT))
+		gunstorm->player.angle -= 0.2;
+	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_RIGHT))
+		gunstorm->player.angle += 0.2;
+}
+
+void draw_line(mlx_image_t *img, float startX, float startY, float endX, float endY, uint32_t color)
+{
+    float deltaX = endX - startX;
+    float deltaY = endY - startY;
+    float step = fmax(fabs(deltaX), fabs(deltaY));
+
+    deltaX /= step;
+    deltaY /= step;
+
+    float x = startX;
+    float y = startY;
+
+    for (int i = 0; i <= step; i++)
+	{
+        if (x >= 0 && x < img->width && y >= 0 && y < img->height)
+            mlx_put_pixel(img, (int)x, (int)y, color);
+        x += deltaX;
+        y += deltaY;
+    }
+}
+
+void cast_rays(int w, int h, t_map worldMap, t_mlx mlx_data, t_game *gunstorm)
+{
+	double playerX = gunstorm->player.position.x;
+	double playerY = gunstorm->player.position.y;
+	double posX = playerX / CELL_SIZE;
+	double posY = playerY / CELL_SIZE;
+	double playerDir = gunstorm->player.angle;
+
+	double halfFOV = DEG_TO_RAD(FOV / 2.0);
+	double startAngle = playerDir - halfFOV;
+
+	for (int x = 0; x < w; x++)
+	{
+		double rayAngle = startAngle + (2 * halfFOV * x / (double)w);
+		double rayDirX = cos(rayAngle);
+		double rayDirY = sin(rayAngle);
+
+		int mapX = (int)posX;
+		int mapY = (int)posY;
+
+		double deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1.0 / rayDirX);
+		double deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1.0 / rayDirY);
+
+		double sideDistX, sideDistY;
+		int stepX, stepY;
+		int hit = 0;
+		int side = 0;  // 0 for vertical, 1 for horizontal
+
+		if (rayDirX < 0)
+		{
+			stepX = -1;
+			sideDistX = (posX - mapX) * deltaDistX;
+		}
+		else
+	{
+			stepX = 1;
+			sideDistX = (mapX + 1.0 - posX) * deltaDistX;
+		}
+
+		if (rayDirY < 0)
+		{
+			stepY = -1;
+			sideDistY = (posY - mapY) * deltaDistY;
+		}
+		else
+	{
+			stepY = 1;
+			sideDistY = (mapY + 1.0 - posY) * deltaDistY;
+		}
+
+		double wallX = posX;
+		double wallY = posY;
+
+		// DDA algorithm
+		while (!hit)
+		{
+			if (sideDistX < sideDistY) {
+				wallX = mapX + (stepX > 0 ? 1.0 : 0.0);
+				wallY = posY + (wallX - posX) * rayDirY / rayDirX;
+				sideDistX += deltaDistX;
+				mapX += stepX;
+				side = 0;
+			} else {
+				wallY = mapY + (stepY > 0 ? 1.0 : 0.0);
+				wallX = posX + (wallY - posY) * rayDirX / rayDirY;
+				sideDistY += deltaDistY;
+				mapY += stepY;
+				side = 1;
+			}
+			if (mapX >= 0 && mapX < map_width(worldMap) && 
+				mapY >= 0 && mapY < worldMap.height && 
+				worldMap.rows[mapY][mapX] == '1') {
+				hit = 1;
+			}
+		}
+
+		double endX = wallX * CELL_SIZE;
+		double endY = wallY * CELL_SIZE;
+
+		draw_line(mlx_data.img, playerX, playerY, endX, endY, 0x000000FF);
+	}
 }
 
 void	map(void *param)
@@ -129,6 +242,8 @@ void	map(void *param)
 		i++;
 	}
 	draw_player(gunstorm->mlx_data.img, gunstorm->player.position);
+	cast_rays(map_width(gunstorm->map) * 40, gunstorm->map.height * 40,
+			gunstorm->map, gunstorm->mlx_data, gunstorm);
 }
 
 void	map_2d(t_game *gunstorm)
