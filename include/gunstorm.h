@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/17 16:57:23 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/18 18:20:31 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,12 @@
 # include "../libft/libft.h"
 #include "../MLX42/include/MLX42/MLX42.h"
 
+# define WIDTH 1280
+# define HEIGHT 720
+# define FOV M_PI / 3
+# define HALF_FOV FOV / 2
+# define CELL_SIZE 32
+# define SPEED CELL_SIZE / 8
 # define MAG "\e[0;35m"
 # define RED "\e[0;31m"
 # define RESET "\e[0m"
@@ -80,6 +86,26 @@ typedef struct s_mlx
 	mlx_image_t	*img;
 }	t_mlx;
 
+typedef struct s_raycaster
+{
+	int		side;
+	int		step_x;
+	int		step_y;
+	int		map_x;
+	int		map_y;
+	float	wall_x;
+	float	wall_y;
+	float	player_x;
+	float	player_y;
+	float	ray_dirx;
+	float	ray_diry;
+	float	ray_angle;
+	float	delta_distx;
+	float	delta_disty;
+	float	side_distx;
+	float	side_disty;
+}	t_raycaster;
+
 typedef struct s_game
 {
 	t_texture	texture;
@@ -88,10 +114,15 @@ typedef struct s_game
 	t_rgb		ceiling;
 	t_map		map;
 	t_mlx		mlx_data;
+	t_raycaster	ray;
 	double		start_time;
 	int			frames;
 }	t_game;
 
+void	game_fps(t_game *gunstorm);
+void	game_hooks(mlx_key_data_t key, void *param);
+void	raycaster(int width, t_game *gunstorm, bool map_2d);
+size_t	map_width(t_map map);
 void	map_2d(t_game *gunstorm);
 void	print_gunstorm(t_game *gunstorm);
 

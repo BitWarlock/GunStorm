@@ -1,0 +1,3 @@
+- Implement the maximum distance cutoff and early termination
+- Add lookup tables and pre-calculated values
+- Implement batch rendering and spatial partitioning

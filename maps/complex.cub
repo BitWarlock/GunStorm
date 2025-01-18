@@ -1,14 +1,14 @@
   		SO  	 ./texture/south
 
 		
-      F    	255  ,  100 ,           		0
+      F    	1,  69 ,           		22
 
 
 
  	 NO   	 ./texture/north
        
  	 	WE ./texture/west
-C 5,0,0
+C 127,206,238
  	 	EA ./texture/west
 
         1111111111111111111111111      11111111111
