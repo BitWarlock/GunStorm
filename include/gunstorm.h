@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/21 15:03:13 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/21 15:54:49 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 # include "../libft/libft.h"
 #include "../MLX42/include/MLX42/MLX42.h"
 
-# define WIDTH 1280
-# define HEIGHT 720
+# define WIDTH 1920
+# define HEIGHT 1080
 # define FOV M_PI / 3
 # define HALF_FOV FOV / 2
 # define CELL_SIZE 8

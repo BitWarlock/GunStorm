@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:42:54 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/21 15:36:49 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/21 17:02:52 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,16 @@ bool	is_colliding(float x, float y, t_map map)
 	if (map_x >= 0 && map_y >= 0
 		&& map.rows[map_y][map_x] == '1')
 		return (true);
+	map_x = floorf((x + 1.9) / CELL_SIZE);
+	map_y = floorf((y + 1.9) / CELL_SIZE);
+	if (map_x >= 0 && map_y >= 0
+		&& map.rows[map_y][map_x] == '1')
+		return (true);
+	map_x = floorf((x - 1.9) / CELL_SIZE);
+	map_y = floorf((y - 1.9) / CELL_SIZE);
+	if (map_x >= 0 && map_y >= 0
+		&& map.rows[map_y][map_x] == '1')
+		return (true);
 	return (false);
 }
 
@@ -58,10 +68,10 @@ void	move_player(mlx_key_data_t key, t_player *player, t_game *gunstorm)
 	move_in_playerdir(key, &new_x, &new_y, gunstorm);
 	new_x += player->position.x;
 	new_y += player->position.y;
-	if (is_colliding(new_x, new_y, gunstorm->map))
-		return ;
-	player->position.x = new_x;
-	player->position.y = new_y;
+	if (!is_colliding(new_x, player->position.y, gunstorm->map))
+		player->position.x = new_x;
+	if (!is_colliding(player->position.x, new_y, gunstorm->map))
+		player->position.y = new_y;
 }
 
 void	player_movement(mlx_key_data_t key, t_game *gunstorm)
