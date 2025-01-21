@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/13 11:10:14 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/21 10:38:33 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,6 @@ void	print_gunstorm(t_game *gunstorm)
 	int	i;
 
 	i = -1;
-	printf("Textures:\n\nNorth: %s\nSouth: %s\nWest: %s\nEast: %s\n\n",
-		gunstorm->texture.north, gunstorm->texture.south,
-		gunstorm->texture.west, gunstorm->texture.east);
 	printf("Ceiling color:\t(%3d, %3d, %3d)\n", gunstorm->ceiling.r,
 		gunstorm->ceiling.g, gunstorm->ceiling.b);
 	printf("Floor color:\t(%3d, %3d, %3d)\n", gunstorm->floor.r,

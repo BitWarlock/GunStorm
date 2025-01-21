@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/13 11:10:14 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/21 10:05:13 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,21 @@
 void	free_textures(char *map, t_game *gunstorm, int index)
 {
 	if (index >= 1)
-		free(gunstorm->texture.north);
+		mlx_delete_texture(gunstorm->texture.north);
 	if (index >= 2)
-		free(gunstorm->texture.south);
+		mlx_delete_texture(gunstorm->texture.south);
 	if (index >= 3)
-		free(gunstorm->texture.west);
+		mlx_delete_texture(gunstorm->texture.west);
 	free(gunstorm);
 	free(map);
 }
 
 void	free_game(t_game *gunstorm)
 {
-	free(gunstorm->texture.north);
-	free(gunstorm->texture.east);
-	free(gunstorm->texture.south);
-	free(gunstorm->texture.west);
+	mlx_delete_texture(gunstorm->texture.north);
+	mlx_delete_texture(gunstorm->texture.east);
+	mlx_delete_texture(gunstorm->texture.south);
+	mlx_delete_texture(gunstorm->texture.west);
 	free(gunstorm);
 }
 

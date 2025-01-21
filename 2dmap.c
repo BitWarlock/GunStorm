@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 18:06:21 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/18 18:06:57 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/21 15:05:26 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,10 @@ size_t	map_width(t_map map)
 
 void	game_fps(t_game *gunstorm)
 {
+	float	fps;
+
+	fps = 1.0 / gunstorm->mlx_data.mlx->delta_time;
+	gunstorm->move_speed = gunstorm->mlx_data.mlx->delta_time * 50.0;
 	gunstorm->frames++;
 	if (mlx_get_time() - gunstorm->start_time >= 1)
 	{
@@ -101,7 +105,7 @@ void	draw_2d_map(t_game *gunstorm)
 		}
 		i++;
 	}
-	draw_player(gunstorm->mlx_data.img, gunstorm->player.position);
+	/*draw_player(gunstorm->mlx_data.img, gunstorm->player.position);*/
 }
 
 void	map(void *param)

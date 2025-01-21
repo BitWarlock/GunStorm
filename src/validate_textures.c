@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/13 11:10:14 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/21 15:37:27 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,17 @@ static char	*get_file_name(char *str, char *texture)
 	return (free(file), NULL);
 }
 
-static void	fill_texture_file(t_game *gunstorm, char *file, char texture)
+static void	fill_texture_file(t_game *gunstorm,
+								mlx_texture_t *texture_, char texture)
 {
 	if (texture == 'N')
-		gunstorm->texture.north = file;
+		gunstorm->texture.north = texture_;
 	if (texture == 'S')
-		gunstorm->texture.south = file;
+		gunstorm->texture.south = texture_;
 	if (texture == 'W')
-		gunstorm->texture.west = file;
+		gunstorm->texture.west = texture_;
 	if (texture == 'E')
-		gunstorm->texture.east = file;
+		gunstorm->texture.east = texture_;
 }
 
 static char	*find_substr(char *str, char *substr)
@@ -73,10 +74,11 @@ static char	*find_substr(char *str, char *substr)
 
 void	validate_textures(char *map, t_game *gunstorm)
 {
-	char	*textures[5];
-	char	*file;
-	int		start;
-	int		i;
+	mlx_texture_t	*texture;
+	char			*textures[5];
+	char			*file;
+	int				start;
+	int				i;
 
 	textures[0] = "NO";
 	textures[1] = "SO";
@@ -86,9 +88,11 @@ void	validate_textures(char *map, t_game *gunstorm)
 	while (i < 4)
 	{
 		file = find_substr(map, textures[i]);
-		if (!file)
+		texture = mlx_load_png(file);
+		free(file);
+		if (!file || !texture)
 			(free_textures(map, gunstorm, i)), texture_error(textures[i]);
-		fill_texture_file(gunstorm, file, textures[i][0]);
+		fill_texture_file(gunstorm, texture, textures[i][0]);
 		i++;
 	}
 }

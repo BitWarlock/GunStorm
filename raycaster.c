@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:51:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/18 18:25:02 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/21 15:22:39 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,24 +135,97 @@ void	draw_line(t_game *gunstorm, mlx_image_t *img)
 	}
 }
 
-void	wall_start_end(t_game *gunstorm, t_raycaster ray,
-				int *wall_start, int *wall_end)
+void	wall_start_end(t_game *gunstorm, t_raycaster *ray)
 {
 	int		wall_height;
 	float	perp_walldist;
 
-	if (ray.side == 0)
-		perp_walldist = ray.side_distx - ray.delta_distx;
+	if (ray->side == 0)
+		perp_walldist = ray->side_distx - ray->delta_distx;
 	else
-		perp_walldist = ray.side_disty - ray.delta_disty;
-	perp_walldist *= cos(ray.ray_angle - gunstorm->player.angle);
+		perp_walldist = ray->side_disty - ray->delta_disty;
+	perp_walldist *= cos(ray->ray_angle - gunstorm->player.angle);
+	ray->perp_wall = perp_walldist;
 	wall_height = (int)(HEIGHT / perp_walldist);
-	*wall_start = -wall_height / 2 + HEIGHT / 2;
-	if (*wall_start < 0)
-		*wall_start = 0;
-	*wall_end = wall_height / 2 + HEIGHT / 2;
-	if (*wall_end >= HEIGHT)
-		*wall_end = HEIGHT - 1;
+	ray->wall_height = wall_height;
+	ray->wall_start = -wall_height / 2 + HEIGHT / 2;
+	if (ray->wall_start < 0)
+		ray->wall_start = 0;
+	ray->wall_end = wall_height / 2 + HEIGHT / 2;
+	if (ray->wall_end >= HEIGHT)
+		ray->wall_end = HEIGHT - 1;
+}
+
+int	texture_pixel_color(mlx_texture_t *texture, int x, int y)
+{
+	int		position;
+	uint8_t	*pixel;
+
+	if (x < 0 || x >= texture->width
+		|| y < 0 || y >= texture->height)
+		return (0);
+	position = y * texture->width + x;
+	position *= texture->bytes_per_pixel;
+	pixel = &texture->pixels[position];
+	return (pixel[0] << 24 | pixel[1] << 16 | pixel[2] << 8 | pixel[3]);
+}
+
+void	draw_texture_slice(t_game *gunstorm, t_raycaster *ray, int x, mlx_texture_t *texture)
+{
+	int		texture_x;
+	float	texture_step;
+	float	wall_x;
+
+	if (ray->side == 0)
+		wall_x = ray->player_y + ray->perp_wall * ray->ray_diry;
+	else
+		wall_x = ray->player_x + ray->perp_wall * ray->ray_dirx;
+	wall_x -= floor(wall_x);
+	texture_x = (int)(wall_x * texture->width);
+	if (ray->side == 0 && ray->ray_dirx > 0)
+		texture_x = texture->width - texture_x - 1;
+	if (ray->side == 1 && ray->ray_diry < 0)
+		texture_x = texture->width - texture_x - 1;
+	texture_step = 1.0 * texture->height / ray->wall_height;
+	float texture_pos = (ray->wall_start - (float)HEIGHT / 2 + ray->wall_height / 2) * texture_step;
+	for (int y = ray->wall_start; y < ray->wall_end; y++)
+	{
+		int texture_y = (int)texture_pos;
+		if (texture_y < 0)
+			texture_y = 0;
+		if (texture_y >= texture->height)
+			texture_y = texture->height - 1;
+		texture_pos += texture_step;
+		int color = texture_pixel_color(texture, texture_x, texture_y);
+		mlx_put_pixel(gunstorm->mlx_data.img, x, y, color);
+	}
+}
+/*mlx_texture_t	*wall_texture(t_game *gunstorm)*/
+/*{*/
+/*	if (gunstorm->ray.side == 0)*/
+/*	{*/
+/*		if (gunstorm->ray.step_x < 0)*/
+/*			return (gunstorm->texture.west);*/
+/*		return (gunstorm->texture.east);*/
+/*	}*/
+/*	else*/
+/*	{*/
+/*		if (gunstorm->ray.step_y < 0)*/
+/*			return (gunstorm->texture.north);*/
+/*		return (gunstorm->texture.south);*/
+/*	}*/
+/*}*/
+
+mlx_texture_t	*wall_texture(t_game *gunstorm)
+{
+	if (gunstorm->ray.side == 0
+		&& gunstorm->ray.step_x < 0)
+		return (gunstorm->texture.west);
+	else if (gunstorm->ray.side == 0)
+		return (gunstorm->texture.east);
+	if (gunstorm->ray.step_y < 0)
+		return (gunstorm->texture.north);
+	return (gunstorm->texture.south);
 }
 
 void	draw_wall(t_game *gunstorm, t_raycaster ray, int x)
@@ -162,16 +235,17 @@ void	draw_wall(t_game *gunstorm, t_raycaster ray, int x)
 	int	wall_color;
 	int	i;
 
-	wall_start_end(gunstorm, ray, &wall_start, &wall_end);
-	wall_color = 0x036244cc;
-	if (ray.side == 1)
-		wall_color /= 2;
-	i = wall_start;
-	while (i < wall_end)
-	{
-		mlx_put_pixel(gunstorm->mlx_data.img, x, i, wall_color);
-		i++;
-	}
+	wall_start_end(gunstorm, &ray);
+	draw_texture_slice(gunstorm, &ray, x, wall_texture(gunstorm));
+	/*wall_color = 0x036244cc;*/
+	/*if (ray.side == 1)*/
+	/*	wall_color /= 2;*/
+	/*i = wall_start;*/
+	/*while (i < wall_end)*/
+	/*{*/
+	/*	mlx_put_pixel(gunstorm->mlx_data.img, x, i, wall_color);*/
+	/*	i++;*/
+	/*}*/
 }
 
 void	raycaster(int width, t_game *gunstorm, bool map_2d)

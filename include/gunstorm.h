@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/18 18:20:31 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/21 15:03:13 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@
 # define HEIGHT 720
 # define FOV M_PI / 3
 # define HALF_FOV FOV / 2
-# define CELL_SIZE 32
-# define SPEED CELL_SIZE / 8
+# define CELL_SIZE 8
+# define SPEED 5.0
 # define MAG "\e[0;35m"
 # define RED "\e[0;31m"
 # define RESET "\e[0m"
@@ -74,10 +74,10 @@ typedef struct s_rgb
 
 typedef struct s_texture
 {
-	char	*north;
-	char	*south;
-	char	*west;
-	char	*east;
+	mlx_texture_t	*north;
+	mlx_texture_t	*south;
+	mlx_texture_t	*west;
+	mlx_texture_t	*east;
 }		t_texture;
 
 typedef struct s_mlx
@@ -89,25 +89,30 @@ typedef struct s_mlx
 typedef struct s_raycaster
 {
 	int		side;
-	int		step_x;
-	int		step_y;
 	int		map_x;
 	int		map_y;
+	int		step_x;
+	int		step_y;
+	int		wall_end;
+	int		wall_start;
 	float	wall_x;
 	float	wall_y;
+	float	wall_height;
+	float	perp_wall;
 	float	player_x;
 	float	player_y;
 	float	ray_dirx;
 	float	ray_diry;
 	float	ray_angle;
-	float	delta_distx;
-	float	delta_disty;
 	float	side_distx;
 	float	side_disty;
+	float	delta_distx;
+	float	delta_disty;
 }	t_raycaster;
 
 typedef struct s_game
 {
+	mlx_image_t	*cell;
 	t_texture	texture;
 	t_player	player;
 	t_rgb		floor;
@@ -115,6 +120,8 @@ typedef struct s_game
 	t_map		map;
 	t_mlx		mlx_data;
 	t_raycaster	ray;
+	float		move_speed;
+	float		rotation_speed;
 	double		start_time;
 	int			frames;
 }	t_game;
