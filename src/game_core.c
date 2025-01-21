@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/21 15:06:23 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/21 21:41:29 by agaladi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,36 @@ void	clear_window(t_game *gunstorm)
 	}
 }
 
+void	mouse_hook(t_game *gunstorm)
+{
+	static int	prev_x = WIDTH / 2;  // Save previous mouse X position
+	static int	prev_y = HEIGHT / 2; // Save previous mouse Y position
+	int			x;
+	int			y;
+
+	// Get the current mouse position
+	mlx_get_mouse_pos(gunstorm->mlx_data.mlx, &x, &y);
+
+	// Recenter the mouse when it reaches the edges
+	if (x <= 0 || x >= WIDTH - 1 || y <= 0 || y >= HEIGHT - 1)
+	{
+		mlx_set_mouse_pos(gunstorm->mlx_data.mlx, WIDTH / 2, HEIGHT / 2);
+		prev_x = WIDTH / 2;
+		prev_y = HEIGHT / 2;
+		return;
+	}
+
+	// Adjust the player's angle based on mouse movement
+	if (x < prev_x)
+		gunstorm->player.angle -= 0.04 - 0.001;
+	else if (x > prev_x)
+		gunstorm->player.angle += 0.04 - 0.001;
+
+	// Update previous mouse position
+	prev_x = x;
+	prev_y = y;
+}
+
 void	game_loop(void *param)
 {
 	t_game	*gunstorm;
@@ -75,6 +105,7 @@ void	game_loop(void *param)
 	gunstorm = (t_game *)param;
 	game_fps(gunstorm);
 	clear_window(gunstorm);
+	mouse_hook(gunstorm);
 	raycaster(WIDTH, gunstorm, false);
 }
 
