@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/21 21:41:29 by agaladi          ###   ########.fr       */
+/*   Updated: 2025/01/22 11:02:30 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,9 @@ void	mouse_hook(t_game *gunstorm)
 
 	// Adjust the player's angle based on mouse movement
 	if (x < prev_x)
-		gunstorm->player.angle -= 0.04 - 0.001;
+		gunstorm->player.angle -= (prev_x - x) / 600.0;
 	else if (x > prev_x)
-		gunstorm->player.angle += 0.04 - 0.001;
+		gunstorm->player.angle += (x - prev_x) / 600.0;
 
 	// Update previous mouse position
 	prev_x = x;
