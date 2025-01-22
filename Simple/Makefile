@@ -86,7 +86,7 @@ $(OBJS_DIR)/%.o: %.c $(HEADER) Makefile
 	@cc -c $< -o $@ $(CFLAGS)
 
 $(NAME): $(MAIN_OBJ) $(LIBFT)
-	@cc $^ MLX42/build/libmlx42.a -lglfw -lm -o $@ $(CFLAGS)
+	@cc $^ ../MLX42/build/libmlx42.a -lglfw -lm -o $@ $(CFLAGS)
 
 $(LIBFT):
 	$(PRINT_LOADING)
