@@ -6,11 +6,11 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:42:54 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/21 17:02:52 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/22 17:20:16 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/gunstorm.h"
+#include "../../include/gunstorm.h"
 
 void	move_in_playerdir(mlx_key_data_t key, float *dx,
 			float *dy, t_game *gunstorm)

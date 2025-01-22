@@ -6,11 +6,11 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/21 15:37:27 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/22 17:20:25 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/gunstorm.h"
+#include "../../include/gunstorm.h"
 
 static char	*get_file_name(char *str, char *texture)
 {

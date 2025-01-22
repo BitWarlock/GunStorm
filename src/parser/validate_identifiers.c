@@ -6,11 +6,11 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/14 11:47:24 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/22 17:20:24 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/gunstorm.h"
+#include "../../include/gunstorm.h"
 
 static void	check_unknown(t_game *gunstorm, char *map, int index)
 {

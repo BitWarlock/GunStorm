@@ -6,11 +6,11 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/13 11:10:14 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/22 17:20:39 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/gunstorm.h"
+#include "../../include/gunstorm.h"
 
 int	find(char *str, char *substr)
 {
@@ -51,4 +51,20 @@ int	check_line(char *line, int s)
 		i++;
 	}
 	return (s);
+}
+
+size_t	map_width(t_map map)
+{
+	size_t	width;
+	int		i;
+
+	width = 0;
+	i = 0;
+	while (i < map.height)
+	{
+		if (ft_strlen(map.rows[i]) > width)
+			width = ft_strlen(map.rows[i]);
+		i++;
+	}
+	return (width);
 }

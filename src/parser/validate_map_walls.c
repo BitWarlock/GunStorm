@@ -6,11 +6,11 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/17 17:05:29 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/22 17:20:25 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/gunstorm.h"
+#include "../../include/gunstorm.h"
 
 static void	blocked_areas_warning(void)
 {
@@ -81,40 +81,4 @@ void	validate_map_walls(t_game *gunstorm, t_map map)
 		y++;
 	}
 	validate_player_access(gunstorm, &gunstorm->map);
-}
-
-float	player_angle(char direction)
-{
-	if (direction == 'S')
-		return (M_PI / 2);
-	if (direction == 'N')
-		return (3 * M_PI / 2);
-	if (direction == 'W')
-		return (M_PI);
-	return (0);
-}
-
-void	store_player(t_game *gunstorm)
-{
-	int	y;
-	int	x;
-
-	y = 0;
-	while (y < gunstorm->map.height)
-	{
-		x = 0;
-		while (x < ft_strlen(gunstorm->map.rows[y]))
-		{
-			if (player_char(gunstorm->map.rows[y][x]))
-			{
-				gunstorm->player.angle = player_angle(gunstorm->map.rows[y][x]);
-				gunstorm->player.direction = gunstorm->map.rows[y][x];
-				gunstorm->player.position.x = x;
-				gunstorm->player.position.y = y;
-				return ;
-			}
-			x++;
-		}
-		y++;
-	}
 }

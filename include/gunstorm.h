@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/21 15:54:49 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/22 17:04:58 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@
 # include <math.h>
 # include <sys/time.h>
 # include "../libft/libft.h"
-#include "../MLX42/include/MLX42/MLX42.h"
+# include "../MLX42/include/MLX42/MLX42.h"
 
 # define WIDTH 1920
 # define HEIGHT 1080
-# define FOV M_PI / 3
-# define HALF_FOV FOV / 2
+# define FOV 1.0471975511965976 /* 60 degrees, PI / 3 in radians */
+# define HALF_FOV 0.5235987755982988 /* Half of POV. 30 degrees */
 # define CELL_SIZE 8
 # define SPEED 5.0
 # define MAG "\e[0;35m"
@@ -108,6 +108,9 @@ typedef struct s_raycaster
 	float	side_disty;
 	float	delta_distx;
 	float	delta_disty;
+	float	texture_x;
+	float	texture_step;
+	float	texture_pos;
 }	t_raycaster;
 
 typedef struct s_game
@@ -126,9 +129,14 @@ typedef struct s_game
 	int			frames;
 }	t_game;
 
+void	ray_draw_column(t_game *gunstorm, t_raycaster *ray,
+			int x, mlx_texture_t *texture);
+void	ray_draw_line(t_game *gunstorm, mlx_image_t *img, float x, float y);
+void	ray_cast_dda(t_game *gunstorm, t_raycaster *ray);
+void	game_loop(void *param);
 void	game_fps(t_game *gunstorm);
 void	game_hooks(mlx_key_data_t key, void *param);
-void	raycaster(int width, t_game *gunstorm, bool map_2d);
+void	ray_cast(int width, t_game *gunstorm, bool map_2d);
 size_t	map_width(t_map map);
 void	map_2d(t_game *gunstorm);
 void	print_gunstorm(t_game *gunstorm);

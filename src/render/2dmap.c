@@ -6,89 +6,62 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 18:06:21 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/21 15:55:49 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/22 17:20:31 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "include/gunstorm.h"
+#include "../../include/gunstorm.h"
 
-int	get_cell_color(char cell)
+void	ray_draw_line(t_game *gunstorm, mlx_image_t *img, float x, float y)
 {
-	if (cell == '0' || player_char(cell))
-		return (0xFFFFFFFF);
-	if (cell == '1')
-		return (0x009e98cf);
-	return (0x00000000);
+	int		i;
+	float	dx;
+	float	dy;
+	float	step;
+
+	dx = gunstorm->ray.wall_x * CELL_SIZE - gunstorm->player.position.x;
+	dy = gunstorm->ray.wall_y * CELL_SIZE - gunstorm->player.position.y;
+	step = fmax(fabs(dx), fabs(dy));
+	dx /= step;
+	dy /= step;
+	i = 0;
+	while (i <= step)
+	{
+		if (x >= 0 && x < img->width
+			&& y >= 0 && y < img->height)
+			mlx_put_pixel(img, (int)x, (int)y, 0x000000FF);
+		x += dx;
+		y += dy;
+		i++;
+	}
 }
 
-void	draw_cube(mlx_image_t *img, int x, int y, char cell)
+static void	draw_cube(mlx_image_t *img, int x, int y, char cell)
 {
+	int	color;
 	int	i;
 	int	j;
 
 	i = 1;
+	if (cell == '0' || player_char(cell))
+		color = (0xFFFFFFFF);
+	else if (cell == '1')
+		color = (0x009e98cf);
+	else
+		color = (0x00000000);
 	while (i < CELL_SIZE)
 	{
 		j = 1;
 		while (j < CELL_SIZE)
 		{
-			mlx_put_pixel(img, x + i, y + j, get_cell_color(cell));
+			mlx_put_pixel(img, x + i, y + j, color);
 			j++;
 		}
 		i++;
 	}
 }
 
-void	draw_player(mlx_image_t *img, t_pair position)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < CELL_SIZE / 6)
-	{
-		j = 0;
-		while (j < CELL_SIZE / 6)
-		{
-			mlx_put_pixel(img, position.x + i, position.y + j, 0xFF0000FF);
-			j++;
-		}
-		i++;
-	}
-}
-
-size_t	map_width(t_map map)
-{
-	size_t	width;
-	int		i;
-
-	width = 0;
-	i = 0;
-	while (i < map.height)
-	{
-		if (ft_strlen(map.rows[i]) > width)
-			width = ft_strlen(map.rows[i]);
-		i++;
-	}
-	return (width);
-}
-
-void	game_fps(t_game *gunstorm)
-{
-	float	fps;
-
-	fps = 1.0 / gunstorm->mlx_data.mlx->delta_time;
-	gunstorm->move_speed = gunstorm->mlx_data.mlx->delta_time * 30.0;
-	gunstorm->frames++;
-	if (mlx_get_time() - gunstorm->start_time >= 1)
-	{
-		printf("FPS: %d\n", gunstorm->frames);
-		gunstorm->frames = 0;
-		gunstorm->start_time = mlx_get_time();
-	}
-}
-
-void	draw_2d_map(t_game *gunstorm)
+static void	draw_2d_map(t_game *gunstorm)
 {
 	int		i;
 	int		j;
@@ -105,17 +78,16 @@ void	draw_2d_map(t_game *gunstorm)
 		}
 		i++;
 	}
-	/*draw_player(gunstorm->mlx_data.img, gunstorm->player.position);*/
 }
 
-void	map(void *param)
+static void	map(void *param)
 {
 	t_game	*gunstorm;
 
 	gunstorm = (t_game *)param;
 	game_fps(gunstorm);
 	draw_2d_map(gunstorm);
-	raycaster(map_width(gunstorm->map) * CELL_SIZE, gunstorm, true);
+	ray_cast(map_width(gunstorm->map) * CELL_SIZE, gunstorm, true);
 }
 
 void	map_2d(t_game *gunstorm)

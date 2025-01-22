@@ -6,11 +6,11 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:09:40 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/13 11:09:42 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/22 17:20:39 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/gunstorm.h"
+#include "../../include/gunstorm.h"
 
 bool	player_char(char a)
 {
