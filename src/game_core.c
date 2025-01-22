@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/22 11:02:30 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/22 14:29:39 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,34 +68,37 @@ void	clear_window(t_game *gunstorm)
 	}
 }
 
-void	mouse_hook(t_game *gunstorm)
+void mouse_hook(t_game *gunstorm)
 {
-	static int	prev_x = WIDTH / 2;  // Save previous mouse X position
-	static int	prev_y = HEIGHT / 2; // Save previous mouse Y position
-	int			x;
-	int			y;
-
-	// Get the current mouse position
-	mlx_get_mouse_pos(gunstorm->mlx_data.mlx, &x, &y);
-
-	// Recenter the mouse when it reaches the edges
-	if (x <= 0 || x >= WIDTH - 1 || y <= 0 || y >= HEIGHT - 1)
-	{
-		mlx_set_mouse_pos(gunstorm->mlx_data.mlx, WIDTH / 2, HEIGHT / 2);
-		prev_x = WIDTH / 2;
-		prev_y = HEIGHT / 2;
-		return;
-	}
-
-	// Adjust the player's angle based on mouse movement
-	if (x < prev_x)
-		gunstorm->player.angle -= (prev_x - x) / 600.0;
-	else if (x > prev_x)
-		gunstorm->player.angle += (x - prev_x) / 600.0;
-
-	// Update previous mouse position
-	prev_x = x;
-	prev_y = y;
+    static int prev_x = WIDTH / 2;
+    static int prev_y = HEIGHT / 2;
+    static double accum_dx = 0.0;  // Accumulated delta for smooth movement
+    int x, y;
+    double sensitivity = 0.0015;    // Adjustable sensitivity
+    double smoothing = 0.7;        // Smoothing factor (0-1)
+    
+    mlx_get_mouse_pos(gunstorm->mlx_data.mlx, &x, &y);
+    
+    if (x <= 0 || x >= WIDTH - 1 || y <= 0 || y >= HEIGHT - 1)
+    {
+        mlx_set_mouse_pos(gunstorm->mlx_data.mlx, WIDTH / 2, HEIGHT / 2);
+        prev_x = WIDTH / 2;
+        prev_y = HEIGHT / 2;
+        accum_dx = 0.0;  // Reset accumulated movement
+        return;
+    }
+    
+    // Calculate delta movement
+    double dx = (x - prev_x) * sensitivity;
+    
+    // Apply smoothing using interpolation
+    accum_dx = accum_dx * smoothing + dx * (1.0 - smoothing);
+    
+    // Update player angle using accumulated movement
+    gunstorm->player.angle += accum_dx;
+    
+    prev_x = x;
+    prev_y = y;
 }
 
 void	game_loop(void *param)
@@ -122,6 +125,7 @@ void	scroll_hook(double xdelta, double ydelta, void *param)
 
 void	game_start(t_game *gunstorm)
 {
+	mlx_set_cursor_mode(gunstorm->mlx_data.mlx, MLX_MOUSE_HIDDEN);
 	mlx_loop_hook(gunstorm->mlx_data.mlx, game_loop, gunstorm);
 	mlx_key_hook(gunstorm->mlx_data.mlx, game_hooks, gunstorm);
 	mlx_scroll_hook(gunstorm->mlx_data.mlx, scroll_hook, gunstorm);
