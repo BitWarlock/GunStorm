@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/22 17:37:21 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/24 15:44:42 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define HEIGHT 1080
 # define FOV 1.0471975511965976 /* 60 degrees, PI / 3 in radians */
 # define HALF_FOV 0.5235987755982988 /* Half of POV. 30 degrees */
-# define CELL_SIZE 8
+# define CELL_SIZE 32
 # define SPEED 5.0
 # define MAG "\e[0;35m"
 # define RED "\e[0;31m"
@@ -129,6 +129,8 @@ typedef struct s_game
 	int			frames;
 }	t_game;
 
+int	get_cell_color(char cell);
+void	minimap(t_game *gunstorm);
 void	ray_draw_column(t_game *gunstorm, t_raycaster *ray,
 			int x, mlx_texture_t *texture);
 void	ray_draw_line(t_game *gunstorm, mlx_image_t *img, float x, float y);

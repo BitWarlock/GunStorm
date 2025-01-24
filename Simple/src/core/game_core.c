@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/22 17:20:05 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/24 11:12:02 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	game_core(char *map_file)
 		fatal_error("malloc", strerror(errno));
 	input_parsing(map_file, gunstorm);
 	update_player_coord(&gunstorm->player);
-	game_start(gunstorm);
+	/*game_start(gunstorm);*/
+	map_2d(gunstorm);
 	free_all(gunstorm);
 }

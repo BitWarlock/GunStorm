@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/22 17:20:39 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/24 15:44:32 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,13 @@ void	check_color(t_game *gunstorm,
 		exit(EXIT_FAILURE);
 	}
 	*key_flag = true;
+}
+
+int	get_cell_color(char cell)
+{
+	if (cell == '0' || player_char(cell))
+		return (0xFFFFFFFF);
+	else if (cell == '1')
+		return (0x009E98CF);
+	return (0x00000000);
 }
