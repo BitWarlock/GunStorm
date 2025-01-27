@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:27:11 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/26 14:06:46 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/27 22:48:06 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,16 @@ static void	ray_texture_coords(t_raycaster *ray, mlx_texture_t *texture)
 	float	wall_x;
 
 	if (ray->side == 0)
-		wall_x = ray->player_y + ray->perp_wall * ray->ray_diry;
+		wall_x = ray->wall_y - ray->map_y;
 	else
-		wall_x = ray->player_x + ray->perp_wall * ray->ray_dirx;
+		wall_x = ray->wall_x - ray->map_x;
 	wall_x -= floor(wall_x);
 	texture_x = (int)(wall_x * texture->width);
 	if ((ray->side == 0 && ray->ray_dirx > 0)
 		|| (ray->side == 1 && ray->ray_diry < 0))
 		texture_x = texture->width - texture_x - 1;
 	ray->texture_x = texture_x;
-	ray->texture_step = 1.0 * texture->height / ray->wall_height;
+	ray->texture_step = texture->height / ray->wall_height;
 	ray->texture_pos = (ray->wall_start - (float)HEIGHT / 2
 			+ ray->wall_height / 2) * ray->texture_step;
 }
