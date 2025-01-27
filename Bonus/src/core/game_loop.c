@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:04:03 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/27 13:58:19 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/27 15:21:20 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,38 @@ static void	clear_window(t_game *gunstorm)
 	}
 }
 
+void    mouse_rotate_pov(t_game *gunstorm)
+{
+	static int        prev_x;
+	static int        prev_y;
+	static double    accum_dx;
+	int                x;
+	int                y;
+
+	mlx_get_mouse_pos(gunstorm->mlx_data.mlx, &x, &y);
+	if (x <= 0 || x >= WIDTH
+		|| y <= 0 || y >= HEIGHT)
+	{
+		mlx_set_mouse_pos(gunstorm->mlx_data.mlx, WIDTH / 2, HEIGHT / 2);
+		prev_x = WIDTH / 2;
+		prev_y = HEIGHT / 2;
+		accum_dx = 0.0;
+		return ;
+	}
+	accum_dx = accum_dx * 0.6 + (x - prev_x) * 0.0004;
+	gunstorm->player.angle += accum_dx;
+	prev_x = x;
+	prev_y = y;
+}
+
 void	game_loop(void *param)
 {
 	t_game	*gunstorm;
 
 	gunstorm = (t_game *)param;
+	mouse_rotate_pov(gunstorm);
 	game_fps(gunstorm);
 	clear_window(gunstorm);
 	ray_cast(WIDTH, gunstorm, false);
+	minimap(gunstorm);
 }

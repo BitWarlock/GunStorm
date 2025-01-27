@@ -1,5 +1,23 @@
 #include "../../include/gunstorm.h"
 
+static void	draw_player_icon(mlx_image_t *img, t_pair pos)
+{
+	int	px;
+	int	py;
+
+	px = 0;
+	while (px < CELL_SIZE / 2)
+	{
+		py = 0;
+		while (py < CELL_SIZE / 2)
+		{
+			mlx_put_pixel(img, pos.x + px, pos.y + py, 0x35deedcc);
+			py++;
+		}
+		px++;
+	}
+}
+
 static bool	is_within_circle(t_pair c, int px, int py)
 {
 	float	dist;
@@ -15,32 +33,19 @@ static void	put_pixel_in_circle(t_game *gunstorm, int px, int py, int col)
 
 	if (is_within_circle(gunstorm->player.position, px, py))
 	{
-		mx = ((map_width(gunstorm->map) * CELL_SIZE) / 2.0)
-			+ (px - gunstorm->player.position.x);
-		my = ((gunstorm->map.height * CELL_SIZE) / 2.0)
-			+ (py - gunstorm->player.position.y);
-		mlx_put_pixel(gunstorm->mlx_data.img, mx, my, col);
-	}
-}
-
-static void	draw_player_icon(mlx_image_t *img, t_pair pos)
-{
-	int	px;
-	int	py;
-
-	px = 0;
-	while (px < CELL_SIZE / 6)
-	{
-		py = 0;
-		while (py < CELL_SIZE / 6)
+		mx = 100
+			+ (px - gunstorm->player.position.x) * 3;
+		my = 100
+			+ (py - gunstorm->player.position.y) * 3;
+		for (int i = 0; i < 5; i++)
 		{
-			mlx_put_pixel(img, pos.x + px, pos.y + py, 0xFF0000FF);
-			py++;
+			for (int j = 0; j < 5; j++)
+			{
+				mlx_put_pixel(gunstorm->mlx_data.img, mx + j, my + i, col);
+			}
 		}
-		px++;
 	}
 }
-
 static void	draw_minimap_cell(t_game *gunstorm, int cx, int cy, char type)
 {
 	int		px;
@@ -48,13 +53,11 @@ static void	draw_minimap_cell(t_game *gunstorm, int cx, int cy, char type)
 	int		col;
 
 	col = get_cell_color(type);
-	px = 1;
-	draw_player_icon(gunstorm->mlx_data.img, (t_pair){
-		(map_width(gunstorm->map) * CELL_SIZE) / 2.0,
-		(gunstorm->map.height * CELL_SIZE) / 2.0});
+	px = 0;
+	draw_player_icon(gunstorm->mlx_data.img, (t_pair){100, 100});
 	while (px < CELL_SIZE)
 	{
-		py = 1;
+		py = 0;
 		while (py < CELL_SIZE)
 		{
 			put_pixel_in_circle(gunstorm, cx + px, cy + py, col);

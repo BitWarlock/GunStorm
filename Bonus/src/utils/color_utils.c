@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/26 16:16:18 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/27 14:49:38 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ void	check_color(t_game *gunstorm,
 int	get_cell_color(char cell)
 {
 	if (cell == '0' || player_char(cell))
-		return (0x898989FF);
+		return (0x000000FF);
 	else if (cell == '1')
-		return (0x00000000);
-	return (0x00000000);
+		return (0x898989FF);
+	return (0x898989FF);
 }
