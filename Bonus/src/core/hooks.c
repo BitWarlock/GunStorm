@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:42:54 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/27 13:53:38 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/28 16:33:51 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,13 @@ void	game_hooks(mlx_key_data_t key, void *param)
 	gunstorm = (t_game *)param;
 	player_movement(key, gunstorm);
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_ESCAPE))
-		mlx_close_window(gunstorm->mlx_data.mlx);
+	{
+		gunstorm->menu = !gunstorm->menu;
+		if (!gunstorm->menu)
+			mlx_set_cursor_mode(gunstorm->mlx_data.mlx, MLX_MOUSE_HIDDEN);
+		else
+			mlx_set_cursor_mode(gunstorm->mlx_data.mlx, MLX_MOUSE_NORMAL);
+	}
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_LEFT))
 		gunstorm->player.angle -= 0.1;
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_RIGHT))

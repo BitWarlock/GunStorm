@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:04:03 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/27 15:21:20 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/28 16:46:20 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,7 @@
 
 void	game_fps(t_game *gunstorm)
 {
-	float	fps;
-
-	fps = 1.0 / gunstorm->mlx_data.mlx->delta_time;
-	gunstorm->move_speed = gunstorm->mlx_data.mlx->delta_time * 20.0;
+	gunstorm->move_speed = gunstorm->mlx_data.mlx->delta_time * 30.0;
 	gunstorm->frames++;
 	if (mlx_get_time() - gunstorm->start_time >= 1)
 	{
@@ -81,11 +78,34 @@ void    mouse_rotate_pov(t_game *gunstorm)
 	prev_y = y;
 }
 
+void	display_menu(t_game *gunstorm)
+{
+	gunstorm->mlx_data.circle->enabled = false;
+	gunstorm->mlx_data.menu->enabled = true;
+}
+
 void	game_loop(void *param)
 {
 	t_game	*gunstorm;
 
 	gunstorm = (t_game *)param;
+	if (gunstorm->menu &&
+		mlx_is_mouse_down(gunstorm->mlx_data.mlx, MLX_MOUSE_BUTTON_LEFT))
+	{
+		int x, y;
+		mlx_get_mouse_pos(gunstorm->mlx_data.mlx, &x, &y);
+		if (x >= 702 && x <= 1245 && y >= 687 && y <= 745)  // Resume
+		{
+			gunstorm->menu = false;
+			mlx_set_cursor_mode(gunstorm->mlx_data.mlx, MLX_MOUSE_HIDDEN);
+		}
+		if (x >= 779 && x <= 1197 && y >= 815 && y <= 869)  // Quit
+			mlx_close_window(gunstorm->mlx_data.mlx);
+	}
+	if (gunstorm->menu)
+		return (display_menu(gunstorm));
+	gunstorm->mlx_data.menu->enabled = false;
+	gunstorm->mlx_data.circle->enabled = true;
 	mouse_rotate_pov(gunstorm);
 	game_fps(gunstorm);
 	clear_window(gunstorm);

@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/27 15:01:00 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/28 16:05:18 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,18 @@ static void	game_init(t_game *gunstorm)
 	gunstorm->mlx_data.img = img;
 	gunstorm->start_time = mlx_get_time();
 	gunstorm->frames = 0;
+	gunstorm->menu = false;
 	mlx_texture_t *tex = mlx_load_png("./circle2.png");
 	mlx_image_t *circle = mlx_texture_to_image(mlx, tex);
 	mlx_resize_image(circle, 200, 200);
 	mlx_delete_texture(tex);
+	tex = mlx_load_png("./menu.png");
+	mlx_image_t *menu = mlx_texture_to_image(mlx, tex);
 	mlx_image_to_window(mlx, circle, 1, 1);
+	gunstorm->mlx_data.circle = circle;
+	gunstorm->mlx_data.menu = menu;
+	mlx_image_to_window(mlx, menu, 0, 0);
+	menu->enabled = false;
 	mlx_set_cursor_mode(mlx, MLX_MOUSE_HIDDEN);
 }
 

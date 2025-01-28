@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/27 13:58:55 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/28 16:02:53 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,9 @@ typedef struct s_mlx
 {
 	mlx_t		*mlx;
 	mlx_image_t	*img;
-	mlx_image_t	*player;
+	mlx_image_t	*circle;
 	mlx_image_t	*rotated;
+	mlx_image_t	*menu;
 }	t_mlx;
 
 typedef struct s_raycaster
@@ -129,6 +130,7 @@ typedef struct s_game
 	float		rotation_speed;
 	double		start_time;
 	int			frames;
+	bool		menu;
 }	t_game;
 
 void	ray_draw_wall(t_game *gunstorm, t_raycaster ray, int x);
