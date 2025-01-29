@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:42:54 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/29 14:30:04 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/29 16:55:54 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ void	move_player(mlx_key_data_t key, t_player *player, t_game *gunstorm)
 	float	new_x;
 	float	new_y;
 
+	new_x = 0;
+	new_y = 0;
 	move_in_playerdir(key, &new_x, &new_y, gunstorm);
 	new_x += player->position.x;
 	new_y += player->position.y;
@@ -119,6 +121,8 @@ void	game_hooks(mlx_key_data_t key, void *param)
 	t_game	*gunstorm;
 
 	gunstorm = (t_game *)param;
+	gunstorm->start_game = true;
+	gunstorm->mlx_data.welcome_screen->enabled = false;
 	player_movement(key, gunstorm);
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_ESCAPE))
 		gunstorm->menu = !gunstorm->menu;

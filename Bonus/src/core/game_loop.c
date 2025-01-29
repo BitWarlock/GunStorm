@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:04:03 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/29 16:06:48 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/29 16:56:58 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	game_fps(t_game *gunstorm)
 {
-	gunstorm->move_speed = gunstorm->mlx_data.mlx->delta_time * 30.0;
+	gunstorm->move_speed = gunstorm->mlx_data.mlx->delta_time * 40.0;
 	gunstorm->frames++;
 	if (mlx_get_time() - gunstorm->start_time >= 1)
 	{
@@ -108,12 +108,16 @@ bool	infront_door(t_map map, t_pair player)
 
 	x = floor(player.x / CELL_SIZE);
 	y = floor(player.y / CELL_SIZE);
+	if (x <= 0 || y <= 0
+		|| y >= map.height - 1
+		|| x >= (int)ft_strlen(map.rows[y]) - 1)
+		return (false);
 	if (map.rows[y - 1][x] == 'D'
 		|| map.rows[y + 1][x] == 'D'
 		|| map.rows[y][x - 1] == 'D'
 		|| map.rows[y][x + 1] == 'D')
 		return (true);
-	if (map.rows[y - 1][x] == 'O'
+	else if (map.rows[y - 1][x] == 'O'
 		|| map.rows[y + 1][x] == 'O'
 		|| map.rows[y][x - 1] == 'O'
 		|| map.rows[y][x + 1] == 'O')
@@ -126,6 +130,8 @@ void	game_loop(void *param)
 	t_game	*gunstorm;
 
 	gunstorm = (t_game *)param;
+	if (!gunstorm->start_game)
+		return ;
 	gunstorm->mlx_data.door_msg->enabled = false;
 	menu(gunstorm);
 	if (gunstorm->menu)

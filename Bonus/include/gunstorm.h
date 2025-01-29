@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/29 14:21:12 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/29 16:55:44 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ typedef struct s_mlx
 	mlx_image_t	*rotated;
 	mlx_image_t	*menu;
 	mlx_image_t	*door_msg;
+	mlx_image_t	*welcome_screen;
 }	t_mlx;
 
 typedef struct s_raycaster
@@ -133,6 +134,7 @@ typedef struct s_game
 	double		start_time;
 	int			frames;
 	bool		menu;
+	bool		start_game;
 }	t_game;
 
 bool	infront_door(t_map map, t_pair player);

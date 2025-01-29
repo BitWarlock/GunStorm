@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/29 15:01:53 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/29 16:55:33 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static void	game_init_vars(t_game *gunstorm, mlx_t *mlx)
 
 	gunstorm->start_time = mlx_get_time();
 	gunstorm->frames = 0;
+	gunstorm->start_game = false;
 	gunstorm->menu = false;
 	tex = mlx_load_png("./circle2.png");
 	circle = mlx_texture_to_image(mlx, tex);
@@ -44,6 +45,7 @@ static void	game_init_vars(t_game *gunstorm, mlx_t *mlx)
 	gunstorm->mlx_data.door_msg = mlx_put_string(gunstorm->mlx_data.mlx,
 			"Press O to open/close the door", WIDTH / 2, 300);
 	gunstorm->mlx_data.door_msg->enabled = false;
+	gunstorm->mlx_data.circle->enabled = false;
 }
 
 static void	game_init(t_game *gunstorm)
@@ -65,7 +67,14 @@ static void	game_init(t_game *gunstorm)
 
 static void	game_start(t_game *gunstorm)
 {
+	mlx_texture_t	*welcome_tex;
+	mlx_image_t		*welcome_screen;
+
 	game_init(gunstorm);
+	welcome_tex = mlx_load_png("./welcome.png");
+	welcome_screen = mlx_texture_to_image(gunstorm->mlx_data.mlx, welcome_tex);
+	mlx_image_to_window(gunstorm->mlx_data.mlx, welcome_screen, 0, 0);
+	gunstorm->mlx_data.welcome_screen = welcome_screen;
 	mlx_loop_hook(gunstorm->mlx_data.mlx, game_loop, gunstorm);
 	mlx_key_hook(gunstorm->mlx_data.mlx, game_hooks, gunstorm);
 	mlx_loop(gunstorm->mlx_data.mlx);
