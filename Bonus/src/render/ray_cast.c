@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:51:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/26 16:21:20 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/29 12:18:55 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,9 @@ static void	ray_init_steps(t_game *gunstorm, t_raycaster *ray)
 
 static mlx_texture_t	*ray_get_texture(t_game *gunstorm)
 {
+	if (gunstorm->map.rows[gunstorm->ray.map_y]
+		[gunstorm->ray.map_x] == 'D')
+		return (gunstorm->texture.door);
 	if (gunstorm->ray.side == 0)
 	{
 		if (gunstorm->ray.step_x < 0)

@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/22 17:20:25 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/29 12:18:36 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,5 @@ void	validate_textures(char *map, t_game *gunstorm)
 		fill_texture_file(gunstorm, texture, textures[i][0]);
 		i++;
 	}
+	gunstorm->texture.door = mlx_load_png("./texture/door.png");
 }

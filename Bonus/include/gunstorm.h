@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/28 16:02:53 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/29 14:21:12 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef struct s_texture
 	mlx_texture_t	*south;
 	mlx_texture_t	*west;
 	mlx_texture_t	*east;
+	mlx_texture_t	*door;
 }		t_texture;
 
 typedef struct s_mlx
@@ -87,6 +88,7 @@ typedef struct s_mlx
 	mlx_image_t	*circle;
 	mlx_image_t	*rotated;
 	mlx_image_t	*menu;
+	mlx_image_t	*door_msg;
 }	t_mlx;
 
 typedef struct s_raycaster
@@ -133,6 +135,7 @@ typedef struct s_game
 	bool		menu;
 }	t_game;
 
+bool	infront_door(t_map map, t_pair player);
 void	ray_draw_wall(t_game *gunstorm, t_raycaster ray, int x);
 int		get_cell_color(char cell);
 void	minimap(t_game *gunstorm);

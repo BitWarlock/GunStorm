@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/27 14:49:38 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/29 15:11:42 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ int	get_cell_color(char cell)
 {
 	if (cell == '0' || player_char(cell))
 		return (0x000000FF);
-	else if (cell == '1')
+	if (cell == '1')
 		return (0x898989FF);
-	return (0x898989FF);
+	if (cell == 'D')
+		return (0x62090bcc);
+	return (0xfb8d90cc);
 }

@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:27:11 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/27 22:48:06 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/29 12:50:54 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	ray_wall_bounds(t_game *gunstorm, t_raycaster *ray)
 		perp_walldist = ray->side_disty - ray->delta_disty;
 	perp_walldist *= cos(ray->ray_angle - gunstorm->player.angle);
 	ray->perp_wall = perp_walldist;
-	wall_height = (int)(HEIGHT / perp_walldist);
+	wall_height = (int)(HEIGHT * 1.4) / perp_walldist;
 	ray->wall_height = wall_height;
 	ray->wall_start = -wall_height / 2 + HEIGHT / 2;
 	if (ray->wall_start < 0)

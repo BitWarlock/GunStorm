@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:42:54 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/28 16:33:51 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/29 14:30:04 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,17 +45,20 @@ bool	is_colliding(float x, float y, t_map map)
 	map_x = floorf(x / CELL_SIZE);
 	map_y = floorf(y / CELL_SIZE);
 	if (map_x >= 0 && map_y >= 0
-		&& map.rows[map_y][map_x] == '1')
+		&& (map.rows[map_y][map_x] == '1'
+		|| map.rows[map_y][map_x] == 'D'))
 		return (true);
 	map_x = floorf((x + 1.9) / CELL_SIZE);
 	map_y = floorf((y + 1.9) / CELL_SIZE);
 	if (map_x >= 0 && map_y >= 0
-		&& map.rows[map_y][map_x] == '1')
+		&& (map.rows[map_y][map_x] == '1'
+		|| map.rows[map_y][map_x] == 'D'))
 		return (true);
 	map_x = floorf((x - 1.9) / CELL_SIZE);
 	map_y = floorf((y - 1.9) / CELL_SIZE);
 	if (map_x >= 0 && map_y >= 0
-		&& map.rows[map_y][map_x] == '1')
+		&& (map.rows[map_y][map_x] == '1'
+		|| map.rows[map_y][map_x] == 'D'))
 		return (true);
 	return (false);
 }
@@ -86,6 +89,31 @@ void	player_movement(mlx_key_data_t key, t_game *gunstorm)
 		move_player(key, &gunstorm->player, gunstorm);
 }
 
+void	door_open_close(t_map *map, t_pair player)
+{
+	int	x;
+	int	y;
+
+	x = floor(player.x / CELL_SIZE);
+	y = floor(player.y / CELL_SIZE);
+	if (map->rows[y - 1][x] == 'D')
+		map->rows[y - 1][x] = 'O';
+	else if (map->rows[y + 1][x] == 'D')
+		map->rows[y + 1][x] = 'O';
+	else if (map->rows[y][x + 1] == 'D')
+		map->rows[y][x + 1] = 'O';
+	else if (map->rows[y][x - 1] == 'D')
+		map->rows[y][x - 1] = 'O';
+	else if (map->rows[y - 1][x] == 'O')
+		map->rows[y - 1][x] = 'D';
+	else if (map->rows[y + 1][x] == 'O')
+		map->rows[y + 1][x] = 'D';
+	else if (map->rows[y][x + 1] == 'O')
+		map->rows[y][x + 1] = 'D';
+	else if (map->rows[y][x - 1] == 'O')
+		map->rows[y][x - 1] = 'D';
+}
+
 void	game_hooks(mlx_key_data_t key, void *param)
 {
 	t_game	*gunstorm;
@@ -93,15 +121,12 @@ void	game_hooks(mlx_key_data_t key, void *param)
 	gunstorm = (t_game *)param;
 	player_movement(key, gunstorm);
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_ESCAPE))
-	{
 		gunstorm->menu = !gunstorm->menu;
-		if (!gunstorm->menu)
-			mlx_set_cursor_mode(gunstorm->mlx_data.mlx, MLX_MOUSE_HIDDEN);
-		else
-			mlx_set_cursor_mode(gunstorm->mlx_data.mlx, MLX_MOUSE_NORMAL);
-	}
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_LEFT))
 		gunstorm->player.angle -= 0.1;
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_RIGHT))
 		gunstorm->player.angle += 0.1;
+	if (infront_door(gunstorm->map, gunstorm->player.position)
+		&& mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_O))
+		door_open_close(&gunstorm->map, gunstorm->player.position);
 }

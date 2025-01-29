@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/22 17:20:25 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/29 11:15:53 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static int	validate_map_chars(char *map, t_game *gunstorm)
 				"- 0 for empty space\n"
 				"- 1 for walls\n"
 				"- ' ' for empty areas\n"
+				"- 'D' for doors\n"
 				"- N, E, S, or W for player direction", gunstorm, map);
 		i++;
 	}

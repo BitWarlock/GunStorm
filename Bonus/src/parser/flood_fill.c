@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/22 17:20:24 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/29 12:11:31 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ static bool	is_invalid_cell(t_map *map, int x, int y)
 	cell = map->rows[y][x];
 	if (cell == '1' || cell == 'x')
 		return (true);
-	if (cell != '0' && !player_char(cell))
+	if (cell != '0' && !player_char(cell)
+		&& cell != 'D')
 		return (true);
 	return (false);
 }

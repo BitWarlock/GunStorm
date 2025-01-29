@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minimap.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/29 15:06:26 by mrezki            #+#    #+#             */
+/*   Updated: 2025/01/29 15:08:29 by mrezki           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/gunstorm.h"
 
 static void	draw_player_icon(mlx_image_t *img, t_pair pos)
@@ -30,6 +42,8 @@ static void	put_pixel_in_circle(t_game *gunstorm, int px, int py, int col)
 {
 	float	mx;
 	float	my;
+	int		i;
+	int		j;
 
 	if (is_within_circle(gunstorm->player.position, px, py))
 	{
@@ -37,15 +51,17 @@ static void	put_pixel_in_circle(t_game *gunstorm, int px, int py, int col)
 			+ (px - gunstorm->player.position.x) * 3;
 		my = 100
 			+ (py - gunstorm->player.position.y) * 3;
-		for (int i = 0; i < 5; i++)
+		i = 0;
+		while (i < 5)
 		{
-			for (int j = 0; j < 5; j++)
-			{
+			j = -1;
+			while (++j < 5)
 				mlx_put_pixel(gunstorm->mlx_data.img, mx + j, my + i, col);
-			}
+			i++;
 		}
 	}
 }
+
 static void	draw_minimap_cell(t_game *gunstorm, int cx, int cy, char type)
 {
 	int		px;
@@ -76,24 +92,22 @@ void	minimap(t_game *gunstorm)
 
 	cx = (gunstorm->player.position.x / CELL_SIZE) - 4;
 	if (cx < 0)
-		cx = 0;
+		cx = -1;
 	cx_limit = cx + 8;
 	if (cx_limit >= map_width(gunstorm->map))
-		cx_limit = map_width(gunstorm->map) - 1;
-	while (cx <= cx_limit)
+		cx_limit = map_width(gunstorm->map) - 2;
+	while (++cx <= cx_limit)
 	{
 		cy = (gunstorm->player.position.y / CELL_SIZE) - 4;
 		if (cy < 0)
-			cy = 0;
+			cy = -1;
 		cy_limit = cy + 8;
 		if (cy_limit >= gunstorm->map.height)
-			cy_limit = gunstorm->map.height - 1;
-		while (cy <= cy_limit)
+			cy_limit = gunstorm->map.height - 2;
+		while (++cy <= cy_limit)
 		{
 			draw_minimap_cell(gunstorm, cx * CELL_SIZE, cy * CELL_SIZE,
 				gunstorm->map.rows[cy][cx]);
-			cy++;
 		}
-		cx++;
 	}
 }

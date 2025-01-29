@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:04:03 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/28 16:46:20 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/29 15:09:13 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,13 @@ static void	clear_window(t_game *gunstorm)
 	}
 }
 
-void    mouse_rotate_pov(t_game *gunstorm)
+void	mouse_rotate_pov(t_game *gunstorm)
 {
-	static int        prev_x;
-	static int        prev_y;
-	static double    accum_dx;
-	int                x;
-	int                y;
+	static int			prev_x;
+	static int			prev_y;
+	static double		accum_dx;
+	int					x;
+	int					y;
 
 	mlx_get_mouse_pos(gunstorm->mlx_data.mlx, &x, &y);
 	if (x <= 0 || x >= WIDTH
@@ -82,6 +82,43 @@ void	display_menu(t_game *gunstorm)
 {
 	gunstorm->mlx_data.circle->enabled = false;
 	gunstorm->mlx_data.menu->enabled = true;
+	mlx_set_cursor_mode(gunstorm->mlx_data.mlx, MLX_MOUSE_NORMAL);
+}
+
+void	menu(t_game *gunstorm)
+{
+	int	x;
+	int	y;
+
+	if (gunstorm->menu
+		&& mlx_is_mouse_down(gunstorm->mlx_data.mlx, MLX_MOUSE_BUTTON_LEFT))
+	{
+		mlx_get_mouse_pos(gunstorm->mlx_data.mlx, &x, &y);
+		if (x >= 702 && x <= 1245 && y >= 687 && y <= 745)
+			gunstorm->menu = false;
+		if (x >= 779 && x <= 1197 && y >= 815 && y <= 869)
+			mlx_close_window(gunstorm->mlx_data.mlx);
+	}
+}
+
+bool	infront_door(t_map map, t_pair player)
+{
+	int	x;
+	int	y;
+
+	x = floor(player.x / CELL_SIZE);
+	y = floor(player.y / CELL_SIZE);
+	if (map.rows[y - 1][x] == 'D'
+		|| map.rows[y + 1][x] == 'D'
+		|| map.rows[y][x - 1] == 'D'
+		|| map.rows[y][x + 1] == 'D')
+		return (true);
+	if (map.rows[y - 1][x] == 'O'
+		|| map.rows[y + 1][x] == 'O'
+		|| map.rows[y][x - 1] == 'O'
+		|| map.rows[y][x + 1] == 'O')
+		return (true);
+	return (false);
 }
 
 void	game_loop(void *param)
@@ -89,23 +126,15 @@ void	game_loop(void *param)
 	t_game	*gunstorm;
 
 	gunstorm = (t_game *)param;
-	if (gunstorm->menu &&
-		mlx_is_mouse_down(gunstorm->mlx_data.mlx, MLX_MOUSE_BUTTON_LEFT))
-	{
-		int x, y;
-		mlx_get_mouse_pos(gunstorm->mlx_data.mlx, &x, &y);
-		if (x >= 702 && x <= 1245 && y >= 687 && y <= 745)  // Resume
-		{
-			gunstorm->menu = false;
-			mlx_set_cursor_mode(gunstorm->mlx_data.mlx, MLX_MOUSE_HIDDEN);
-		}
-		if (x >= 779 && x <= 1197 && y >= 815 && y <= 869)  // Quit
-			mlx_close_window(gunstorm->mlx_data.mlx);
-	}
+	gunstorm->mlx_data.door_msg->enabled = false;
+	menu(gunstorm);
 	if (gunstorm->menu)
 		return (display_menu(gunstorm));
+	mlx_set_cursor_mode(gunstorm->mlx_data.mlx, MLX_MOUSE_HIDDEN);
 	gunstorm->mlx_data.menu->enabled = false;
 	gunstorm->mlx_data.circle->enabled = true;
+	if (infront_door(gunstorm->map, gunstorm->player.position))
+		gunstorm->mlx_data.door_msg->enabled = true;
 	mouse_rotate_pov(gunstorm);
 	game_fps(gunstorm);
 	clear_window(gunstorm);
