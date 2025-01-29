@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/29 16:55:33 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/29 19:46:39 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static void	game_init_vars(t_game *gunstorm, mlx_t *mlx)
 	mlx_delete_texture(tex);
 	tex = mlx_load_png("./menu.png");
 	menu = mlx_texture_to_image(mlx, tex);
+	mlx_delete_texture(tex);
 	mlx_image_to_window(mlx, circle, 1, 1);
 	gunstorm->mlx_data.circle = circle;
 	gunstorm->mlx_data.menu = menu;
@@ -73,6 +74,7 @@ static void	game_start(t_game *gunstorm)
 	game_init(gunstorm);
 	welcome_tex = mlx_load_png("./welcome.png");
 	welcome_screen = mlx_texture_to_image(gunstorm->mlx_data.mlx, welcome_tex);
+	mlx_delete_texture(welcome_tex);
 	mlx_image_to_window(gunstorm->mlx_data.mlx, welcome_screen, 0, 0);
 	gunstorm->mlx_data.welcome_screen = welcome_screen;
 	mlx_loop_hook(gunstorm->mlx_data.mlx, game_loop, gunstorm);

@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/22 17:20:39 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/29 19:45:17 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	free_split(char **strs)
 
 void	free_all(t_game *gunstorm)
 {
+	mlx_delete_texture(gunstorm->texture.door);
 	free_split(gunstorm->map.rows);
 	free_game(gunstorm);
 }
