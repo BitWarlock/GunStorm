@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:06:26 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/29 15:08:29 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/29 16:05:13 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,22 +92,24 @@ void	minimap(t_game *gunstorm)
 
 	cx = (gunstorm->player.position.x / CELL_SIZE) - 4;
 	if (cx < 0)
-		cx = -1;
+		cx = 0;
 	cx_limit = cx + 8;
 	if (cx_limit >= map_width(gunstorm->map))
-		cx_limit = map_width(gunstorm->map) - 2;
-	while (++cx <= cx_limit)
+		cx_limit = map_width(gunstorm->map) - 1;
+	while (cx <= cx_limit)
 	{
 		cy = (gunstorm->player.position.y / CELL_SIZE) - 4;
 		if (cy < 0)
-			cy = -1;
+			cy = 0;
 		cy_limit = cy + 8;
 		if (cy_limit >= gunstorm->map.height)
-			cy_limit = gunstorm->map.height - 2;
-		while (++cy <= cy_limit)
+			cy_limit = gunstorm->map.height - 1;
+		while (cy <= cy_limit)
 		{
 			draw_minimap_cell(gunstorm, cx * CELL_SIZE, cy * CELL_SIZE,
 				gunstorm->map.rows[cy][cx]);
+			cy++;
 		}
+		cx++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:27:11 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/26 14:06:46 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/29 16:15:20 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	ray_wall_bounds(t_game *gunstorm, t_raycaster *ray)
 		perp_walldist = ray->side_disty - ray->delta_disty;
 	perp_walldist *= cos(ray->ray_angle - gunstorm->player.angle);
 	ray->perp_wall = perp_walldist;
-	wall_height = (int)(HEIGHT / perp_walldist);
+	wall_height = (int)(HEIGHT * 1.4) / perp_walldist;
 	ray->wall_height = wall_height;
 	ray->wall_start = -wall_height / 2 + HEIGHT / 2;
 	if (ray->wall_start < 0)
@@ -55,9 +55,9 @@ static void	ray_texture_coords(t_raycaster *ray, mlx_texture_t *texture)
 	float	wall_x;
 
 	if (ray->side == 0)
-		wall_x = ray->player_y + ray->perp_wall * ray->ray_diry;
+		wall_x = ray->wall_y - ray->map_y;
 	else
-		wall_x = ray->player_x + ray->perp_wall * ray->ray_dirx;
+		wall_x = ray->wall_x - ray->map_x;
 	wall_x -= floor(wall_x);
 	texture_x = (int)(wall_x * texture->width);
 	if ((ray->side == 0 && ray->ray_dirx > 0)

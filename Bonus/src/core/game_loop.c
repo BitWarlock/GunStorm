@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:04:03 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/29 15:09:13 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/01/29 16:06:48 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,9 @@ void	menu(t_game *gunstorm)
 		&& mlx_is_mouse_down(gunstorm->mlx_data.mlx, MLX_MOUSE_BUTTON_LEFT))
 	{
 		mlx_get_mouse_pos(gunstorm->mlx_data.mlx, &x, &y);
-		if (x >= 702 && x <= 1245 && y >= 687 && y <= 745)
+		if (x >= 600 && x <= 1400 && y >= 610 && y <= 730)
 			gunstorm->menu = false;
-		if (x >= 779 && x <= 1197 && y >= 815 && y <= 869)
+		if (x >= 600 && x <= 1400 && y >= 770 && y <= 890)
 			mlx_close_window(gunstorm->mlx_data.mlx);
 	}
 }
