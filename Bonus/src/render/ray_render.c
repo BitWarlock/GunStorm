@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:27:11 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/29 15:58:51 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/05 16:17:11 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,33 @@ static void	ray_wall_bounds(t_game *gunstorm, t_raycaster *ray)
 		ray->wall_end = HEIGHT - 1;
 }
 
-static int	texture_pixel_color(mlx_texture_t *texture, int x, int y)
+/*static int texture_pixel_color(mlx_texture_t *texture, int x, int y, float ray_dist)*/
+/*{*/
+/*    int     position;*/
+/*    uint8_t *pixel;*/
+/*    float   max_distance;*/
+/*    float   brightness;*/
+/**/
+/*    if (x < 0 || x >= texture->width || y < 0 || y >= texture->height)*/
+/*        return (0);*/
+/**/
+/*    position = y * texture->width + x;*/
+/*    position *= texture->bytes_per_pixel;*/
+/*    pixel = &texture->pixels[position];*/
+/**/
+/*    max_distance = 9.0f;*/
+/*    brightness = 1.0f - (ray_dist / max_distance);*/
+/**/
+/*    brightness = brightness < 0.2f ? 0.2f : brightness;*/
+/**/
+/*    uint8_t r = (uint8_t)(pixel[0] * brightness);*/
+/*    uint8_t g = (uint8_t)(pixel[1] * brightness);*/
+/*    uint8_t b = (uint8_t)(pixel[2] * brightness);*/
+/*    uint8_t a = pixel[3];*/
+/**/
+/*    return (r << 24 | g << 16 | b << 8 | a);*/
+/*}*/
+static int	texture_pixel_color(mlx_texture_t *texture, int x, int y, float ray_dist)
 {
 	int		position;
 	uint8_t	*pixel;
@@ -87,7 +113,7 @@ void	ray_draw_column(t_game *gunstorm, t_raycaster *ray,
 			texture_y = texture->height - 1;
 		ray->texture_pos += ray->texture_step;
 		mlx_put_pixel(gunstorm->mlx_data.img, x, y,
-			texture_pixel_color(texture, ray->texture_x, texture_y));
+			texture_pixel_color(texture, ray->texture_x, texture_y, ray->perp_wall));
 		y++;
 	}
 }

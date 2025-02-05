@@ -1,0 +1,3 @@
+/home/mrezki/GunStorm/Bonus/build/CMakeFiles/cub3D.dir
+/home/mrezki/GunStorm/Bonus/build/CMakeFiles/edit_cache.dir
+/home/mrezki/GunStorm/Bonus/build/CMakeFiles/rebuild_cache.dir

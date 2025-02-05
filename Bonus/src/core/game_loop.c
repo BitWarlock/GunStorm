@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:04:03 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/29 16:56:58 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/05 16:16:16 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	game_fps(t_game *gunstorm)
 {
-	gunstorm->move_speed = gunstorm->mlx_data.mlx->delta_time * 40.0;
+	gunstorm->move_speed = gunstorm->mlx_data.mlx->delta_time * 30.0;
 	gunstorm->frames++;
 	if (mlx_get_time() - gunstorm->start_time >= 1)
 	{
@@ -23,6 +23,27 @@ void	game_fps(t_game *gunstorm)
 		gunstorm->start_time = mlx_get_time();
 	}
 }
+
+/*static int rgba_color(t_rgb colors, int alpha, int y)*/
+/*{*/
+/*    uint8_t r;*/
+/*    uint8_t g;*/
+/*    uint8_t b;*/
+/*    uint8_t a;*/
+/*    float brightness;*/
+/**/
+/*    float distance_from_center = fabsf((HEIGHT / 2) - (float)y) / (HEIGHT / 2);*/
+/*    brightness = distance_from_center * 1.01;*/
+/*    brightness = brightness < 0.2f ? 0.2f : brightness;*/
+/*    brightness = brightness > 1.0f ? 1.0f : brightness;*/
+/**/
+/*    r = (uint8_t)(colors.r * brightness);*/
+/*    g = (uint8_t)(colors.g * brightness);*/
+/*    b = (uint8_t)(colors.b * brightness);*/
+/*    a = (uint8_t)(alpha * brightness);*/
+/**/
+/*    return (r << 24 | g << 16 | b << 8 | alpha);*/
+/*}*/
 
 static int	rgba_color(t_rgb colors, int alpha)
 {
@@ -44,10 +65,10 @@ static void	clear_window(t_game *gunstorm)
 		{
 			if (y <= HEIGHT / 2)
 				mlx_put_pixel(gunstorm->mlx_data.img,
-					x, y, rgba_color(gunstorm->ceiling, 150));
+					x, y, rgba_color(gunstorm->ceiling, 255));
 			else
 				mlx_put_pixel(gunstorm->mlx_data.img,
-					x, y, rgba_color(gunstorm->floor, 50));
+					x, y, rgba_color(gunstorm->floor, 255));
 			y++;
 		}
 		x++;
@@ -72,7 +93,7 @@ void	mouse_rotate_pov(t_game *gunstorm)
 		accum_dx = 0.0;
 		return ;
 	}
-	accum_dx = accum_dx * 0.6 + (x - prev_x) * 0.0004;
+	accum_dx = accum_dx * 0.6 + (x - prev_x) * 0.00052;
 	gunstorm->player.angle += accum_dx;
 	prev_x = x;
 	prev_y = y;
@@ -94,9 +115,9 @@ void	menu(t_game *gunstorm)
 		&& mlx_is_mouse_down(gunstorm->mlx_data.mlx, MLX_MOUSE_BUTTON_LEFT))
 	{
 		mlx_get_mouse_pos(gunstorm->mlx_data.mlx, &x, &y);
-		if (x >= 600 && x <= 1400 && y >= 610 && y <= 730)
+		if (x >= 710 && x <= 1200 && y >= 600 && y <= 780)
 			gunstorm->menu = false;
-		if (x >= 600 && x <= 1400 && y >= 770 && y <= 890)
+		if (x >= 710 && x <= 1200 && y >= 830 && y <= 1000)
 			mlx_close_window(gunstorm->mlx_data.mlx);
 	}
 }
