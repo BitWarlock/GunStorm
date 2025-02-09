@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/03 19:31:05 by agaladi          ###   ########.fr       */
+/*   Updated: 2025/02/09 17:09:54 by agaladi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@ void load_player_anim(t_game *game, t_player_anim *anim)
     for (int i = 0; i < PLAYER_FRAME_COUNT; i++)
     {
         // Construct the file path for each frame.
-        // For example: "./light_saber/lightSaber_frame_0.png"
         sprintf(frame_path, "./Gun/gun_frame_%d.png", i+1);
-
         // Load the texture
         anim->textures[i] = mlx_load_png(frame_path);
         if (!anim->textures[i])
@@ -38,7 +36,6 @@ void load_player_anim(t_game *game, t_player_anim *anim)
             fprintf(stderr, "Failed to load texture: %s\n", frame_path);
             exit(EXIT_FAILURE);
         }
-
         // Create the image from the texture
         anim->frames[i] = mlx_texture_to_image(game->mlx_data.mlx, anim->textures[i]);
         if (!anim->frames[i])
@@ -46,51 +43,29 @@ void load_player_anim(t_game *game, t_player_anim *anim)
             fprintf(stderr, "Failed to create image for: %s\n", frame_path);
             exit(EXIT_FAILURE);
         }
-
         // Initially disable all frames
         anim->frames[i]->enabled = false;
-
-        // Add the image to the window at the desired position.
-        // You might want to use anim->pos_x and anim->pos_y if you want to store position.
-        mlx_image_to_window(game->mlx_data.mlx, anim->frames[i], game->player_anim.pos_x, game->player_anim.pos_y);
+        mlx_image_to_window(game->mlx_data.mlx, anim->frames[i],
+							game->player_anim.pos_x, game->player_anim.pos_y);
+		anim->frames[i]->instances[0].y = 680;
     }
-
     // Start with the first frame enabled.
     anim->current_frame = 0;
     anim->frames[0]->enabled = true;
 }
 
-
-/*// keeps looping throu all frames*/
-/*void update_player_anim(t_game *game, t_player_anim *anim)*/
-/*{*/
-/*    // Hide the current frame*/
-/*    anim->frames[anim->current_frame]->enabled = false;*/
-/**/
-/*    // Advance to the next frame (wrapping around)*/
-/*    anim->current_frame = (anim->current_frame + 1) % PLAYER_FRAME_COUNT;*/
-/**/
-/*    // Show the new frame*/
-/*    anim->frames[anim->current_frame]->enabled = true;*/
-/*}*/
-
-
-
-
 void update_player_anim(t_game *game, t_player_anim *anim)
 {
-    if (!anim->active || anim->frames[anim->current_frame]->instances[0].y > 280)
-        return;
+    if (!anim->active)
+        return; 
     // Hide the current frame
     anim->frames[anim->current_frame]->enabled = false;
-
     // Advance to the next frame
     anim->current_frame = (anim->current_frame + 1) % PLAYER_FRAME_COUNT;
-
     // Show the new frame
     anim->frames[anim->current_frame]->enabled = true;
-
-    // Stop animation after one full loop (optional)
+	anim->frames[anim->current_frame]->instances[0].y = 280;
+    // Stop animation after one full loop 
     if (anim->current_frame == 0)
         anim->active = false;
 }
@@ -107,7 +82,7 @@ static void	game_init_vars(t_game *gunstorm, mlx_t *mlx)
 	gunstorm->start_game = false;
 	gunstorm->menu = false;
 	gunstorm->player_anim.active = false;
-	tex = mlx_load_png("./circle2.png");
+	tex = mlx_load_png("./circle.png");
 	circle = mlx_texture_to_image(mlx, tex);
 	mlx_resize_image(circle, 200, 200);
 	mlx_delete_texture(tex);
@@ -122,10 +97,7 @@ static void	game_init_vars(t_game *gunstorm, mlx_t *mlx)
 	// Set the desired position for the player animation
 	// for gun
 	gunstorm->player_anim.pos_x = WIDTH / 3;
-	gunstorm->player_anim.pos_y = 650;//280;
-	// for light saber
-    /*gunstorm->player_anim.pos_x = WIDTH / 3;*/
-    /*gunstorm->player_anim.pos_y = 90;*/
+	gunstorm->player_anim.pos_y = 280;
     
     // Load the player animation frames
     load_player_anim(gunstorm, &gunstorm->player_anim);

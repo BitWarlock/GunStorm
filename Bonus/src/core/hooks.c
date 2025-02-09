@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:42:54 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/02 23:05:28 by agaladi          ###   ########.fr       */
+/*   Updated: 2025/02/09 17:03:55 by agaladi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,13 +122,18 @@ void	door_open_close(t_map *map, t_pair player)
 void	game_hooks(mlx_key_data_t key, void *param)
 {
 	t_game	*gunstorm;
+	int		current_frame;
 
 	gunstorm = (t_game *)param;
 	gunstorm->start_game = true;
 	gunstorm->mlx_data.welcome_screen->enabled = false;
 	player_movement(key, gunstorm);
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_ESCAPE))
+	{
+		current_frame = gunstorm->player_anim.current_frame;
+		gunstorm->player_anim.frames[current_frame]->enabled = true;
 		gunstorm->menu = !gunstorm->menu;
+	}
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_LEFT))
 		gunstorm->player.angle -= 0.1;
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_RIGHT))

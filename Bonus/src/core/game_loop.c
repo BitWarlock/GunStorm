@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:04:03 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/03 19:28:56 by agaladi          ###   ########.fr       */
+/*   Updated: 2025/02/09 17:00:14 by agaladi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,10 +131,9 @@ bool	infront_door(t_map map, t_pair player)
 
 void	gun_up(t_game *gunstorm)
 {
-	if (gunstorm->player_anim.frames[gunstorm->player_anim.current_frame]->instances[0].y > 280)
+	if (gunstorm->player_anim.current_frame == 0 && gunstorm->player_anim.frames[gunstorm->player_anim.current_frame]->instances[0].y > 280)
 	{
-		gunstorm->player_anim.frames[gunstorm->player_anim.current_frame]->instances[0].y -= 2;
-		gunstorm->player_anim.pos_y = gunstorm->player_anim.frames[gunstorm->player_anim.current_frame]->instances[0].y;
+		gunstorm->player_anim.frames[gunstorm->player_anim.current_frame]->instances[0].y -= 10;
 	}
 }
 
@@ -151,8 +150,6 @@ void	game_loop(void *param)
 		return (display_menu(gunstorm));
 	gun_up(gunstorm);
 	update_player_anim(gunstorm, &gunstorm->player_anim);
-
-	
 	mlx_set_cursor_mode(gunstorm->mlx_data.mlx, MLX_MOUSE_HIDDEN);
 	gunstorm->mlx_data.menu->enabled = false;
 	gunstorm->mlx_data.circle->enabled = true;
