@@ -27,13 +27,13 @@ MAIN_SOURCES 	= src/parser/validate_colors.c src/parser/validate_identifiers.c \
 				  src/core/game_core.c src/core/game_loop.c src/core/hooks.c src/core/main.c \
 				  \
 				  src/render/ray_cast.c src/render/ray_cast_dda.c src/render/ray_render.c \
-				  src/render/2dmap.c src/render/minimap.c
+				  src/render/2dmap.c src/render/minimap.c src/core/game_sound.c
 
 OBJS_DIR		= objs
 
 MAIN_OBJ 		= $(addprefix $(OBJS_DIR)/, $(MAIN_SOURCES:.c=.o))
 
-HEADER 			= include/gunstorm.h
+HEADER 			= include/gunstorm.h include/miniaudio_types.h ../Sound/miniaudio.h
 
 CFLAGS			= $(FLAGS)
 

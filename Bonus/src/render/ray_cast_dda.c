@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:24:00 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/29 12:13:22 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/10 15:04:33 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,22 @@ void	ray_cast_dda(t_game *gunstorm, t_raycaster *ray)
 		else
 			ray_update_h_intersect(ray);
 		ray_check_collision(ray, gunstorm->map, &hit_wall);
+	}
+}
+
+void	ray_draw_wall(t_game *gunstorm, t_raycaster ray, int x)
+{
+	int	wall_color;
+	int	i;
+
+	ray_wall_bounds(gunstorm, &ray);
+	wall_color = 0x036244cc;
+	if (ray.side == 1)
+		wall_color /= 2;
+	i = ray.wall_start;
+	while (i < ray.wall_end)
+	{
+		mlx_put_pixel(gunstorm->mlx_data.img, x, i, wall_color);
+		i++;
 	}
 }

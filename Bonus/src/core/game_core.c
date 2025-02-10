@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/04 16:58:52 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/07 17:51:13 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@ static void	game_init_vars(t_game *gunstorm, mlx_t *mlx)
 	gunstorm->frames = 0;
 	gunstorm->start_game = false;
 	gunstorm->menu = false;
+	gunstorm->movement.forward = false;
+	gunstorm->movement.backward = false;
+	gunstorm->movement.right = false;
+	gunstorm->movement.left = false;
 	tex = mlx_load_png("./circle2.png");
 	circle = mlx_texture_to_image(mlx, tex);
 	mlx_resize_image(circle, 200, 200);
@@ -49,7 +53,24 @@ static void	game_init_vars(t_game *gunstorm, mlx_t *mlx)
 	gunstorm->mlx_data.circle->enabled = false;
 }
 
-static void	game_init(t_game *gunstorm)
+void	game_init_sound(SoundSystem *sound_system)
+{
+	if (ma_engine_init(NULL, &sound_system->engine) != MA_SUCCESS)
+	{
+		printf("Failed to initialize audio engine.\n");
+		return ;
+	}
+	if (ma_sound_init_from_file(&sound_system->engine, "../Sound/gunshot.mp3",
+			0, NULL, NULL, &sound_system->gunshot) != MA_SUCCESS)
+	{
+		printf("Failed to load gunshot sound.\n");
+		ma_engine_uninit(&sound_system->engine);
+		return ;
+	}
+	sound_system->sound_loaded = true;
+}
+
+static void	game_init_mlx(t_game *gunstorm)
 {
 	mlx_t		*mlx;
 	mlx_image_t	*img;
@@ -59,11 +80,16 @@ static void	game_init(t_game *gunstorm)
 		(free_all(gunstorm)), exit(EXIT_FAILURE);
 	img = mlx_new_image(mlx, WIDTH, HEIGHT);
 	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
-		(free_all(gunstorm)), mlx_terminate(mlx),
-			exit(EXIT_FAILURE);
+		(free_all(gunstorm)), mlx_terminate(mlx), exit(EXIT_FAILURE);
 	gunstorm->mlx_data.mlx = mlx;
 	gunstorm->mlx_data.img = img;
-	game_init_vars(gunstorm, mlx);
+}
+
+static void	game_init(t_game *gunstorm)
+{
+	game_init_mlx(gunstorm);
+	game_init_vars(gunstorm, gunstorm->mlx_data.mlx);
+	game_init_sound(&gunstorm->sound_system);
 }
 
 static void	game_start(t_game *gunstorm)
@@ -92,6 +118,8 @@ void	game_core(char *map_file)
 		fatal_error("malloc", strerror(errno));
 	input_parsing(map_file, gunstorm);
 	update_player_coord(&gunstorm->player);
+	game_sound_init(gunstorm, &gunstorm->sound);
 	game_start(gunstorm);
+	free_sound(gunstorm);
 	free_all(gunstorm);
 }

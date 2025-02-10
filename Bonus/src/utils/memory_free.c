@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/29 19:45:17 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/09 18:59:44 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,17 @@ void	free_split(char **strs)
 	while (strs[++i])
 		free(strs[i]);
 	free(strs);
+}
+
+void	free_sound(t_game *gunstorm)
+{
+	ma_sound_uninit(&gunstorm->sound_system.gunshot);
+	ma_engine_uninit(&gunstorm->sound_system.engine);
+	ma_device_uninit(gunstorm->sound.device);
+	ma_decoder_uninit(gunstorm->sound.decoder);
+	free(gunstorm->sound.device);
+	free(gunstorm->sound.device_config);
+	free(gunstorm->sound.decoder);
 }
 
 void	free_all(t_game *gunstorm)

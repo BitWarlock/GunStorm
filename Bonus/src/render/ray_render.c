@@ -6,13 +6,13 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:27:11 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/05 16:17:11 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/10 17:14:23 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/gunstorm.h"
 
-static void	ray_wall_bounds(t_game *gunstorm, t_raycaster *ray)
+void	ray_wall_bounds(t_game *gunstorm, t_raycaster *ray)
 {
 	int		wall_height;
 	float	perp_walldist;
@@ -33,33 +33,20 @@ static void	ray_wall_bounds(t_game *gunstorm, t_raycaster *ray)
 		ray->wall_end = HEIGHT - 1;
 }
 
-/*static int texture_pixel_color(mlx_texture_t *texture, int x, int y, float ray_dist)*/
-/*{*/
-/*    int     position;*/
-/*    uint8_t *pixel;*/
-/*    float   max_distance;*/
-/*    float   brightness;*/
-/**/
-/*    if (x < 0 || x >= texture->width || y < 0 || y >= texture->height)*/
-/*        return (0);*/
-/**/
-/*    position = y * texture->width + x;*/
-/*    position *= texture->bytes_per_pixel;*/
-/*    pixel = &texture->pixels[position];*/
-/**/
-/*    max_distance = 9.0f;*/
-/*    brightness = 1.0f - (ray_dist / max_distance);*/
-/**/
-/*    brightness = brightness < 0.2f ? 0.2f : brightness;*/
-/**/
-/*    uint8_t r = (uint8_t)(pixel[0] * brightness);*/
-/*    uint8_t g = (uint8_t)(pixel[1] * brightness);*/
-/*    uint8_t b = (uint8_t)(pixel[2] * brightness);*/
-/*    uint8_t a = pixel[3];*/
-/**/
-/*    return (r << 24 | g << 16 | b << 8 | a);*/
-/*}*/
-static int	texture_pixel_color(mlx_texture_t *texture, int x, int y, float ray_dist)
+static int	texture_pixel_dim(uint8_t *pixel, float ray_dist)
+{
+	float	brightness;
+
+	brightness = 1.0f - (ray_dist / 9.0f);
+	if (brightness < 0.2f)
+		brightness = 0.2f;
+	return ((uint8_t)(pixel[0] * brightness) << 24
+		| (uint8_t)(pixel[1] * brightness) << 16
+		| (uint8_t)(pixel[2] * brightness) << 8 | pixel[3]);
+}
+
+static int	texture_pixel_color(mlx_texture_t *texture,
+				int x, int y, float ray_dist)
 {
 	int		position;
 	uint8_t	*pixel;
@@ -70,8 +57,7 @@ static int	texture_pixel_color(mlx_texture_t *texture, int x, int y, float ray_d
 	position = y * texture->width + x;
 	position *= texture->bytes_per_pixel;
 	pixel = &texture->pixels[position];
-	return (pixel[0] << 24 | pixel[1] << 16
-		| pixel[2] << 8 | pixel[3]);
+	return (texture_pixel_dim(pixel, ray_dist));
 }
 
 static void	ray_texture_coords(t_raycaster *ray, mlx_texture_t *texture)
@@ -113,24 +99,8 @@ void	ray_draw_column(t_game *gunstorm, t_raycaster *ray,
 			texture_y = texture->height - 1;
 		ray->texture_pos += ray->texture_step;
 		mlx_put_pixel(gunstorm->mlx_data.img, x, y,
-			texture_pixel_color(texture, ray->texture_x, texture_y, ray->perp_wall));
+			texture_pixel_color(texture, ray->texture_x,
+				texture_y, ray->perp_wall));
 		y++;
-	}
-}
-
-void	ray_draw_wall(t_game *gunstorm, t_raycaster ray, int x)
-{
-	int	wall_color;
-	int	i;
-
-	ray_wall_bounds(gunstorm, &ray);
-	wall_color = 0x036244cc;
-	if (ray.side == 1)
-		wall_color /= 2;
-	i = ray.wall_start;
-	while (i < ray.wall_end)
-	{
-		mlx_put_pixel(gunstorm->mlx_data.img, x, i, wall_color);
-		i++;
 	}
 }

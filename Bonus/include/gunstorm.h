@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/29 16:55:44 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/10 15:22:59 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@
 # include <sys/time.h>
 # include "../libft/libft.h"
 # include "../../MLX42/include/MLX42/MLX42.h"
+# include "miniaudio_types.h"
 
+# define MINIAUDIO_IMPLEMENTATION
 # define WIDTH 1920
 # define HEIGHT 1080
 # define FOV 1.0471975511965976 /* 60 degrees, PI / 3 in radians */
@@ -35,6 +37,14 @@
 # define MAG "\e[0;35m"
 # define RED "\e[0;31m"
 # define RESET "\e[0m"
+
+typedef enum s_direction
+{
+	FORWARD,
+	BACKWARD,
+	RIGHT,
+	LEFT,
+}	t_direction;
 
 typedef struct s_identifiers
 {
@@ -119,6 +129,19 @@ typedef struct s_raycaster
 	float	texture_pos;
 }	t_raycaster;
 
+typedef struct s_move {
+	bool	forward;
+	bool	backward;
+	bool	left;
+	bool	right;
+}	t_move;
+
+typedef struct {
+    ma_engine engine;
+    ma_sound gunshot;
+    bool sound_loaded;
+} SoundSystem;
+
 typedef struct s_game
 {
 	mlx_image_t	*cell;
@@ -129,6 +152,9 @@ typedef struct s_game
 	t_map		map;
 	t_mlx		mlx_data;
 	t_raycaster	ray;
+	t_sound		sound;
+	t_move		movement;
+	SoundSystem sound_system;
 	float		move_speed;
 	float		rotation_speed;
 	double		start_time;
@@ -137,6 +163,14 @@ typedef struct s_game
 	bool		start_game;
 }	t_game;
 
+void	play_gunshot(SoundSystem *sound_system, t_sound *sound);
+void	ray_wall_bounds(t_game *gunstorm, t_raycaster *ray);
+void	validate_doors(t_game *gunstorm, t_map map, int x, int y);
+void	validate_door_adjacent(t_game *gunstorm, int x, int y, char axis);
+void	player_movement(t_game *gunstorm, t_player *player);
+void	free_sound(t_game *gunstorm);
+void	sound_error(t_game *gunstorm);
+void	game_sound_init(t_game *gunstorm, t_sound *sound);
 bool	infront_door(t_map map, t_pair player);
 void	ray_draw_wall(t_game *gunstorm, t_raycaster ray, int x);
 int		get_cell_color(char cell);
