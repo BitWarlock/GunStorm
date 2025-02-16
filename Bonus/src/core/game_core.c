@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/16 20:07:59 by agaladi          ###   ########.fr       */
+/*   Updated: 2025/02/16 23:07:20 by agaladi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ static void	game_init_vars(t_game *game, mlx_t *mlx)
 	(1 && (game->start_time = mlx_get_time()), (game->frames = 0));
 	(1 && (game->start_game = false), (game->menu = false));
 	game->player_anim.active = false;
-	tex = mlx_load_png("./circle.png");
+	tex = mlx_load_png("./assets/circle.png");
 	circle = mlx_texture_to_image(mlx, tex);
 	mlx_resize_image(circle, 200, 200);
 	mlx_delete_texture(tex);
-	tex = mlx_load_png("./menu.png");
+	tex = mlx_load_png("./assets/menu.png");
 	menu = mlx_texture_to_image(mlx, tex);
 	mlx_image_to_window(mlx, circle, 1, 1);
 	game->mlx_data.circle = circle;
@@ -72,7 +72,7 @@ static void	game_start(t_game *gunstorm)
 	mlx_image_t		*welcome_screen;
 
 	game_init(gunstorm);
-	welcome_tex = mlx_load_png("./welcome.png");
+	welcome_tex = mlx_load_png("./assets/welcome.png");
 	welcome_screen = mlx_texture_to_image(gunstorm->mlx_data.mlx, welcome_tex);
 	mlx_image_to_window(gunstorm->mlx_data.mlx, welcome_screen, 0, 0);
 	gunstorm->mlx_data.welcome_screen = welcome_screen;
