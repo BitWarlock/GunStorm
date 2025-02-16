@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/16 20:44:13 by agaladi          ###   ########.fr       */
+/*   Updated: 2025/02/16 23:08:52 by agaladi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,7 @@ void	print_gunstorm(t_game *gunstorm);
 void	load_player_anim(t_game *game, t_player_anim *anim);
 void	update_player_anim(t_game *game, t_player_anim *anim);
 void	player_attack(mouse_key_t button, action_t action,
-				modifier_key_t mods, void *param);
+			modifier_key_t mods, void *param);
 void	gun_up(t_game *gunstorm);
 void	display_menu(t_game *gunstorm);
 void	menu(t_game *gunstorm);
@@ -219,7 +219,7 @@ void	flood_fill(t_game *gunstorm, t_map *map, int x, int y);
 
 void	check_color(t_game *gunstorm,
 			char *map, char *id, bool *key_flag);
-int	rgba_color(t_rgb colors, int alpha);
+int		rgba_color(t_rgb colors, int alpha);
 void	blocked_areas_warning(void);
 
 bool	is_space(char c);

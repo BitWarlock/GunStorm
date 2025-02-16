@@ -6,7 +6,7 @@
 /*   By: agaladi <agaladi@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:06:26 by agaladi           #+#    #+#             */
-/*   Updated: 2025/02/16 20:41:14 by agaladi          ###   ########.fr       */
+/*   Updated: 2025/02/16 23:05:29 by agaladi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	load_player_anim(t_game *game, t_player_anim *anim)
 	i = 0;
 	while (i < PLAYER_FRAME_COUNT)
 	{
-		sprintf(frame_path, "./Gun/gun_frame_%d.png", i + 1);
+		sprintf(frame_path, "./assets/Gun/gun_frame_%d.png", i + 1);
 		anim->textures[i] = mlx_load_png(frame_path);
 		if (!anim->textures[i])
 			exit(EXIT_FAILURE);
