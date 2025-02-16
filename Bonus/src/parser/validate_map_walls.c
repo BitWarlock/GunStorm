@@ -6,22 +6,11 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/29 15:13:47 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/16 20:44:19 by agaladi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/gunstorm.h"
-
-static void	blocked_areas_warning(void)
-{
-	static int	count;
-
-	if (count != 0)
-		return ;
-	count++;
-	printf(MAG"Warning: Certain areas are"
-		" inaccessible to the player\n"RESET);
-}
 
 static void	validate_player_access(t_game *gunstorm, t_map *map)
 {

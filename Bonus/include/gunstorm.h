@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/03 19:28:38 by agaladi          ###   ########.fr       */
+/*   Updated: 2025/02/16 20:44:13 by agaladi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,18 @@
 # define MAG "\e[0;35m"
 # define RED "\e[0;31m"
 # define RESET "\e[0m"
-#define PLAYER_FRAME_COUNT 18
+# define PLAYER_FRAME_COUNT 18
 
 // animation 
-typedef struct s_player_anim {
-    mlx_texture_t *textures[PLAYER_FRAME_COUNT];
-    mlx_image_t   *frames[PLAYER_FRAME_COUNT];
-    int current_frame;
-    int pos_x;
-    int pos_y;
-	bool active;
-} t_player_anim;
-
+typedef struct s_player_anim
+{
+	mlx_texture_t	*textures[PLAYER_FRAME_COUNT];
+	mlx_image_t		*frames[PLAYER_FRAME_COUNT];
+	int				current_frame;
+	int				pos_x;
+	int				pos_y;
+	bool			active;
+}				t_player_anim;
 
 typedef struct s_identifiers
 {
@@ -102,7 +102,7 @@ typedef struct s_mlx
 	mlx_image_t	*menu;
 	mlx_image_t	*door_msg;
 	mlx_image_t	*welcome_screen;
-	mlx_image_t *player;
+	mlx_image_t	*player;
 }	t_mlx;
 
 typedef struct s_raycaster
@@ -134,27 +134,26 @@ typedef struct s_raycaster
 
 typedef struct s_game
 {
-	mlx_image_t	*cell;
-	t_texture	texture;
-	t_player	player;
-	t_rgb		floor;
-	t_rgb		ceiling;
-	t_map		map;
-	t_mlx		mlx_data;
-	t_player_anim player_anim;
-	t_raycaster	ray;
-	float		move_speed;
-	float		rotation_speed;
-	double		start_time;
-	int			frames;
-	bool		menu;
-	bool		start_game;
+	mlx_image_t		*cell;
+	t_texture		texture;
+	t_player		player;
+	t_rgb			floor;
+	t_rgb			ceiling;
+	t_map			map;
+	t_mlx			mlx_data;
+	t_player_anim	player_anim;
+	t_raycaster		ray;
+	float			move_speed;
+	float			rotation_speed;
+	double			start_time;
+	int				frames;
+	bool			menu;
+	bool			start_game;
 }	t_game;
 
 // Function prototypes
-void load_player_anim(t_game *game, t_player_anim *anim);
-void update_player_anim(t_game *game, t_player_anim *anim);
-/*void	player_display(t_game *gunstorm);*/
+void	load_player_anim(t_game *game, t_player_anim *anim);
+void	update_player_anim(t_game *game, t_player_anim *anim);
 bool	infront_door(t_map map, t_pair player);
 void	ray_draw_wall(t_game *gunstorm, t_raycaster ray, int x);
 int		get_cell_color(char cell);
@@ -169,8 +168,22 @@ void	game_hooks(mlx_key_data_t key, void *param);
 void	ray_cast(int width, t_game *gunstorm, bool map_2d);
 size_t	map_width(t_map map);
 void	map_2d(t_game *gunstorm);
-void	print_gunstorm(t_game *gunstorm);
+void	rotate_and_translate_points(t_pair points[3],
+			t_pair pos, float angle);
 
+void	fill_triangle(mlx_image_t *img, t_pair pts[3], uint32_t color);
+void	sort_points_by_y(t_pair points[3]);
+void	draw_player_icon(mlx_image_t *img, t_pair pos, int length, float angle);
+bool	is_within_circle(t_pair c, int px, int py);
+void	print_gunstorm(t_game *gunstorm);
+void	load_player_anim(t_game *game, t_player_anim *anim);
+void	update_player_anim(t_game *game, t_player_anim *anim);
+void	player_attack(mouse_key_t button, action_t action,
+				modifier_key_t mods, void *param);
+void	gun_up(t_game *gunstorm);
+void	display_menu(t_game *gunstorm);
+void	menu(t_game *gunstorm);
+void	door_open_close(t_map *map, t_pair player);
 void	game_core(char *map_file);
 
 /* ERROR HANDLING */
@@ -206,6 +219,8 @@ void	flood_fill(t_game *gunstorm, t_map *map, int x, int y);
 
 void	check_color(t_game *gunstorm,
 			char *map, char *id, bool *key_flag);
+int	rgba_color(t_rgb colors, int alpha);
+void	blocked_areas_warning(void);
 
 bool	is_space(char c);
 bool	valid_char(char a);

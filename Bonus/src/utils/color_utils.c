@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/29 15:11:42 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/16 20:24:58 by agaladi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,13 @@ void	check_color(t_game *gunstorm,
 	*key_flag = true;
 }
 
+int	rgba_color(t_rgb colors, int alpha)
+{
+	return (colors.r << 24
+		| colors.g << 16 | colors.b << 8
+		| alpha);
+}
+
 int	get_cell_color(char cell)
 {
 	if (cell == '0' || player_char(cell))
@@ -56,4 +63,12 @@ int	get_cell_color(char cell)
 	if (cell == 'D')
 		return (0x62090bcc);
 	return (0xfb8d90cc);
+}
+
+bool	is_within_circle(t_pair c, int px, int py)
+{
+	float	dist;
+
+	dist = ((px - c.x) * (px - c.x)) + ((py - c.y) * (py - c.y));
+	return (dist <= (CELL_SIZE * 3) * (CELL_SIZE * 3));
 }

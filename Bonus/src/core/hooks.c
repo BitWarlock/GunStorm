@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:42:54 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/09 17:03:55 by agaladi          ###   ########.fr       */
+/*   Updated: 2025/02/16 20:30:27 by agaladi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,36 +88,8 @@ void	player_movement(mlx_key_data_t key, t_game *gunstorm)
 	else if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_D))
 		move_player(key, &gunstorm->player, gunstorm);
 	else if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_A))
-		move_player(key, &gunstorm->player, gunstorm); 
+		move_player(key, &gunstorm->player, gunstorm);
 }
-
-
-void	door_open_close(t_map *map, t_pair player)
-{
-	int	x;
-	int	y;
-
-	x = floor(player.x / CELL_SIZE);
-	y = floor(player.y / CELL_SIZE);
-	if (map->rows[y - 1][x] == 'D')
-		map->rows[y - 1][x] = 'O';
-	else if (map->rows[y + 1][x] == 'D')
-		map->rows[y + 1][x] = 'O';
-	else if (map->rows[y][x + 1] == 'D')
-		map->rows[y][x + 1] = 'O';
-	else if (map->rows[y][x - 1] == 'D')
-		map->rows[y][x - 1] = 'O';
-	else if (map->rows[y - 1][x] == 'O')
-		map->rows[y - 1][x] = 'D';
-	else if (map->rows[y + 1][x] == 'O')
-		map->rows[y + 1][x] = 'D';
-	else if (map->rows[y][x + 1] == 'O')
-		map->rows[y][x + 1] = 'D';
-	else if (map->rows[y][x - 1] == 'O')
-		map->rows[y][x - 1] = 'D';
-}
-
-
 
 void	game_hooks(mlx_key_data_t key, void *param)
 {

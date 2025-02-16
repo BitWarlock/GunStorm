@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/22 17:20:39 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/16 20:43:36 by agaladi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,15 @@ size_t	map_width(t_map map)
 		i++;
 	}
 	return (width);
+}
+
+void	blocked_areas_warning(void)
+{
+	static int	count;
+
+	if (count != 0)
+		return ;
+	count++;
+	printf(MAG"Warning: Certain areas are"
+		" inaccessible to the player\n"RESET);
 }
