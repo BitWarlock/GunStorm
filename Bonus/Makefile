@@ -27,7 +27,8 @@ MAIN_SOURCES 	= src/parser/validate_colors.c src/parser/validate_identifiers.c \
 				  src/core/game_core.c src/core/game_loop.c src/core/hooks.c src/core/main.c \
 				  \
 				  src/render/ray_cast.c src/render/ray_cast_dda.c src/render/ray_render.c \
-				  src/render/2dmap.c src/render/minimap.c
+				  src/render/2dmap.c src/render/minimap.c src/render/draw_triangle.c src/render/player_animation.c \
+				  src/render/menu_and_door.c
 
 OBJS_DIR		= objs
 
