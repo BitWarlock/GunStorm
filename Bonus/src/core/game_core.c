@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/07 17:51:13 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/18 21:59:39 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ static void	game_init_vars(t_game *gunstorm, mlx_t *mlx)
 	gunstorm->movement.backward = false;
 	gunstorm->movement.right = false;
 	gunstorm->movement.left = false;
-	tex = mlx_load_png("./circle2.png");
+	tex = mlx_load_png("./assets/circle2.png");
 	circle = mlx_texture_to_image(mlx, tex);
 	mlx_resize_image(circle, 200, 200);
 	mlx_delete_texture(tex);
-	tex = mlx_load_png("./menu.png");
+	tex = mlx_load_png("./assets/menu.png");
 	menu = mlx_texture_to_image(mlx, tex);
 	mlx_delete_texture(tex);
 	mlx_image_to_window(mlx, circle, 1, 1);
@@ -51,9 +51,12 @@ static void	game_init_vars(t_game *gunstorm, mlx_t *mlx)
 			"Press O to open/close the door", WIDTH / 2, 300);
 	gunstorm->mlx_data.door_msg->enabled = false;
 	gunstorm->mlx_data.circle->enabled = false;
+	gunstorm->player_anim.pos_x = WIDTH / 3;
+	gunstorm->player_anim.pos_y = 280;
+	load_player_anim(gunstorm, &gunstorm->player_anim);
 }
 
-void	game_init_sound(SoundSystem *sound_system)
+void	game_init_sound(t_gunsound *sound_system)
 {
 	if (ma_engine_init(NULL, &sound_system->engine) != MA_SUCCESS)
 	{
@@ -98,10 +101,11 @@ static void	game_start(t_game *gunstorm)
 	mlx_image_t		*welcome_screen;
 
 	game_init(gunstorm);
-	welcome_tex = mlx_load_png("./welcome.png");
+	welcome_tex = mlx_load_png("./assets/welcome.png");
 	welcome_screen = mlx_texture_to_image(gunstorm->mlx_data.mlx, welcome_tex);
 	mlx_delete_texture(welcome_tex);
 	mlx_image_to_window(gunstorm->mlx_data.mlx, welcome_screen, 0, 0);
+	mlx_mouse_hook(gunstorm->mlx_data.mlx, player_attack, gunstorm);
 	gunstorm->mlx_data.welcome_screen = welcome_screen;
 	mlx_loop_hook(gunstorm->mlx_data.mlx, game_loop, gunstorm);
 	mlx_key_hook(gunstorm->mlx_data.mlx, game_hooks, gunstorm);

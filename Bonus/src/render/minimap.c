@@ -6,37 +6,11 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:06:26 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/10 15:08:06 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/18 18:46:57 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/gunstorm.h"
-
-static void	draw_player_icon(mlx_image_t *img, t_pair pos)
-{
-	int	px;
-	int	py;
-
-	px = 0;
-	while (px < CELL_SIZE / 2)
-	{
-		py = 0;
-		while (py < CELL_SIZE / 2)
-		{
-			mlx_put_pixel(img, pos.x + px, pos.y + py, 0x35deedcc);
-			py++;
-		}
-		px++;
-	}
-}
-
-static bool	is_within_circle(t_pair c, int px, int py)
-{
-	float	dist;
-
-	dist = ((px - c.x) * (px - c.x)) + ((py - c.y) * (py - c.y));
-	return (dist <= (CELL_SIZE * 3) * (CELL_SIZE * 3));
-}
 
 static void	put_pixel_in_circle(t_game *gunstorm, int px, int py, int col)
 {
@@ -62,6 +36,22 @@ static void	put_pixel_in_circle(t_game *gunstorm, int px, int py, int col)
 	}
 }
 
+// Main function to draw the player icon
+void	draw_player_icon(mlx_image_t *img, t_pair pos, int length, float angle)
+{
+	t_pair	points[3];
+
+	points[0].x = 0;
+	points[0].y = -length;
+	points[1].x = -length / 2.0;
+	points[1].y = length;
+	points[2].x = length / 2.0;
+	points[2].y = length;
+	rotate_and_translate_points(points, pos, angle);
+	sort_points_by_y(points);
+	fill_triangle(img, points, 0x35deedcc);
+}
+
 static void	draw_minimap_cell(t_game *gunstorm, int cx, int cy, char type)
 {
 	int		px;
@@ -70,7 +60,8 @@ static void	draw_minimap_cell(t_game *gunstorm, int cx, int cy, char type)
 
 	col = get_cell_color(type);
 	px = 0;
-	draw_player_icon(gunstorm->mlx_data.img, (t_pair){100, 100});
+	draw_player_icon(gunstorm->mlx_data.img, (t_pair){100, 100}, 10,
+		(gunstorm->player.angle * 180) / M_PI + 90);
 	while (px < CELL_SIZE)
 	{
 		py = 0;
@@ -83,6 +74,16 @@ static void	draw_minimap_cell(t_game *gunstorm, int cx, int cy, char type)
 	}
 }
 
+static void	x_init(t_game *gunstorm, int *cx, int *cx_limit)
+{
+	*cx = (gunstorm->player.position.x / CELL_SIZE) - 4;
+	if (*cx < 0)
+		*cx = 0;
+	*cx_limit = *cx + 8;
+	if (*cx_limit >= map_width(gunstorm->map))
+		*cx_limit = map_width(gunstorm->map) - 1;
+}
+
 void	minimap(t_game *gunstorm)
 {
 	int	cx;
@@ -90,12 +91,7 @@ void	minimap(t_game *gunstorm)
 	int	cx_limit;
 	int	cy_limit;
 
-	cx = (gunstorm->player.position.x / CELL_SIZE) - 4;
-	if (cx < 0)
-		cx = 0;
-	cx_limit = cx + 8;
-	if (cx_limit >= map_width(gunstorm->map))
-		cx_limit = map_width(gunstorm->map) - 1;
+	x_init(gunstorm, &cx, &cx_limit);
 	while (cx <= cx_limit)
 	{
 		cy = (gunstorm->player.position.y / CELL_SIZE) - 4;

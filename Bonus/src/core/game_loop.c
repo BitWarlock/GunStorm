@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:04:03 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/10 15:24:26 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/18 21:55:30 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	game_fps(t_game *gunstorm)
 {
-	gunstorm->move_speed = 35.0 * gunstorm->mlx_data.mlx->delta_time;
+	gunstorm->move_speed = 30.0 * gunstorm->mlx_data.mlx->delta_time;
 	gunstorm->frames++;
 	if (mlx_get_time() - gunstorm->start_time >= 1)
 	{
@@ -24,7 +24,7 @@ void	game_fps(t_game *gunstorm)
 	}
 }
 
-static int	rgba_color(t_rgb colors, int alpha, int y)
+int	rgba_color(t_rgb colors, int alpha, int y)
 {
 	uint8_t	r;
 	uint8_t	g;
@@ -97,29 +97,6 @@ void	mouse_rotate_pov(t_game *gunstorm, float delta_time)
 	prev_y = y;
 }
 
-void	display_menu(t_game *gunstorm)
-{
-	gunstorm->mlx_data.circle->enabled = false;
-	gunstorm->mlx_data.menu->enabled = true;
-	mlx_set_cursor_mode(gunstorm->mlx_data.mlx, MLX_MOUSE_NORMAL);
-}
-
-void	menu(t_game *gunstorm)
-{
-	int	x;
-	int	y;
-
-	if (gunstorm->menu && mlx_is_mouse_down(gunstorm->mlx_data.mlx,
-			MLX_MOUSE_BUTTON_LEFT))
-	{
-		mlx_get_mouse_pos(gunstorm->mlx_data.mlx, &x, &y);
-		if (x >= 710 && x <= 1200 && y >= 600 && y <= 780)
-			gunstorm->menu = false;
-		if (x >= 710 && x <= 1200 && y >= 830 && y <= 1000)
-			mlx_close_window(gunstorm->mlx_data.mlx);
-	}
-}
-
 bool	infront_door(t_map map, t_pair player)
 {
 	int	x;
@@ -150,13 +127,13 @@ void	game_loop(void *param)
 	menu(gunstorm);
 	if (gunstorm->menu)
 		return (display_menu(gunstorm));
+	gun_up(gunstorm);
+	update_player_anim(gunstorm, &gunstorm->player_anim);
 	mlx_set_cursor_mode(gunstorm->mlx_data.mlx, MLX_MOUSE_HIDDEN);
 	gunstorm->mlx_data.menu->enabled = false;
 	gunstorm->mlx_data.circle->enabled = true;
 	if (infront_door(gunstorm->map, gunstorm->player.position))
 		gunstorm->mlx_data.door_msg->enabled = true;
-	if (mlx_is_mouse_down(gunstorm->mlx_data.mlx, MLX_MOUSE_BUTTON_LEFT))
-		play_gunshot(&gunstorm->sound_system, &gunstorm->sound);
 	mouse_rotate_pov(gunstorm, gunstorm->mlx_data.mlx->delta_time);
 	player_movement(gunstorm, &gunstorm->player);
 	game_fps(gunstorm);

@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/04 16:59:39 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/18 22:01:40 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,17 @@ int	get_cell_color(char cell)
 {
 	if (cell == '0' || player_char(cell))
 		return (0x000000FF);
-	if (cell == '1')
-		return (0x898989FF);
 	if (cell == 'D')
 		return (0x62090bcc);
+	else if (cell == '1')
+		return (0x898989FF);
 	return (0x000000FF);
+}
+
+bool	is_within_circle(t_pair c, int px, int py)
+{
+	float	dist;
+
+	dist = ((px - c.x) * (px - c.x)) + ((py - c.y) * (py - c.y));
+	return (dist <= (CELL_SIZE * 3) * (CELL_SIZE * 3));
 }

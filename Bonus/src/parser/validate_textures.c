@@ -6,37 +6,11 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/08 12:57:13 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/18 18:42:15 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/gunstorm.h"
-
-void	validate_doors(t_game *gunstorm, t_map map, int x, int y)
-{
-	if (x <= 0 || y <= 0
-		|| y >= map.height - 1
-		|| x >= (int)ft_strlen(map.rows[y]) - 1)
-		map_error_split("Door position is not valid",
-			gunstorm, NULL);
-	if (map.rows[y - 1][x] == '1')
-	{
-		if (map.rows[y + 1][x] != '1')
-			map_error_split("Door must be surrounded by walls",
-				gunstorm, NULL);
-		validate_door_adjacent(gunstorm, x, y, 'x');
-	}
-	else if (map.rows[y][x - 1] == '1')
-	{
-		if (map.rows[y][x + 1] != '1')
-			map_error_split("Door must be surrounded by walls",
-				gunstorm, NULL);
-		validate_door_adjacent(gunstorm, x, y, 'y');
-	}
-	else
-		map_error_split("Door must be adjacent to a wall",
-			gunstorm, NULL);
-}
 
 static char	*get_file_name(char *str, char *texture)
 {

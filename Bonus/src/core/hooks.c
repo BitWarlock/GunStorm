@@ -6,13 +6,13 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:42:54 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/10 15:24:37 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/18 22:05:08 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/gunstorm.h"
 
-void	move_in_playerdir(t_direction direction, float *dx, float *dy,
+static void	move_in_playerdir(t_direction direction, float *dx, float *dy,
 		t_game *gunstorm)
 {
 	if (direction == FORWARD)
@@ -37,30 +37,33 @@ void	move_in_playerdir(t_direction direction, float *dx, float *dy,
 	}
 }
 
-bool	is_colliding(float x, float y, t_map map)
+static bool	is_colliding(float x, float y, t_map map)
 {
 	int	map_x;
 	int	map_y;
 
 	map_x = floorf(x / CELL_SIZE);
 	map_y = floorf(y / CELL_SIZE);
-	if (map_x >= 0 && map_y >= 0 && (map.rows[map_y][map_x] == '1'
+	if (map_x >= 0 && map_y >= 0
+		&& (map.rows[map_y][map_x] == '1'
 		|| map.rows[map_y][map_x] == 'D'))
 		return (true);
 	map_x = floorf((x + 3.0) / CELL_SIZE);
 	map_y = floorf((y + 3.0) / CELL_SIZE);
-	if (map_x >= 0 && map_y >= 0 && (map.rows[map_y][map_x] == '1'
+	if (map_x >= 0 && map_y >= 0
+		&& (map.rows[map_y][map_x] == '1'
 		|| map.rows[map_y][map_x] == 'D'))
 		return (true);
 	map_x = floorf((x - 3.0) / CELL_SIZE);
 	map_y = floorf((y - 3.0) / CELL_SIZE);
-	if (map_x >= 0 && map_y >= 0 && (map.rows[map_y][map_x] == '1'
+	if (map_x >= 0 && map_y >= 0
+		&& (map.rows[map_y][map_x] == '1'
 		|| map.rows[map_y][map_x] == 'D'))
 		return (true);
 	return (false);
 }
 
-void	move_player(t_direction direction, t_player *player, t_game *gunstorm)
+static void	move_player(t_direction direction, t_player *player, t_game *gunstorm)
 {
 	float	new_x;
 	float	new_y;
@@ -104,41 +107,22 @@ void	game_movement_hooks(mlx_key_data_t key, t_game *gunstorm)
 			= (key.action == MLX_PRESS || key.action == MLX_REPEAT);
 }
 
-void	door_open_close(t_map *map, t_pair player)
-{
-	int	x;
-	int	y;
-
-	x = floor(player.x / CELL_SIZE);
-	y = floor(player.y / CELL_SIZE);
-	if (map->rows[y - 1][x] == 'D')
-		map->rows[y - 1][x] = 'O';
-	else if (map->rows[y + 1][x] == 'D')
-		map->rows[y + 1][x] = 'O';
-	else if (map->rows[y][x + 1] == 'D')
-		map->rows[y][x + 1] = 'O';
-	else if (map->rows[y][x - 1] == 'D')
-		map->rows[y][x - 1] = 'O';
-	else if (map->rows[y - 1][x] == 'O')
-		map->rows[y - 1][x] = 'D';
-	else if (map->rows[y + 1][x] == 'O')
-		map->rows[y + 1][x] = 'D';
-	else if (map->rows[y][x + 1] == 'O')
-		map->rows[y][x + 1] = 'D';
-	else if (map->rows[y][x - 1] == 'O')
-		map->rows[y][x - 1] = 'D';
-}
-
 void	game_hooks(mlx_key_data_t key, void *param)
 {
 	t_game	*gunstorm;
+	int		current_frame;
 
 	gunstorm = (t_game *)param;
 	gunstorm->start_game = true;
+	gunstorm->mlx_data.welcome_screen->enabled = false;
 	mlx_delete_image(gunstorm->mlx_data.mlx, gunstorm->mlx_data.welcome_screen);
 	game_movement_hooks(key, gunstorm);
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_ESCAPE))
+	{
+		current_frame = gunstorm->player_anim.current_frame;
+		gunstorm->player_anim.frames[current_frame]->enabled = true;
 		gunstorm->menu = !gunstorm->menu;
+	}
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_LEFT))
 		gunstorm->player.angle -= 0.1;
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_RIGHT))

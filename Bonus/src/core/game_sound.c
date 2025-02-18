@@ -6,14 +6,14 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:38:21 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/10 15:30:31 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/18 22:00:13 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/gunstorm.h"
 #include "../../../Sound/miniaudio.h"
 
-void	play_gunshot(SoundSystem *sound_system, t_sound *sound)
+void	play_gunshot(t_gunsound *sound_system, t_sound *sound)
 {
 	if (!sound_system->sound_loaded
 		|| ma_sound_is_playing(&sound_system->gunshot))
