@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:42:54 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/18 22:05:08 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/18 23:23:38 by agaladi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,6 @@ void	game_hooks(mlx_key_data_t key, void *param)
 
 	gunstorm = (t_game *)param;
 	gunstorm->start_game = true;
-	gunstorm->mlx_data.welcome_screen->enabled = false;
 	mlx_delete_image(gunstorm->mlx_data.mlx, gunstorm->mlx_data.welcome_screen);
 	game_movement_hooks(key, gunstorm);
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_ESCAPE))
