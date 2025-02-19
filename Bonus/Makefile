@@ -41,7 +41,13 @@ CFLAGS			= $(FLAGS)
 
 define PRINT_LOADING
 	@printf "\n\033[2K\r$(GREEN)Compiling $*... $(RESET)\n"
-	@for i in $(shell seq 0 100); do \
+	@# Determine the sleep duration based on the file name
+	@if echo "$*" | grep -q "src/core/game_sound"; then \
+		sleep_duration=0.6; \
+	else \
+		sleep_duration=0.001; \
+	fi; \
+	for i in $(shell seq 0 100); do \
 		if [ $$((i % 5)) -eq 0 ]; then \
 			printf "\033[2K\r$(BLUE)⟦$(RESET)"; \
 			n=`expr $$i / 2 + 1`; \
@@ -50,10 +56,11 @@ define PRINT_LOADING
 			printf "$(BLUE)⟧$(RESET) $(GREEN)%3d%%$(RESET)" "$$i"; \
 			printf "$(RESET)"; \
 		fi; \
-		sleep 0.002; \
+		sleep $$sleep_duration; \
 	done; \
 	printf "\n"
 endef
+
 
 define CLEAN_LOADING
 	@for i in $(shell seq 0 100); do \

@@ -6,7 +6,7 @@
 /*   By: agaladi <agaladi@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:06:26 by agaladi           #+#    #+#             */
-/*   Updated: 2025/02/18 19:29:25 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/19 20:20:08 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	load_player_anim(t_game *game, t_player_anim *anim)
 			exit(EXIT_FAILURE);
 		anim->frames[i] = mlx_texture_to_image(game->mlx_data.mlx,
 				anim->textures[i]);
+		mlx_delete_texture(anim->textures[i]);
 		if (!anim->frames[i])
 			exit(EXIT_FAILURE);
 		anim->frames[i]->enabled = false;
@@ -39,7 +40,7 @@ void	load_player_anim(t_game *game, t_player_anim *anim)
 
 void	update_player_anim(t_game *game, t_player_anim *anim)
 {
-	if (!anim->active)
+	if (!anim->active || game->menu)
 		return ;
 	anim->frames[anim->current_frame]->enabled = false;
 	anim->current_frame = (anim->current_frame + 1) % PLAYER_FRAME_COUNT;

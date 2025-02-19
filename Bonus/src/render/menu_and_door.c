@@ -6,7 +6,7 @@
 /*   By: agaladi <agaladi@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:04:03 by agaladi           #+#    #+#             */
-/*   Updated: 2025/02/19 16:21:53 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/19 19:21:46 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,6 @@ void	menu(t_game *gunstorm)
 
 static void	cell_infront_player(int *x, int *y, float angle)
 {
-	angle = fmod(angle, 2 * M_PI);
-	if (angle < 0)
-		angle += 2 * M_PI;
 	*x += (int)round(cos(angle));
 	*y -= (int)round(sin(angle));
 }

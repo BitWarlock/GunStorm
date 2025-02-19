@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/19 16:20:59 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/19 19:07:50 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ void				validate_door_adjacent(t_game *gunstorm, int x, int y,
 void				player_movement(t_game *gunstorm, t_player *player);
 void				free_sound(t_game *gunstorm);
 void				sound_error(t_game *gunstorm);
-void				game_sound_init(t_game *gunstorm, t_sound *sound);
+void				game_init_soundtrack(t_game *gunstorm, t_sound *sound);
 void				load_player_anim(t_game *game, t_player_anim *anim);
 void				update_player_anim(t_game *game, t_player_anim *anim);
 bool				is_infront_door(t_map map, t_player player);

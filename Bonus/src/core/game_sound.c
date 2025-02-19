@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:38:21 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/18 22:00:13 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/19 19:08:14 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	sound_devices_init(ma_decoder *decoder,
 	ma_device_set_master_volume(gunstorm->sound.device, 0.6);
 }
 
-void	game_sound_init(t_game *gunstorm, t_sound *sound)
+void	game_init_soundtrack(t_game *gunstorm, t_sound *sound)
 {
 	sound->decoder = malloc(sizeof(ma_decoder));
 	sound->device_config = malloc(sizeof(ma_device_config));
