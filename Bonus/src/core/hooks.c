@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:42:54 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/18 23:23:38 by agaladi          ###   ########.fr       */
+/*   Updated: 2025/02/19 16:24:39 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ static bool	is_colliding(float x, float y, t_map map)
 	return (false);
 }
 
-static void	move_player(t_direction direction, t_player *player, t_game *gunstorm)
+static void	move_player(t_direction direction,
+				t_player *player, t_game *gunstorm)
 {
 	float	new_x;
 	float	new_y;
@@ -126,7 +127,7 @@ void	game_hooks(mlx_key_data_t key, void *param)
 		gunstorm->player.angle -= 0.1;
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_RIGHT))
 		gunstorm->player.angle += 0.1;
-	if (infront_door(gunstorm->map, gunstorm->player.position)
-		&& mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_O))
-		door_open_close(&gunstorm->map, gunstorm->player.position);
+	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_E)
+		&& is_infront_door(gunstorm->map, gunstorm->player))
+		door_open_close(&gunstorm->map, gunstorm->player);
 }

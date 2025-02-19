@@ -6,7 +6,7 @@
 /*   By: agaladi <agaladi@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:04:03 by agaladi           #+#    #+#             */
-/*   Updated: 2025/02/18 22:03:05 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/19 16:21:53 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,27 +37,38 @@ void	menu(t_game *gunstorm)
 	}
 }
 
-void	door_open_close(t_map *map, t_pair player)
+static void	cell_infront_player(int *x, int *y, float angle)
+{
+	angle = fmod(angle, 2 * M_PI);
+	if (angle < 0)
+		angle += 2 * M_PI;
+	*x += (int)round(cos(angle));
+	*y -= (int)round(sin(angle));
+}
+
+void	door_open_close(t_map *map, t_player player)
 {
 	int	x;
 	int	y;
 
-	x = floor(player.x / CELL_SIZE);
-	y = floor(player.y / CELL_SIZE);
-	if (map->rows[y - 1][x] == 'D')
-		map->rows[y - 1][x] = 'O';
-	else if (map->rows[y + 1][x] == 'D')
-		map->rows[y + 1][x] = 'O';
-	else if (map->rows[y][x + 1] == 'D')
-		map->rows[y][x + 1] = 'O';
-	else if (map->rows[y][x - 1] == 'D')
-		map->rows[y][x - 1] = 'O';
-	else if (map->rows[y - 1][x] == 'O')
-		map->rows[y - 1][x] = 'D';
-	else if (map->rows[y + 1][x] == 'O')
-		map->rows[y + 1][x] = 'D';
-	else if (map->rows[y][x + 1] == 'O')
-		map->rows[y][x + 1] = 'D';
-	else if (map->rows[y][x - 1] == 'O')
-		map->rows[y][x - 1] = 'D';
+	x = floor(player.position.x / CELL_SIZE);
+	y = floor(player.position.y / CELL_SIZE);
+	cell_infront_player(&x, &y, player.angle);
+	if (map->rows[y][x] == 'D')
+		map->rows[y][x] = 'O';
+	else if (map->rows[y][x] == 'O')
+		map->rows[y][x] = 'D';
+}
+
+bool	is_infront_door(t_map map, t_player player)
+{
+	char	cell;
+	int		x;
+	int		y;
+
+	x = floor(player.position.x / CELL_SIZE);
+	y = floor(player.position.y / CELL_SIZE);
+	cell_infront_player(&x, &y, player.angle);
+	cell = map.rows[y][x];
+	return (cell == 'D' || cell == 'O');
 }

@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/18 21:59:39 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/19 16:25:36 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	game_init_vars(t_game *gunstorm, mlx_t *mlx)
 	menu->enabled = false;
 	mlx_set_cursor_mode(mlx, MLX_MOUSE_HIDDEN);
 	gunstorm->mlx_data.door_msg = mlx_put_string(gunstorm->mlx_data.mlx,
-			"Press O to open/close the door", WIDTH / 2, 300);
+			"Press E to open/close the door", WIDTH / 2, 300);
 	gunstorm->mlx_data.door_msg->enabled = false;
 	gunstorm->mlx_data.circle->enabled = false;
 	gunstorm->player_anim.pos_x = WIDTH / 3;

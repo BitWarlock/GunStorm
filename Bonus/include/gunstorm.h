@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/18 22:04:32 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/19 16:20:59 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ void				sound_error(t_game *gunstorm);
 void				game_sound_init(t_game *gunstorm, t_sound *sound);
 void				load_player_anim(t_game *game, t_player_anim *anim);
 void				update_player_anim(t_game *game, t_player_anim *anim);
-bool				infront_door(t_map map, t_pair player);
+bool				is_infront_door(t_map map, t_player player);
 void				ray_draw_wall(t_game *gunstorm, t_raycaster ray, int x);
 int					get_cell_color(char cell);
 void				minimap(t_game *gunstorm);
@@ -224,7 +224,7 @@ void				player_attack(mouse_key_t button, action_t action,
 void				gun_up(t_game *gunstorm);
 void				display_menu(t_game *gunstorm);
 void				menu(t_game *gunstorm);
-void				door_open_close(t_map *map, t_pair player);
+void				door_open_close(t_map *map, t_player player);
 void				game_core(char *map_file);
 
 /* ERROR HANDLING */

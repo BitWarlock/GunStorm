@@ -12,7 +12,7 @@ STRICT_FLAGS	= -Wall -Wextra -Werror -Wunused -Wconversion
 DEBUG_FLAGS 	= -g3 -O0 -DDEBUG \
 					-fno-inline -fno-omit-frame-pointer \
 					-fstack-protector-all
-FLAGS			= -O3 -g -Wshadow -Wnull-dereference #-fsanitize=address
+FLAGS			= -Ofast -g -Wshadow -Wnull-dereference #-fsanitize=address
 NAME			= cub3D
 LIB_DIR			= ./libft
 LIBFT			= $(LIB_DIR)/libft.a

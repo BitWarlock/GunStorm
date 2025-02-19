@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:04:03 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/18 21:55:30 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/19 16:24:52 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,32 +24,31 @@ void	game_fps(t_game *gunstorm)
 	}
 }
 
-int	rgba_color(t_rgb colors, int alpha, int y)
+static int	apply_brightness(t_rgb colors, int alpha, float brightness)
 {
 	uint8_t	r;
 	uint8_t	g;
 	uint8_t	b;
-	uint8_t	a;
-	float	brightness;
-	float	distance_from_center;
 
-	distance_from_center = fabsf((HEIGHT / 2) - (float)y) / (HEIGHT / 2);
-	brightness = distance_from_center * 1.01;
-	brightness = brightness < 0.2f ? 0.2f : brightness;
-	brightness = brightness > 1.0f ? 1.0f : brightness;
 	r = (uint8_t)(colors.r * brightness);
 	g = (uint8_t)(colors.g * brightness);
 	b = (uint8_t)(colors.b * brightness);
-	a = (uint8_t)(alpha * brightness);
 	return (r << 24 | g << 16 | b << 8 | alpha);
 }
 
-/*static int	rgba_color(t_rgb colors, int alpha, int y)*/
-/*{*/
-/*	return (colors.r << 24*/
-/*		| colors.g << 16 | colors.b << 8*/
-/*		| alpha);*/
-/*}*/
+int	rgba_color(t_rgb colors, int alpha, int y)
+{
+	float	brightness;
+	float	distance_from_center;
+
+	distance_from_center = fabsf((HEIGHT * 0.5f) - (float)y) / (HEIGHT * 0.5f);
+	brightness = distance_from_center * 1.0;
+	if (brightness < 0.2f)
+		brightness = 0.2f;
+	if (brightness > 1.0f)
+		brightness = 1.0f;
+	return (apply_brightness(colors, alpha, brightness));
+}
 
 static void	clear_window(t_game *gunstorm)
 {
@@ -97,25 +96,6 @@ void	mouse_rotate_pov(t_game *gunstorm, float delta_time)
 	prev_y = y;
 }
 
-bool	infront_door(t_map map, t_pair player)
-{
-	int	x;
-	int	y;
-
-	x = floor(player.x / CELL_SIZE);
-	y = floor(player.y / CELL_SIZE);
-	if (x <= 0 || y <= 0 || y >= map.height - 1
-		|| x >= (int)ft_strlen(map.rows[y]) - 1)
-		return (false);
-	if (map.rows[y - 1][x] == 'D' || map.rows[y + 1][x] == 'D' || map.rows[y][x
-		- 1] == 'D' || map.rows[y][x + 1] == 'D')
-		return (true);
-	else if (map.rows[y - 1][x] == 'O' || map.rows[y + 1][x] == 'O'
-		|| map.rows[y][x - 1] == 'O' || map.rows[y][x + 1] == 'O')
-		return (true);
-	return (false);
-}
-
 void	game_loop(void *param)
 {
 	t_game	*gunstorm;
@@ -132,7 +112,7 @@ void	game_loop(void *param)
 	mlx_set_cursor_mode(gunstorm->mlx_data.mlx, MLX_MOUSE_HIDDEN);
 	gunstorm->mlx_data.menu->enabled = false;
 	gunstorm->mlx_data.circle->enabled = true;
-	if (infront_door(gunstorm->map, gunstorm->player.position))
+	if (is_infront_door(gunstorm->map, gunstorm->player))
 		gunstorm->mlx_data.door_msg->enabled = true;
 	mouse_rotate_pov(gunstorm, gunstorm->mlx_data.mlx->delta_time);
 	player_movement(gunstorm, &gunstorm->player);
