@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/19 16:25:36 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/19 18:02:03 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,16 @@ void	game_init_sound(t_gunsound *sound_system)
 
 static void	game_init_mlx(t_game *gunstorm)
 {
+	int			width;
+	int			height;
 	mlx_t		*mlx;
 	mlx_image_t	*img;
 
 	mlx = mlx_init(WIDTH, HEIGHT, "GunStorm", true);
 	if (!mlx)
 		(free_all(gunstorm)), exit(EXIT_FAILURE);
+	mlx_get_monitor_size(0, &width, &height);
+	mlx_set_window_pos(mlx, (width - WIDTH) / 2, (height - HEIGHT) / 2);
 	img = mlx_new_image(mlx, WIDTH, HEIGHT);
 	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
 		(free_all(gunstorm)), mlx_terminate(mlx), exit(EXIT_FAILURE);
