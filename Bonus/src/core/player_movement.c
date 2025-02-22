@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hooks.c                                            :+:      :+:    :+:   */
+/*   player_movement.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/18 17:42:54 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/19 16:24:39 by mrezki           ###   ########.fr       */
+/*   Created: 2025/02/22 15:53:20 by mrezki            #+#    #+#             */
+/*   Updated: 2025/02/22 15:53:22 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,44 +90,4 @@ void	player_movement(t_game *gunstorm, t_player *player)
 		move_player(LEFT, player, gunstorm);
 	if (gunstorm->movement.right)
 		move_player(RIGHT, player, gunstorm);
-}
-
-void	game_movement_hooks(mlx_key_data_t key, t_game *gunstorm)
-{
-	if (key.key == MLX_KEY_W)
-		gunstorm->movement.forward
-			= (key.action == MLX_PRESS || key.action == MLX_REPEAT);
-	if (key.key == MLX_KEY_S)
-		gunstorm->movement.backward
-			= (key.action == MLX_PRESS || key.action == MLX_REPEAT);
-	if (key.key == MLX_KEY_D)
-		gunstorm->movement.right
-			= (key.action == MLX_PRESS || key.action == MLX_REPEAT);
-	if (key.key == MLX_KEY_A)
-		gunstorm->movement.left
-			= (key.action == MLX_PRESS || key.action == MLX_REPEAT);
-}
-
-void	game_hooks(mlx_key_data_t key, void *param)
-{
-	t_game	*gunstorm;
-	int		current_frame;
-
-	gunstorm = (t_game *)param;
-	gunstorm->start_game = true;
-	mlx_delete_image(gunstorm->mlx_data.mlx, gunstorm->mlx_data.welcome_screen);
-	game_movement_hooks(key, gunstorm);
-	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_ESCAPE))
-	{
-		current_frame = gunstorm->player_anim.current_frame;
-		gunstorm->player_anim.frames[current_frame]->enabled = true;
-		gunstorm->menu = !gunstorm->menu;
-	}
-	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_LEFT))
-		gunstorm->player.angle -= 0.1;
-	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_RIGHT))
-		gunstorm->player.angle += 0.1;
-	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_E)
-		&& is_infront_door(gunstorm->map, gunstorm->player))
-		door_open_close(&gunstorm->map, gunstorm->player);
 }

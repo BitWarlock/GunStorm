@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/19 19:07:50 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/22 16:10:01 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,11 +181,11 @@ typedef struct s_game
 }					t_game;
 
 // Function prototypes
+void				blocked_areas_warning(void);
+int					apply_brightness(t_rgb colors, int alpha, float brightness);
+void				game_init(t_game *gunstorm);
 void				ray_wall_bounds(t_game *gunstorm, t_raycaster *ray);
 void				play_gunshot(t_gunsound *sound_system, t_sound *sound);
-void				validate_doors(t_game *gunstorm, t_map map, int x, int y);
-void				validate_door_adjacent(t_game *gunstorm, int x, int y,
-						char axis);
 void				player_movement(t_game *gunstorm, t_player *player);
 void				free_sound(t_game *gunstorm);
 void				sound_error(t_game *gunstorm);

@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/18 22:01:40 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/22 16:02:48 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,16 @@ bool	is_within_circle(t_pair c, int px, int py)
 
 	dist = ((px - c.x) * (px - c.x)) + ((py - c.y) * (py - c.y));
 	return (dist <= (CELL_SIZE * 3) * (CELL_SIZE * 3));
+}
+
+int	apply_brightness(t_rgb colors, int alpha, float brightness)
+{
+	uint8_t	r;
+	uint8_t	g;
+	uint8_t	b;
+
+	r = (uint8_t)(colors.r * brightness);
+	g = (uint8_t)(colors.g * brightness);
+	b = (uint8_t)(colors.b * brightness);
+	return (r << 24 | g << 16 | b << 8 | alpha);
 }

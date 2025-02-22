@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:04:03 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/19 16:24:52 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/22 16:03:02 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,6 @@ void	game_fps(t_game *gunstorm)
 		gunstorm->frames = 0;
 		gunstorm->start_time = mlx_get_time();
 	}
-}
-
-static int	apply_brightness(t_rgb colors, int alpha, float brightness)
-{
-	uint8_t	r;
-	uint8_t	g;
-	uint8_t	b;
-
-	r = (uint8_t)(colors.r * brightness);
-	g = (uint8_t)(colors.g * brightness);
-	b = (uint8_t)(colors.b * brightness);
-	return (r << 24 | g << 16 | b << 8 | alpha);
 }
 
 int	rgba_color(t_rgb colors, int alpha, int y)
