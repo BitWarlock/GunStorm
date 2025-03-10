@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:53:20 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/22 15:53:22 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/10 22:56:44 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,27 +39,29 @@ static void	move_in_playerdir(t_direction direction, float *dx, float *dy,
 
 static bool	is_colliding(float x, float y, t_map map)
 {
-	int	map_x;
-	int	map_y;
+	float	dx;
+	float	dy;
+	float	offset;
+	int		map_x;
+	int		map_y;
 
-	map_x = floorf(x / CELL_SIZE);
-	map_y = floorf(y / CELL_SIZE);
-	if (map_x >= 0 && map_y >= 0
-		&& (map.rows[map_y][map_x] == '1'
-		|| map.rows[map_y][map_x] == 'D'))
-		return (true);
-	map_x = floorf((x + 3.0) / CELL_SIZE);
-	map_y = floorf((y + 3.0) / CELL_SIZE);
-	if (map_x >= 0 && map_y >= 0
-		&& (map.rows[map_y][map_x] == '1'
-		|| map.rows[map_y][map_x] == 'D'))
-		return (true);
-	map_x = floorf((x - 3.0) / CELL_SIZE);
-	map_y = floorf((y - 3.0) / CELL_SIZE);
-	if (map_x >= 0 && map_y >= 0
-		&& (map.rows[map_y][map_x] == '1'
-		|| map.rows[map_y][map_x] == 'D'))
-		return (true);
+	offset = 3.0;
+	dx = -offset;
+	while (dx <= offset)
+	{
+		dy = -offset;
+		while (dy <= offset)
+		{
+			map_x = floorf((x + dx) / CELL_SIZE);
+			map_y = floorf((y + dy) / CELL_SIZE);
+			if (map_x >= 0 && map_y >= 0
+				&& (map.rows[map_y][map_x] == '1'
+				|| map.rows[map_y][map_x] == 'D'))
+				return (true);
+			dy += offset;
+		}
+		dx += offset;
+	}
 	return (false);
 }
 

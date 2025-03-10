@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:27:11 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/18 22:04:15 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/23 10:49:28 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int	texture_pixel_dim(uint8_t *pixel, float ray_dist)
 		| (uint8_t)(pixel[2] * brightness) << 8 | pixel[3]);
 }
 
-static int	texture_pixel_color(mlx_texture_t *texture,
+int	texture_pixel_color(mlx_texture_t *texture,
 				int x, int y, float ray_dist)
 {
 	int		position;

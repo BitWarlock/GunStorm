@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/22 16:10:01 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/02/22 18:43:35 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,8 @@ typedef struct s_game
 }					t_game;
 
 // Function prototypes
+int					texture_pixel_color(mlx_texture_t *texture, int x, int y,
+						float ray_dist);
 void				blocked_areas_warning(void);
 int					apply_brightness(t_rgb colors, int alpha, float brightness);
 void				game_init(t_game *gunstorm);
