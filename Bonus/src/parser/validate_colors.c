@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/22 17:20:24 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/16 04:19:06 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static char	*find_color_values(char *map, char *substr)
 			return (free(tmp), file);
 		next_tmp = ft_substr(tmp, start + 1, ft_strlen(tmp));
 		if (!next_tmp)
-			fatal_error("malloc", strerror(errno));
+			(free(tmp), fatal_error("malloc", strerror(errno)));
 		free(tmp);
 		tmp = next_tmp;
 		start = find(tmp, substr);
@@ -67,7 +67,7 @@ static int	color_value(char *color)
 	if (!color_value || !color_value[0]
 		|| ft_strlen(color_value) > 3)
 		return (free(color_value), -1);
-	value = ft_atoi(color);
+	value = ft_atoi(color_value);
 	return (free(color_value), value);
 }
 
@@ -76,6 +76,8 @@ static t_rgb	get_color_values(char *line)
 	t_rgb	values;
 	char	**colors;
 
+	if (!line)
+		return ((t_rgb){-1, -1, -1});
 	colors = ft_split(line, ',');
 	if (!colors)
 		(free(line)), fatal_error("malloc", strerror(errno));

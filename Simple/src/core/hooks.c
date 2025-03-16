@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:42:54 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/18 18:59:34 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/16 03:07:19 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,26 +37,31 @@ void	move_in_playerdir(mlx_key_data_t key, float *dx,
 	}
 }
 
-bool	is_colliding(float x, float y, t_map map)
+static bool	is_colliding(float x, float y, t_map map)
 {
-	int	map_x;
-	int	map_y;
+	float	dx;
+	float	dy;
+	float	offset;
+	int		map_x;
+	int		map_y;
 
-	map_x = floorf(x / CELL_SIZE);
-	map_y = floorf(y / CELL_SIZE);
-	if (map_x >= 0 && map_y >= 0
-		&& map.rows[map_y][map_x] == '1')
-		return (true);
-	map_x = floorf((x + 1.9) / CELL_SIZE);
-	map_y = floorf((y + 1.9) / CELL_SIZE);
-	if (map_x >= 0 && map_y >= 0
-		&& map.rows[map_y][map_x] == '1')
-		return (true);
-	map_x = floorf((x - 1.9) / CELL_SIZE);
-	map_y = floorf((y - 1.9) / CELL_SIZE);
-	if (map_x >= 0 && map_y >= 0
-		&& map.rows[map_y][map_x] == '1')
-		return (true);
+	offset = 3.0;
+	dx = -offset;
+	while (dx <= offset)
+	{
+		dy = -offset;
+		while (dy <= offset)
+		{
+			map_x = floorf((x + dx) / CELL_SIZE);
+			map_y = floorf((y + dy) / CELL_SIZE);
+			if (map_x >= 0 && map_y >= 0
+				&& (map.rows[map_y][map_x] == '1'
+				|| map.rows[map_y][map_x] == 'D'))
+				return (true);
+			dy += offset;
+		}
+		dx += offset;
+	}
 	return (false);
 }
 

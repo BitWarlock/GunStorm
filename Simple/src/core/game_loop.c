@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:04:03 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/27 13:58:19 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/14 23:27:42 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	game_fps(t_game *gunstorm)
 	float	fps;
 
 	fps = 1.0 / gunstorm->mlx_data.mlx->delta_time;
-	gunstorm->move_speed = gunstorm->mlx_data.mlx->delta_time * 20.0;
+	gunstorm->move_speed = gunstorm->mlx_data.mlx->delta_time * 50.0;
 	gunstorm->frames++;
 	if (mlx_get_time() - gunstorm->start_time >= 1)
 	{

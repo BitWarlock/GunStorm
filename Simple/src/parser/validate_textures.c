@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/22 17:20:25 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/14 21:18:50 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,15 @@ static char	*get_file_name(char *str, char *texture)
 	while (str[i] && str[i] != '\n')
 		i++;
 	tmp = ft_substr(str, 0, i);
-	file = ft_strtrim(tmp, " \n\t");
-	if (!tmp || !file)
+	if (!tmp)
 		fatal_error("malloc", strerror(errno));
+	file = ft_strtrim(tmp, " \n\t");
 	free(tmp);
+	if (!file)
+		fatal_error("malloc", strerror(errno));
 	fd = open(file, O_RDONLY);
 	if (fd != -1)
-		return (file);
+		return (close(fd), file);
 	return (free(file), NULL);
 }
 
@@ -64,7 +66,7 @@ static char	*find_substr(char *str, char *substr)
 			return (free(tmp), file);
 		next_tmp = ft_substr(tmp, start + 2, ft_strlen(tmp));
 		if (!next_tmp)
-			fatal_error("malloc", strerror(errno));
+			(free(tmp), fatal_error("malloc", strerror(errno)));
 		free(tmp);
 		tmp = next_tmp;
 		start = find(tmp, substr);
@@ -88,10 +90,13 @@ void	validate_textures(char *map, t_game *gunstorm)
 	while (i < 4)
 	{
 		file = find_substr(map, textures[i]);
-		texture = mlx_load_png(file);
-		free(file);
-		if (!file || !texture)
+		if (!file)
 			(free_textures(map, gunstorm, i)), texture_error(textures[i]);
+		texture = mlx_load_png(file);
+		if (!texture)
+			(free_textures(map, gunstorm, i)),
+				free(file), texture_error(textures[i]);
+		free(file);
 		fill_texture_file(gunstorm, texture, textures[i][0]);
 		i++;
 	}

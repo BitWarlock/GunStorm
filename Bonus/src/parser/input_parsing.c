@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/22 17:20:24 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/16 04:13:15 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 static float	player_angle(char direction)
 {
 	if (direction == 'S')
-		return (M_PI / 2);
-	if (direction == 'N')
 		return (3 * M_PI / 2);
+	if (direction == 'N')
+		return (M_PI / 2);
 	if (direction == 'W')
 		return (M_PI);
 	return (0);
@@ -63,7 +63,7 @@ static char	*get_map_content(int map_fd)
 		tmp = map;
 		map = ft_strjoin(map, str);
 		if (!map)
-			fatal_error("malloc", strerror(errno));
+			(free(tmp), fatal_error("malloc", strerror(errno)));
 		free(tmp);
 		free(str);
 		str = get_next_line(map_fd);
