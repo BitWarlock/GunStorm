@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/18 18:44:27 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/16 20:53:23 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ void	free_sound(t_game *gunstorm)
 
 void	free_all(t_game *gunstorm)
 {
-	mlx_delete_texture(gunstorm->texture.door);
+	if (door_in_map(gunstorm->map))
+		mlx_delete_texture(gunstorm->texture.door);
 	free_split(gunstorm->map.rows);
 	free_game(gunstorm);
 }
