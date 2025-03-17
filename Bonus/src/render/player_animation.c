@@ -6,13 +6,13 @@
 /*   By: agaladi <agaladi@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:06:26 by agaladi           #+#    #+#             */
-/*   Updated: 2025/02/19 20:20:08 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/17 03:44:00 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/gunstorm.h"
 
-void	load_player_anim(t_game *game, t_player_anim *anim)
+void	game_init_animations(t_game *game, t_player_anim *anim)
 {
 	char	frame_path[128];
 	int		i;

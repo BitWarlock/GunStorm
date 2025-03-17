@@ -6,7 +6,7 @@
 /*   By: agaladi <agaladi@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:04:03 by agaladi           #+#    #+#             */
-/*   Updated: 2025/02/19 19:21:46 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/17 21:11:06 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,35 +37,52 @@ void	menu(t_game *gunstorm)
 	}
 }
 
-static void	cell_infront_player(int *x, int *y, float angle)
-{
-	*x += (int)round(cos(angle));
-	*y -= (int)round(sin(angle));
-}
-
-void	door_open_close(t_map *map, t_player player)
+bool	map_has_doors(t_map map)
 {
 	int	x;
 	int	y;
 
-	x = floor(player.position.x / CELL_SIZE);
-	y = floor(player.position.y / CELL_SIZE);
-	cell_infront_player(&x, &y, player.angle);
+	y = 0;
+	while (y < map.height)
+	{
+		x = 0;
+		while (x < ft_strlen(map.rows[y]))
+		{
+			if (map.rows[y][x] == 'D')
+				return (true);
+			x++;
+		}
+		y++;
+	}
+	return (false);
+}
+
+void	door_open_close(t_map *map, t_game *gunstorm)
+{
+	int	x;
+	int	y;
+
+	x = floor(gunstorm->player.position.x / CELL_SIZE);
+	y = floor(gunstorm->player.position.y / CELL_SIZE);
+	x += (int)round(gunstorm->cos_table[gunstorm->player.angle_degree]);
+	y -= (int)round(gunstorm->sin_table[gunstorm->player.angle_degree]);
 	if (map->rows[y][x] == 'D')
 		map->rows[y][x] = 'O';
 	else if (map->rows[y][x] == 'O')
 		map->rows[y][x] = 'D';
 }
 
-bool	is_infront_door(t_map map, t_player player)
+bool	is_infront_door(t_map map, t_game *gunstorm)
 {
+	int		angle;
 	char	cell;
 	int		x;
 	int		y;
 
-	x = floor(player.position.x / CELL_SIZE);
-	y = floor(player.position.y / CELL_SIZE);
-	cell_infront_player(&x, &y, player.angle);
+	x = floor(gunstorm->player.position.x / CELL_SIZE);
+	y = floor(gunstorm->player.position.y / CELL_SIZE);
+	x += (int)round(gunstorm->cos_table[gunstorm->player.angle_degree]);
+	y -= (int)round(gunstorm->sin_table[gunstorm->player.angle_degree]);
 	cell = map.rows[y][x];
 	return (cell == 'D' || cell == 'O');
 }

@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:53:20 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/10 22:56:44 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/17 20:25:20 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,30 @@
 static void	move_in_playerdir(t_direction direction, float *dx, float *dy,
 		t_game *gunstorm)
 {
+	int	angle;
+
+	angle = gunstorm->player.angle_degree;
 	if (direction == FORWARD)
 	{
-		*dx = gunstorm->move_speed * cos(gunstorm->player.angle);
-		*dy = gunstorm->move_speed * sin(gunstorm->player.angle);
+		*dx = gunstorm->move_speed * gunstorm->cos_table[angle];
+		*dy = gunstorm->move_speed * gunstorm->sin_table[angle];
 	}
-	if (direction == BACKWARD)
+	else if (direction == BACKWARD)
 	{
-		*dx = -gunstorm->move_speed * cos(gunstorm->player.angle);
-		*dy = -gunstorm->move_speed * sin(gunstorm->player.angle);
+		*dx = -gunstorm->move_speed * gunstorm->cos_table[angle];
+		*dy = -gunstorm->move_speed * gunstorm->sin_table[angle];
 	}
-	if (direction == RIGHT)
+	else if (direction == RIGHT)
 	{
-		*dx = gunstorm->move_speed * cos(gunstorm->player.angle + M_PI_2);
-		*dy = gunstorm->move_speed * sin(gunstorm->player.angle + M_PI_2);
+		angle = (angle + 900) % 3600;
+		*dx = gunstorm->move_speed * gunstorm->cos_table[angle];
+		*dy = gunstorm->move_speed * gunstorm->sin_table[angle];
 	}
-	if (direction == LEFT)
+	else if (direction == LEFT)
 	{
-		*dx = gunstorm->move_speed * cos(gunstorm->player.angle - M_PI_2);
-		*dy = gunstorm->move_speed * sin(gunstorm->player.angle - M_PI_2);
+		angle = (angle - 900 + 3600) % 3600;
+		*dx = gunstorm->move_speed * gunstorm->cos_table[angle];
+		*dy = gunstorm->move_speed * gunstorm->sin_table[angle];
 	}
 }
 

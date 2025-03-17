@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 16:01:16 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/22 16:01:33 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/17 22:29:56 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,10 @@ static void	game_init_gunsound(t_gunsound *sound_system)
 
 static void	game_init_vars(t_game *gunstorm)
 {
+	gunstorm->ray_angle_step = FOV / (float)WIDTH;
+	gunstorm->player.angle_degree = (int)
+		(gunstorm->player.angle * 1800.0 / M_PI) % 3600;
+	gunstorm->game_has_doors = map_has_doors(gunstorm->map);
 	gunstorm->mlx_data.door_msg->enabled = false;
 	gunstorm->mlx_data.circle->enabled = false;
 	gunstorm->mlx_data.menu->enabled = false;
@@ -98,7 +102,8 @@ void	game_init(t_game *gunstorm)
 	game_init_mlx(gunstorm);
 	game_init_mlx_assets(gunstorm, gunstorm->mlx_data.mlx);
 	game_init_vars(gunstorm);
-	load_player_anim(gunstorm, &gunstorm->player_anim);
+	game_init_animations(gunstorm, &gunstorm->player_anim);
 	game_init_soundtrack(gunstorm, &gunstorm->sound);
 	game_init_gunsound(&gunstorm->sound_system);
+	game_init_lookup_t(gunstorm);
 }

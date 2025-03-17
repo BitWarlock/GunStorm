@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:42:54 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/22 15:53:32 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/17 21:11:37 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,13 @@ static void	game_movement_hooks(mlx_key_data_t key, t_game *gunstorm)
 	if (key.key == MLX_KEY_A)
 		gunstorm->movement.left
 			= (key.action == MLX_PRESS || key.action == MLX_REPEAT);
+}
+
+void	update_angle(t_player *player)
+{
+	player->angle_degree = (int)(player->angle * 1800.0f / M_PI) % 3600;
+	if (player->angle_degree < 0)
+		player->angle_degree += 3600;
 }
 
 void	game_hooks(mlx_key_data_t key, void *param)
@@ -48,6 +55,7 @@ void	game_hooks(mlx_key_data_t key, void *param)
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_RIGHT))
 		gunstorm->player.angle += 0.1;
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_E)
-		&& is_infront_door(gunstorm->map, gunstorm->player))
-		door_open_close(&gunstorm->map, gunstorm->player);
+		&& is_infront_door(gunstorm->map, gunstorm))
+		door_open_close(&gunstorm->map, gunstorm);
+	update_angle(&gunstorm->player);
 }

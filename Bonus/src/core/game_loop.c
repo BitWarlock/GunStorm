@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:04:03 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/17 02:41:39 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/17 20:29:56 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void	mouse_rotate_pov(t_game *gunstorm, float delta_time)
 	}
 	accum_dx = accum_dx * 0.6 + (x - prev_x) * 0.00052 * delta_time * 20.0f;
 	gunstorm->player.angle += accum_dx;
+	update_angle(&gunstorm->player);
 	prev_x = x;
 	prev_y = y;
 }
@@ -105,12 +106,13 @@ void	game_loop(void *param)
 	mlx_set_cursor_mode(gunstorm->mlx_data.mlx, MLX_MOUSE_HIDDEN);
 	gunstorm->mlx_data.menu->enabled = false;
 	gunstorm->mlx_data.circle->enabled = true;
-	if (is_infront_door(gunstorm->map, gunstorm->player))
+	if (gunstorm->game_has_doors
+		&& is_infront_door(gunstorm->map, gunstorm))
 		gunstorm->mlx_data.door_msg->enabled = true;
 	mouse_rotate_pov(gunstorm, gunstorm->mlx_data.mlx->delta_time);
 	player_movement(gunstorm, &gunstorm->player);
 	game_fps(gunstorm);
-	threaded_raycast(gunstorm, clear_window);
-	threaded_raycast(gunstorm, ray_caster);
+	threaded_render(gunstorm, clear_window);
+	threaded_render(gunstorm, ray_caster);
 	minimap(gunstorm);
 }

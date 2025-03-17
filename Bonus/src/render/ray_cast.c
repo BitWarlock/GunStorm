@@ -6,23 +6,28 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:51:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/17 02:40:52 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/17 20:13:03 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/gunstorm.h"
 
 static void	ray_init_direction(t_raycaster *ray,
-							float start_angle, int x, int w)
+					float start_angle, int x, t_game *gunstorm)
 {
-	ray->ray_angle = start_angle + (FOV * x / w);
-	ray->ray_dirx = cos(ray->ray_angle);
-	ray->ray_diry = sin(ray->ray_angle);
-	if (ray->ray_dirx == 0)
+	int	angle_index;
+
+	ray->ray_angle = start_angle + (gunstorm->ray_angle_step * x);
+	angle_index = (int)(ray->ray_angle * 1800.0f / M_PI) % 3600;
+	if (angle_index < 0)
+		angle_index += 3600;
+	ray->ray_dirx = gunstorm->cos_table[angle_index];
+	ray->ray_diry = gunstorm->sin_table[angle_index];
+	if (fabs(ray->ray_dirx) < 1e-10)
 		ray->delta_distx = 1e30;
 	else
 		ray->delta_distx = fabs(1.0 / ray->ray_dirx);
-	if (ray->ray_diry == 0)
+	if (fabs(ray->ray_diry) < 1e-10)
 		ray->delta_disty = 1e30;
 	else
 		ray->delta_disty = fabs(1.0 / ray->ray_diry);
@@ -86,7 +91,7 @@ void	*ray_caster(void *arg)
 	while (x < thread->end)
 	{
 		ray_init_direction(&gunstorm->ray[thread->index],
-			start_angle, x, WIDTH);
+			start_angle, x, gunstorm);
 		ray_init_steps(gunstorm, &gunstorm->ray[thread->index]);
 		ray_cast_dda(gunstorm, &gunstorm->ray[thread->index]);
 		ray_render(gunstorm, &gunstorm->ray[thread->index],
@@ -96,7 +101,7 @@ void	*ray_caster(void *arg)
 	return (NULL);
 }
 
-void	threaded_raycast(t_game *gunstorm, void *(*func) (void *))
+void	threaded_render(t_game *gunstorm, void *(*func) (void *))
 {
 	int			step;
 	int			i;

@@ -6,11 +6,26 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/22 17:20:16 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/17 22:29:53 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/gunstorm.h"
+
+void	game_init_lookup_t(t_game *gunstorm)
+{
+	int		i;
+	float	angle;
+
+	i = 0;
+	while (i < 3600)
+	{
+		angle = (float)i * M_PI / 1800.0f;
+		gunstorm->cos_table[i] = cos(angle);
+		gunstorm->sin_table[i] = sin(angle);
+		i++;
+	}
+}
 
 void	print_gunstorm(t_game *gunstorm)
 {

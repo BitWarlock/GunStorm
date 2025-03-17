@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/17 02:36:51 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/17 22:30:11 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct s_player
 	t_pair			position;
 	char			direction;
 	float			angle;
+	int				angle_degree;
 }					t_player;
 
 typedef struct s_map
@@ -173,12 +174,16 @@ typedef struct s_game
 	t_sound			sound;
 	t_move			movement;
 	t_gunsound		sound_system;
-	float			move_speed;
+	float			ray_angle_step;
 	float			rotation_speed;
+	float			cos_table[3600];
+	float			sin_table[3600];
 	double			start_time;
-	int				frames;
+	float			move_speed;
 	bool			menu;
 	bool			start_game;
+	bool			game_has_doors;
+	int				frames;
 }					t_game;
 
 typedef struct s_thread
@@ -191,8 +196,11 @@ typedef struct s_thread
 
 // Function prototypes
 
+void				game_init_lookup_t(t_game *gunstorm);
+bool				map_has_doors(t_map map);
+void				update_angle(t_player *player);
 void				*ray_caster(void *arg);
-void				threaded_raycast(t_game *gunstorm, void *(*func) (void *));
+void				threaded_render(t_game *gunstorm, void *(*func) (void *));
 bool				door_in_map(t_map map);
 int					texture_pixel_color(mlx_texture_t *texture, int x, int y,
 						float ray_dist);
@@ -205,9 +213,8 @@ void				player_movement(t_game *gunstorm, t_player *player);
 void				free_sound(t_game *gunstorm);
 void				sound_error(t_game *gunstorm);
 void				game_init_soundtrack(t_game *gunstorm, t_sound *sound);
-void				load_player_anim(t_game *game, t_player_anim *anim);
 void				update_player_anim(t_game *game, t_player_anim *anim);
-bool				is_infront_door(t_map map, t_player player);
+bool				is_infront_door(t_map map, t_game *gunstorm);
 void				ray_draw_wall(t_game *gunstorm, t_raycaster ray, int x);
 int					get_cell_color(char cell);
 void				minimap(t_game *gunstorm);
@@ -232,14 +239,14 @@ void				draw_player_icon(mlx_image_t *img, t_pair pos, int length,
 						float angle);
 bool				is_within_circle(t_pair c, int px, int py);
 void				print_gunstorm(t_game *gunstorm);
-void				load_player_anim(t_game *game, t_player_anim *anim);
+void				game_init_animations(t_game *game, t_player_anim *anim);
 void				update_player_anim(t_game *game, t_player_anim *anim);
 void				player_attack(mouse_key_t button, action_t action,
 						modifier_key_t mods, void *param);
 void				gun_up(t_game *gunstorm);
 void				display_menu(t_game *gunstorm);
 void				menu(t_game *gunstorm);
-void				door_open_close(t_map *map, t_player player);
+void				door_open_close(t_map *map, t_game *gunstorm);
 void				game_core(char *map_file);
 
 /* ERROR HANDLING */
