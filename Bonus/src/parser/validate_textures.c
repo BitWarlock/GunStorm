@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/14 21:18:50 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/17 00:07:21 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,14 @@ static char	*find_substr(char *str, char *substr)
 	return (free(tmp), NULL);
 }
 
+static void	validate_door_png(t_game *gunstorm, char *map)
+{
+	gunstorm->texture.door = mlx_load_png("./texture/door.png");
+	if (!gunstorm->texture.door)
+		(free(map)), free_game(gunstorm),
+				texture_error("DOOR");
+}
+
 void	validate_textures(char *map, t_game *gunstorm)
 {
 	mlx_texture_t	*texture;
@@ -100,4 +108,5 @@ void	validate_textures(char *map, t_game *gunstorm)
 		fill_texture_file(gunstorm, texture, textures[i][0]);
 		i++;
 	}
+	validate_door_png(gunstorm, map);
 }
