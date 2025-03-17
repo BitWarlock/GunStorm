@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:27:11 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/16 20:39:38 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/17 02:26:19 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static void	ray_texture_coords(t_raycaster *ray, mlx_texture_t *texture)
 			+ ray->wall_height / 2) * ray->texture_step;
 }
 
-void	ray_draw_column(t_game *gunstorm, t_raycaster *ray,
+void	ray_render(t_game *gunstorm, t_raycaster *ray,
 						int x, mlx_texture_t *texture)
 {
 	int	texture_y;

@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:51:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/29 12:18:55 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/17 02:40:52 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,45 +56,65 @@ static void	ray_init_steps(t_game *gunstorm, t_raycaster *ray)
 	}
 }
 
-static mlx_texture_t	*ray_get_texture(t_game *gunstorm)
+static mlx_texture_t	*ray_get_texture(t_game *gunstorm, t_raycaster ray)
 {
-	if (gunstorm->map.rows[gunstorm->ray.map_y]
-		[gunstorm->ray.map_x] == 'D')
+	if (gunstorm->map.rows[ray.map_y]
+		[ray.map_x] == 'D')
 		return (gunstorm->texture.door);
-	if (gunstorm->ray.side == 0)
+	if (ray.side == 0)
 	{
-		if (gunstorm->ray.step_x < 0)
+		if (ray.step_x < 0)
 			return (gunstorm->texture.west);
 		return (gunstorm->texture.east);
 	}
-	if (gunstorm->ray.step_y < 0)
+	if (ray.step_y < 0)
 		return (gunstorm->texture.north);
 	return (gunstorm->texture.south);
 }
 
-static void	ray_render(t_game *gunstorm, bool map_2d, int x)
+void	*ray_caster(void *arg)
 {
-	if (map_2d)
-		ray_draw_line(gunstorm, gunstorm->mlx_data.img,
-			gunstorm->player.position.x, gunstorm->player.position.y);
-	else
-		ray_draw_column(gunstorm, &gunstorm->ray,
-			x, ray_get_texture(gunstorm));
-}
+	t_thread	*thread;
+	t_game		*gunstorm;
+	float		start_angle;
+	int			x;
 
-void	ray_cast(int width, t_game *gunstorm, bool map_2d)
-{
-	float	start_angle;
-	int		x;
-
-	x = 0;
+	thread = (t_thread *)arg;
+	x = thread->start;
+	gunstorm = thread->gunstorm;
 	start_angle = gunstorm->player.angle - HALF_FOV;
-	while (x < width)
+	while (x < thread->end)
 	{
-		ray_init_direction(&gunstorm->ray, start_angle, x, width);
-		ray_init_steps(gunstorm, &gunstorm->ray);
-		ray_cast_dda(gunstorm, &gunstorm->ray);
-		ray_render(gunstorm, map_2d, x);
+		ray_init_direction(&gunstorm->ray[thread->index],
+			start_angle, x, WIDTH);
+		ray_init_steps(gunstorm, &gunstorm->ray[thread->index]);
+		ray_cast_dda(gunstorm, &gunstorm->ray[thread->index]);
+		ray_render(gunstorm, &gunstorm->ray[thread->index],
+			x, ray_get_texture(gunstorm, gunstorm->ray[thread->index]));
 		x++;
 	}
+	return (NULL);
+}
+
+void	threaded_raycast(t_game *gunstorm, void *(*func) (void *))
+{
+	int			step;
+	int			i;
+	t_thread	raycast[THREADS];
+	pthread_t	threads[THREADS];
+
+	i = 0;
+	step = WIDTH / THREADS;
+	while (i < THREADS)
+	{
+		raycast[i].start = step * i;
+		raycast[i].end = step * (i + 1);
+		raycast[i].gunstorm = gunstorm;
+		raycast[i].index = i;
+		pthread_create(&threads[i], NULL, func, &raycast[i]);
+		i++;
+	}
+	i = -1;
+	while (++i < THREADS)
+		pthread_join(threads[i], NULL);
 }

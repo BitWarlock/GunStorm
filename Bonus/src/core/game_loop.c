@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:04:03 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/10 22:57:30 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/17 02:41:39 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,17 @@ int	rgba_color(t_rgb colors, int alpha, int y)
 	return (apply_brightness(colors, alpha, brightness));
 }
 
-static void	clear_window(t_game *gunstorm)
+static void	*clear_window(void *arg)
 {
-	int	x;
-	int	y;
+	int			x;
+	int			y;
+	t_game		*gunstorm;
+	t_thread	*thread;
 
-	x = 0;
-	while (x < WIDTH)
+	thread = (t_thread *)arg;
+	gunstorm = thread->gunstorm;
+	x = thread->start;
+	while (x < thread->end)
 	{
 		y = 0;
 		while (y < HEIGHT)
@@ -59,6 +63,7 @@ static void	clear_window(t_game *gunstorm)
 		}
 		x++;
 	}
+	return (NULL);
 }
 
 void	mouse_rotate_pov(t_game *gunstorm, float delta_time)
@@ -105,7 +110,7 @@ void	game_loop(void *param)
 	mouse_rotate_pov(gunstorm, gunstorm->mlx_data.mlx->delta_time);
 	player_movement(gunstorm, &gunstorm->player);
 	game_fps(gunstorm);
-	clear_window(gunstorm);
-	ray_cast(WIDTH, gunstorm, false);
+	threaded_raycast(gunstorm, clear_window);
+	threaded_raycast(gunstorm, ray_caster);
 	minimap(gunstorm);
 }

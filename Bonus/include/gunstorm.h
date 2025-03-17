@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/16 20:37:36 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/17 02:36:51 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 # define MAG "\e[0;35m"
 # define RED "\e[0;31m"
 # define RESET "\e[0m"
+# define THREADS 8
 
 typedef enum s_direction
 {
@@ -168,7 +169,7 @@ typedef struct s_game
 	t_map			map;
 	t_mlx			mlx_data;
 	t_player_anim	player_anim;
-	t_raycaster		ray;
+	t_raycaster		ray[THREADS];
 	t_sound			sound;
 	t_move			movement;
 	t_gunsound		sound_system;
@@ -180,8 +181,18 @@ typedef struct s_game
 	bool			start_game;
 }					t_game;
 
+typedef struct s_thread
+{
+	t_game	*gunstorm;
+	int		index;
+	int		start;
+	int		end;
+}					t_thread;
+
 // Function prototypes
 
+void				*ray_caster(void *arg);
+void				threaded_raycast(t_game *gunstorm, void *(*func) (void *));
 bool				door_in_map(t_map map);
 int					texture_pixel_color(mlx_texture_t *texture, int x, int y,
 						float ray_dist);
@@ -200,7 +211,7 @@ bool				is_infront_door(t_map map, t_player player);
 void				ray_draw_wall(t_game *gunstorm, t_raycaster ray, int x);
 int					get_cell_color(char cell);
 void				minimap(t_game *gunstorm);
-void				ray_draw_column(t_game *gunstorm, t_raycaster *ray, int x,
+void				ray_render(t_game *gunstorm, t_raycaster *ray, int x,
 						mlx_texture_t *texture);
 void				ray_draw_line(t_game *gunstorm, mlx_image_t *img, float x,
 						float y);
