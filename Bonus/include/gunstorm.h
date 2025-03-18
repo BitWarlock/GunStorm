@@ -194,108 +194,143 @@ typedef struct s_thread
 	int		end;
 }					t_thread;
 
-// Function prototypes
 
-void				game_init_gunsound(t_gunsound *sound_system);
-void				game_init_lookup_t(t_game *gunstorm);
-bool				map_has_doors(t_map map);
-void				update_angle(t_player *player);
-void				*ray_caster(void *arg);
-void				threaded_render(t_game *gunstorm, void *(*func) (void *));
-bool				door_in_map(t_map map);
-int					texture_pixel_color(mlx_texture_t *texture, int x, int y,
-						float ray_dist);
-void				blocked_areas_warning(void);
-int					apply_brightness(t_rgb colors, int alpha, float brightness);
-void				game_init(t_game *gunstorm);
-void				ray_wall_bounds(t_game *gunstorm, t_raycaster *ray);
-void				play_gunshot(t_gunsound *sound_system, t_sound *sound);
-void				player_movement(t_game *gunstorm, t_player *player);
-void				free_sound(t_game *gunstorm);
-void				sound_error(t_game *gunstorm);
-void				game_init_soundtrack(t_game *gunstorm, t_sound *sound);
-void				update_player_anim(t_game *game, t_player_anim *anim);
-bool				is_infront_door(t_map map, t_game *gunstorm);
-void				ray_draw_wall(t_game *gunstorm, t_raycaster ray, int x);
-int					get_cell_color(char cell);
-void				minimap(t_game *gunstorm);
-void				ray_render(t_game *gunstorm, t_raycaster *ray, int x,
-						mlx_texture_t *texture);
-void				ray_draw_line(t_game *gunstorm, mlx_image_t *img, float x,
-						float y);
-void				ray_cast_dda(t_game *gunstorm, t_raycaster *ray);
-void				game_loop(void *param);
-void				game_fps(t_game *gunstorm);
-void				game_hooks(mlx_key_data_t key, void *param);
-void				ray_cast(int width, t_game *gunstorm, bool map_2d);
-size_t				map_width(t_map map);
-void				map_2d(t_game *gunstorm);
-void				print_gunstorm(t_game *gunstorm);
-void				rotate_and_translate_points(t_pair points[3], t_pair pos,
-						float angle);
-void				fill_triangle(mlx_image_t *img, t_pair pts[3],
-						uint32_t color);
-void				sort_points_by_y(t_pair points[3]);
-void				draw_player_icon(mlx_image_t *img, t_pair pos, int length,
-						float angle);
-bool				is_within_circle(t_pair c, int px, int py);
-void				print_gunstorm(t_game *gunstorm);
+// ======================
+// GAME INITIALIZATION
+// ======================
+
+void				game_init_gunsound(t_gunsound *sound_system, t_game *gunstorm);
 void				game_init_animations(t_game *game, t_player_anim *anim);
+void				game_init_soundtrack(t_game *gunstorm, t_sound *sound);
+void				game_init_lookup_t(t_game *gunstorm);
+void				game_init(t_game *gunstorm);
+
+// ======================
+// GAME LOOP AND HOOKS
+// ======================
+
+void				player_attack(mouse_key_t button, action_t action, modifier_key_t mods, void *param);
+void				game_hooks(mlx_key_data_t key, void *param);
+void				game_fps(t_game *gunstorm);
+void				game_loop(void *param);
+
+// ======================
+// PLAYER AND MOVEMENT
+// ======================
+
 void				update_player_anim(t_game *game, t_player_anim *anim);
-void				player_attack(mouse_key_t button, action_t action,
-						modifier_key_t mods, void *param);
+void				player_movement(t_game *gunstorm, t_player *player);
+void				update_angle(t_player *player);
 void				gun_up(t_game *gunstorm);
+
+// ======================
+// RAYCASTING AND RENDERING
+// ======================
+
+void				ray_render(t_game *gunstorm, t_raycaster *ray, int x, mlx_texture_t *texture);
+void				ray_draw_line(t_game *gunstorm, mlx_image_t *img, float x, float y);
+void				threaded_render(t_game *gunstorm, void *(*func) (void *));
+void				ray_draw_wall(t_game *gunstorm, t_raycaster ray, int x);
+void				ray_wall_bounds(t_game *gunstorm, t_raycaster *ray);
+void				ray_cast(int width, t_game *gunstorm, bool map_2d);
+void				ray_cast_dda(t_game *gunstorm, t_raycaster *ray);
+void				*ray_caster(void *arg);
+
+// ======================
+// MAP AND MINIMAP
+// ======================
+
+void				door_open_close(t_map *map, t_game *gunstorm);
+bool				is_infront_door(t_map map, t_game *gunstorm);
+void				minimap(t_game *gunstorm);
+bool				map_has_doors(t_map map);
+void				map_2d(t_game *gunstorm);
+bool				door_in_map(t_map map);
+size_t				map_width(t_map map);
+
+// ======================
+// GRAPHICS AND DRAWING
+// ======================
+
+int					texture_pixel_color(mlx_texture_t *texture, int x, int y, float ray_dist);
+void				draw_player_icon(mlx_image_t *img, t_pair pos, int length, float angle);
+void				rotate_and_translate_points(t_pair points[3], t_pair pos, float angle);
+void				fill_triangle(mlx_image_t *img, t_pair pts[3], uint32_t color);
+int					apply_brightness(t_rgb colors, int alpha, float brightness);
+bool				is_within_circle(t_pair c, int px, int py);
+void				sort_points_by_y(t_pair points[3]);
+
+// ======================
+// SOUND AND AUDIO
+// ======================
+
+void				play_gunshot(t_gunsound *sound_system, t_sound *sound);
+void				sound_error(t_game *gunstorm);
+void				free_sound(t_game *gunstorm);
+
+// ======================
+// MENU AND UI
+// ======================
+
+void				print_gunstorm(t_game *gunstorm);
 void				display_menu(t_game *gunstorm);
 void				menu(t_game *gunstorm);
-void				door_open_close(t_map *map, t_game *gunstorm);
-void				game_core(char *map_file);
 
-/* ERROR HANDLING */
+// ======================
+// ERROR HANDLING
+// ======================
 
-void				texture_error(char *error);
-void				fatal_error(char *error, char *msg);
+void				map_error_split(char *error_msg, t_game *gunstorm, char *map);
+void				puterror(char *prefix, char *err1, char *err2, char *suffix);
 void				map_error(char *error_msg, t_game *gunstorm, char *map);
-void				puterror(char *prefix, char *err1, char *err2,
-						char *suffix);
-void				map_error_split(char *error_msg, t_game *gunstorm,
-						char *map);
+void				fatal_error(char *error, char *msg);
+void				blocked_areas_warning(void);
+void				texture_error(char *error);
 
-/* MEMORY MANAGEMENT */
+// ======================
+// MEMORY MANAGEMENT
+// ======================
 
-void				free_split(char **strs);
-void				free_all(t_game *gunstorm);
-void				free_game(t_game *gunstorm);
 void				free_textures(char *map, t_game *gunstorm, int index);
+void				free_game(t_game *gunstorm);
+void				free_all(t_game *gunstorm);
+void				free_split(char **strs);
 
-/* INPUT VALIDATION AND PARSE */
+// ======================
+// INPUT VALIDATION AND PARSING
+// ======================
 
-bool				valid_map_char(char a);
-bool				player_char(char a);
-
-void				store_player(t_game *gunstorm);
-void				validate_map(char *scene, t_game *gunstorm);
-void				validate_colors(char *map, t_game *gunstorm);
-void				validate_textures(char *map, t_game *gunstorm);
-void				validate_map_walls(t_game *gunstorm, t_map map);
-void				input_parsing(char *map_file, t_game *gunstorm);
-void				validate_identifiers(char *map, t_game *gunstorm);
 void				flood_fill(t_game *gunstorm, t_map *map, int x, int y);
-
-/* STRING UTILS */
-
-void				check_color(t_game *gunstorm, char *map, char *id,
-						bool *key_flag);
-int					rgba_color(t_rgb colors, int alpha, int y);
-
-bool				is_space(char c);
-bool				valid_char(char a);
-bool				player_char(char a);
+void				validate_identifiers(char *map, t_game *gunstorm);
+void				input_parsing(char *map_file, t_game *gunstorm);
+void				validate_map_walls(t_game *gunstorm, t_map map);
+void				validate_textures(char *map, t_game *gunstorm);
+void				validate_colors(char *map, t_game *gunstorm);
+void				validate_map(char *scene, t_game *gunstorm);
+void				store_player(t_game *gunstorm);
 bool				valid_map_char(char a);
-bool				empty_line(char *line, int s);
+bool				player_char(char a);
 
-char				*get_color_line(char *map);
+// ======================
+// STRING UTILS
+// ======================
 
+void				check_color(t_game *gunstorm, char *map, char *id, bool *key_flag);
+int					rgba_color(t_rgb colors, int alpha, int y);
 int					find(char *str, char *substr);
 int					check_line(char *line, int s);
+bool				empty_line(char *line, int s);
+char				*get_color_line(char *map);
+int					get_cell_color(char cell);
+bool				valid_map_char(char a);
+bool				player_char(char a);
+bool				valid_char(char a);
+bool				is_space(char c);
+
+// ======================
+// CORE FUNCTION
+// ======================
+
+void				game_core(char *map_file);
 
 #endif // !GUNSTORM_H

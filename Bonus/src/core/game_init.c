@@ -78,12 +78,13 @@ static void	game_init_mlx(t_game *gunstorm)
 
 	mlx = mlx_init(WIDTH, HEIGHT, "GunStorm", true);
 	if (!mlx)
-		(free_all(gunstorm)), exit(EXIT_FAILURE);
+		(free_all(gunstorm)), fatal_error("MLX library failed", NULL);
 	mlx_get_monitor_size(0, &width, &height);
 	mlx_set_window_pos(mlx, (width - WIDTH) / 2, (height - HEIGHT) / 2);
 	img = mlx_new_image(mlx, WIDTH, HEIGHT);
 	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
-		(free_all(gunstorm)), mlx_terminate(mlx), exit(EXIT_FAILURE);
+		(free_all(gunstorm)), mlx_terminate(mlx),
+			fatal_error("MLX library failed", NULL);
 	gunstorm->mlx_data.mlx = mlx;
 	gunstorm->mlx_data.img = img;
 }
@@ -95,6 +96,6 @@ void	game_init(t_game *gunstorm)
 	game_init_vars(gunstorm);
 	game_init_animations(gunstorm, &gunstorm->player_anim);
 	game_init_soundtrack(gunstorm, &gunstorm->sound);
-	game_init_gunsound(&gunstorm->sound_system);
+	game_init_gunsound(&gunstorm->sound_system, gunstorm);
 	game_init_lookup_t(gunstorm);
 }

@@ -13,19 +13,15 @@
 #include "../../include/gunstorm.h"
 #include "../../../Sound/miniaudio.h"
 
-void	game_init_gunsound(t_gunsound *sound_system)
+void	game_init_gunsound(t_gunsound *sound_system, t_game *gunstorm)
 {
 	if (ma_engine_init(NULL, &sound_system->engine) != MA_SUCCESS)
-	{
-		printf("Failed to initialize audio engine.\n");
-		return ;
-	}
+		sound_error(gunstorm);
 	if (ma_sound_init_from_file(&sound_system->engine, "../Sound/gunshot.mp3",
 			0, NULL, NULL, &sound_system->gunshot) != MA_SUCCESS)
 	{
-		printf("Failed to load gunshot sound.\n");
 		ma_engine_uninit(&sound_system->engine);
-		return ;
+		sound_error(gunstorm);
 	}
 	sound_system->sound_loaded = true;
 }

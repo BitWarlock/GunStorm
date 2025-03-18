@@ -23,12 +23,12 @@ void	game_init_animations(t_game *game, t_player_anim *anim)
 		sprintf(frame_path, "./assets/Gun/gun_frame_%d.png", i + 1);
 		anim->textures[i] = mlx_load_png(frame_path);
 		if (!anim->textures[i])
-			exit(EXIT_FAILURE);
+			(free_all(game)), fatal_error("MLX library failed", NULL);
 		anim->frames[i] = mlx_texture_to_image(game->mlx_data.mlx,
 				anim->textures[i]);
 		mlx_delete_texture(anim->textures[i]);
 		if (!anim->frames[i])
-			exit(EXIT_FAILURE);
+			(free_all(game)), fatal_error("MLX library failed", NULL);
 		anim->frames[i]->enabled = false;
 		mlx_image_to_window(game->mlx_data.mlx, anim->frames[i],
 			game->player_anim.pos_x, game->player_anim.pos_y);
