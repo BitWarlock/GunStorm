@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/22 16:01:04 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/17 23:05:50 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,5 @@ void	game_core(char *map_file)
 	input_parsing(map_file, gunstorm);
 	update_player_coord(&gunstorm->player);
 	game_start(gunstorm);
-	free_sound(gunstorm);
 	free_all(gunstorm);
 }

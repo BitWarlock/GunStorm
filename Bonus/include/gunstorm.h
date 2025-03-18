@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/17 22:30:11 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/17 23:22:50 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,6 +196,7 @@ typedef struct s_thread
 
 // Function prototypes
 
+void				game_init_gunsound(t_gunsound *sound_system);
 void				game_init_lookup_t(t_game *gunstorm);
 bool				map_has_doors(t_map map);
 void				update_angle(t_player *player);

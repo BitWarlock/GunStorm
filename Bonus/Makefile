@@ -27,14 +27,18 @@ MAIN_SOURCES 	= src/parser/validate_colors.c src/parser/validate_identifiers.c \
 				  src/core/game_core.c src/core/game_loop.c src/core/game_hooks.c src/core/main.c \
 				  \
 				  src/render/ray_cast.c src/render/ray_cast_dda.c src/render/ray_render.c \
-				  src/render/2dmap.c src/render/minimap.c src/core/game_sound.c \
+				  src/render/2dmap.c src/render/minimap.c \
 				  src/render/draw_triangle.c src/render/player_animation.c \
 				  src/render/menu_and_door.c src/core/player_movement.c \
 				  src/core/game_init.c
 
+SOUND_SOURCES	= src/core/game_sound.c
+
 OBJS_DIR		= objs
 
 MAIN_OBJ 		= $(addprefix $(OBJS_DIR)/, $(MAIN_SOURCES:.c=.o))
+
+SOUND_OBJ 		= $(addprefix $(OBJS_DIR)/, $(SOUND_SOURCES:.c=.o))
 
 HEADER 			= include/gunstorm.h include/miniaudio_types.h ../Sound/miniaudio.h
 
@@ -95,7 +99,12 @@ $(OBJS_DIR)/%.o: %.c $(HEADER) Makefile
 	$(PRINT_LOADING)
 	@cc -c $< -o $@ $(CFLAGS)
 
-$(NAME): $(MAIN_OBJ) $(LIBFT)
+$(OBJS_DIR)/src/core/game_sound.o: $(SOUND_SOURCES)
+	@mkdir -p $(dir $@)
+	$(PRINT_LOADING)
+	@cc -c $< -o $@ $(CFLAGS)
+
+$(NAME): $(MAIN_OBJ) $(SOUND_OBJ) $(LIBFT)
 	@cc $^ ../MLX42/build/libmlx42.a -lglfw -lm -o $@ $(CFLAGS)
 
 $(LIBFT):

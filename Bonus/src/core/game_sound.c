@@ -6,22 +6,28 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:38:21 by mrezki            #+#    #+#             */
-/*   Updated: 2025/02/19 19:08:14 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/17 23:10:05 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/gunstorm.h"
 #include "../../../Sound/miniaudio.h"
 
-void	play_gunshot(t_gunsound *sound_system, t_sound *sound)
+void	game_init_gunsound(t_gunsound *sound_system)
 {
-	if (!sound_system->sound_loaded
-		|| ma_sound_is_playing(&sound_system->gunshot))
+	if (ma_engine_init(NULL, &sound_system->engine) != MA_SUCCESS)
+	{
+		printf("Failed to initialize audio engine.\n");
 		return ;
-	ma_device_set_master_volume(sound->device, 0.0);
-	ma_sound_seek_to_pcm_frame(&sound_system->gunshot, 0);
-	ma_sound_start(&sound_system->gunshot);
-	ma_device_set_master_volume(sound->device, 0.7);
+	}
+	if (ma_sound_init_from_file(&sound_system->engine, "../Sound/gunshot.mp3",
+			0, NULL, NULL, &sound_system->gunshot) != MA_SUCCESS)
+	{
+		printf("Failed to load gunshot sound.\n");
+		ma_engine_uninit(&sound_system->engine);
+		return ;
+	}
+	sound_system->sound_loaded = true;
 }
 
 void	sound_error(t_game *gunstorm)

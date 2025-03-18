@@ -6,7 +6,7 @@
 /*   By: agaladi <agaladi@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:06:26 by agaladi           #+#    #+#             */
-/*   Updated: 2025/03/17 03:44:00 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/17 23:09:16 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,17 @@ void	gun_up(t_game *gunstorm)
 			.current_frame]->instances[0].y > 280)
 		gunstorm->player_anim.frames[gunstorm->player_anim
 			.current_frame]->instances[0].y -= 10;
+}
+
+void	play_gunshot(t_gunsound *sound_system, t_sound *sound)
+{
+	if (!sound_system->sound_loaded
+		|| ma_sound_is_playing(&sound_system->gunshot))
+		return ;
+	ma_device_set_master_volume(sound->device, 0.0);
+	ma_sound_seek_to_pcm_frame(&sound_system->gunshot, 0);
+	ma_sound_start(&sound_system->gunshot);
+	ma_device_set_master_volume(sound->device, 0.7);
 }
 
 void	player_attack(mouse_key_t button, action_t action,

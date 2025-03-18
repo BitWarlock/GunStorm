@@ -6,28 +6,11 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 16:01:16 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/17 22:29:56 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/17 23:23:50 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/gunstorm.h"
-
-static void	game_init_gunsound(t_gunsound *sound_system)
-{
-	if (ma_engine_init(NULL, &sound_system->engine) != MA_SUCCESS)
-	{
-		printf("Failed to initialize audio engine.\n");
-		return ;
-	}
-	if (ma_sound_init_from_file(&sound_system->engine, "../Sound/gunshot.mp3",
-			0, NULL, NULL, &sound_system->gunshot) != MA_SUCCESS)
-	{
-		printf("Failed to load gunshot sound.\n");
-		ma_engine_uninit(&sound_system->engine);
-		return ;
-	}
-	sound_system->sound_loaded = true;
-}
 
 static void	game_init_vars(t_game *gunstorm)
 {
@@ -50,6 +33,20 @@ static void	game_init_vars(t_game *gunstorm)
 	gunstorm->frames = 0;
 }
 
+static mlx_image_t	*init_texture(char *path, mlx_t *mlx, t_game *gunstorm)
+{
+	mlx_image_t		*img;
+	mlx_texture_t	*texture;
+
+	texture = mlx_load_png(path);
+	if (!texture)
+		(free_all(gunstorm)),
+			fatal_error("Asset failed to load", NULL);
+	img = mlx_texture_to_image(mlx, texture);
+	mlx_delete_texture(texture);
+	return (img);
+}
+
 static void	game_init_mlx_assets(t_game *gunstorm, mlx_t *mlx)
 {
 	mlx_image_t		*welcome_screen;
@@ -57,16 +54,10 @@ static void	game_init_mlx_assets(t_game *gunstorm, mlx_t *mlx)
 	mlx_image_t		*circle;
 	mlx_image_t		*menu;
 
-	tex = mlx_load_png("./assets/welcome.png");
-	welcome_screen = mlx_texture_to_image(mlx, tex);
-	mlx_delete_texture(tex);
-	tex = mlx_load_png("./assets/circle2.png");
-	circle = mlx_texture_to_image(mlx, tex);
+	welcome_screen = init_texture("./assets/welcome.png", mlx, gunstorm);
+	circle = init_texture("./assets/circle2.png", mlx, gunstorm);
 	mlx_resize_image(circle, 200, 200);
-	mlx_delete_texture(tex);
-	tex = mlx_load_png("./assets/menu.png");
-	menu = mlx_texture_to_image(mlx, tex);
-	mlx_delete_texture(tex);
+	menu = init_texture("./assets/menu.png", mlx, gunstorm);
 	mlx_image_to_window(mlx, circle, 1, 1);
 	mlx_image_to_window(mlx, menu, 0, 0);
 	mlx_image_to_window(mlx, welcome_screen, 0, 0);
