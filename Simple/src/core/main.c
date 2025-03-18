@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/22 17:20:16 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/18 21:53:25 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ void	print_gunstorm(t_game *gunstorm)
 		printf("Row %3d =>\t%s\n", i, gunstorm->map.rows[i]);
 }
 
-void	input_validation(char *argv[])
+void	input_validation(char *argv[], int argc)
 {
 	char	*ext;
 	int		fd;
 
-	if (!argv[1])
+	if (argc == 1)
 		fatal_error("No map file found.\nUsage: ./cub3D ./map_file.cub", 0);
-	if (argv[2])
+	if (argc > 2)
 		fatal_error("Too many arguments.\nUsage: ./cub3D ./map_file.cub", 0);
 	ext = ft_substr(argv[1], ft_strlen(argv[1]) - 4, 4);
 	if (ft_strncmp(ext, ".cub", 4))
@@ -46,7 +46,7 @@ void	input_validation(char *argv[])
 
 int	main(int argc, char *argv[])
 {
-	input_validation(argv);
+	input_validation(argv, argc);
 	game_core(argv[1]);
 	return (EXIT_SUCCESS);
 }

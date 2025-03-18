@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/27 14:02:09 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/18 21:52:30 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static void	scroll_hook(double xdelta, double ydelta, void *param)
 {
 	t_game	*gunstorm;
 
+	(void)xdelta;
 	gunstorm = (t_game *)param;
 	if (ydelta < 0)
 		gunstorm->player.angle -= 0.1;

@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:27:11 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/29 16:15:20 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/18 21:55:12 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ static int	texture_pixel_color(mlx_texture_t *texture, int x, int y)
 	int		position;
 	uint8_t	*pixel;
 
-	if (x < 0 || x >= texture->width
-		|| y < 0 || y >= texture->height)
+	if (x < 0 || (uint32_t)x >= texture->width
+		|| y < 0 || (uint32_t)y >= texture->height)
 		return (0);
 	position = y * texture->width + x;
 	position *= texture->bytes_per_pixel;
@@ -51,7 +51,6 @@ static int	texture_pixel_color(mlx_texture_t *texture, int x, int y)
 static void	ray_texture_coords(t_raycaster *ray, mlx_texture_t *texture)
 {
 	int		texture_x;
-	float	texture_step;
 	float	wall_x;
 
 	if (ray->side == 0)
@@ -83,7 +82,7 @@ void	ray_draw_column(t_game *gunstorm, t_raycaster *ray,
 		texture_y = (int)ray->texture_pos;
 		if (texture_y < 0)
 			texture_y = 0;
-		if (texture_y >= texture->height)
+		if ((uint32_t)texture_y >= texture->height)
 			texture_y = texture->height - 1;
 		ray->texture_pos += ray->texture_step;
 		mlx_put_pixel(gunstorm->mlx_data.img, x, y,

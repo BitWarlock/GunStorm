@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:24:00 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/22 17:20:32 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/18 21:53:50 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	ray_update_v_intersect(t_raycaster *ray)
 static void	ray_check_collision(t_raycaster *ray,
 								t_map world_map, int *hit_wall)
 {
-	if (!(ray->map_x >= 0 && ray->map_x < map_width(world_map)
+	if (!(ray->map_x >= 0 && ray->map_x < (int)map_width(world_map)
 			&& ray->map_y >= 0 && ray->map_y < world_map.height))
 		return ;
 	if (world_map.rows[ray->map_y][ray->map_x] == '1')

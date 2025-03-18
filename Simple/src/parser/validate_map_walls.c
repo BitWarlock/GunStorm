@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/22 17:20:25 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/18 21:51:09 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ static void	blocked_areas_warning(void)
 
 static void	validate_player_access(t_game *gunstorm, t_map *map)
 {
-	int	x;
-	int	y;
+	size_t	x;
+	int		y;
 
 	y = 0;
 	flood_fill(gunstorm, &gunstorm->map,
@@ -65,8 +65,8 @@ static void	validate_position(t_game *gunstorm, t_map map, int x, int y)
 
 void	validate_map_walls(t_game *gunstorm, t_map map)
 {
-	int	x;
-	int	y;
+	size_t	x;
+	int		y;
 
 	y = 0;
 	while (y < map.height)

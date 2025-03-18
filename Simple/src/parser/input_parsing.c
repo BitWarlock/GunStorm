@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/14 23:24:07 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/18 21:52:08 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ static float	player_angle(char direction)
 
 void	store_player(t_game *gunstorm)
 {
-	int	y;
-	int	x;
+	int		y;
+	size_t	x;
 
 	y = 0;
 	while (y < gunstorm->map.height)

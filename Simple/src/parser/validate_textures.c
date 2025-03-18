@@ -6,13 +6,13 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/14 21:18:50 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/18 21:51:48 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/gunstorm.h"
 
-static char	*get_file_name(char *str, char *texture)
+static char	*get_file_name(char *str)
 {
 	int		i;
 	int		fd;
@@ -61,7 +61,7 @@ static char	*find_substr(char *str, char *substr)
 	start = find(tmp, substr);
 	while (start != -1)
 	{
-		file = get_file_name(tmp + start + 2, substr);
+		file = get_file_name(tmp + start + 2);
 		if (file)
 			return (free(tmp), file);
 		next_tmp = ft_substr(tmp, start + 2, ft_strlen(tmp));
@@ -79,7 +79,6 @@ void	validate_textures(char *map, t_game *gunstorm)
 	mlx_texture_t	*texture;
 	char			*textures[5];
 	char			*file;
-	int				start;
 	int				i;
 
 	textures[0] = "NO";

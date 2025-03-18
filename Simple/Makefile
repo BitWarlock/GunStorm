@@ -8,11 +8,8 @@ NEON			= \033[38;5;51m
 PURPLE			= \033[38;5;92;1m
 BOLD			= \033[1m
 RESET			= \033[0m
-STRICT_FLAGS	= -Wall -Wextra -Werror -Wunused -Wconversion
-DEBUG_FLAGS 	= -g3 -O0 -DDEBUG \
-					-fno-inline -fno-omit-frame-pointer \
-					-fstack-protector-all
-FLAGS			= -O3 -g -Wshadow -Wnull-dereference #-fsanitize=address
+CFLAGS			= -Ofast -Wall -Wextra -Werror
+MLXFLAGS		= -lm -lpthread -lglfw
 NAME			= cub3D
 LIB_DIR			= ./libft
 LIBFT			= $(LIB_DIR)/libft.a
@@ -35,7 +32,7 @@ MAIN_OBJ 		= $(addprefix $(OBJS_DIR)/, $(MAIN_SOURCES:.c=.o))
 
 HEADER 			= include/gunstorm.h
 
-CFLAGS			= $(FLAGS)
+FLAGS			= $(CFLAGS) $(MLXFLAGS)
 
 define PRINT_LOADING
 	@printf "\n\033[2K\r$(GREEN)Compiling $*... $(RESET)\n"
@@ -86,7 +83,7 @@ $(OBJS_DIR)/%.o: %.c $(HEADER) Makefile
 	@cc -c $< -o $@ $(CFLAGS)
 
 $(NAME): $(MAIN_OBJ) $(LIBFT)
-	@cc $^ ../MLX42/build/libmlx42.a -lglfw -lm -o $@ $(CFLAGS)
+	@cc $^ ../MLX42/build/libmlx42.a -o $@ $(CFLAGS)
 
 $(LIBFT):
 	$(PRINT_LOADING)
