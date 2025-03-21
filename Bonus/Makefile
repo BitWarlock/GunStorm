@@ -30,7 +30,7 @@ MAIN_SOURCES 	= src/parser/validate_colors.c src/parser/validate_identifiers.c \
 				  src/render/2dmap.c src/render/minimap.c \
 				  src/render/draw_triangle.c src/render/player_animation.c \
 				  src/render/menu_and_door.c src/core/player_movement.c \
-				  src/core/game_init.c
+				  src/core/game_init.c src/render/render_sky_floor.c
 
 SOUND_SOURCES	= src/core/game_sound.c
 

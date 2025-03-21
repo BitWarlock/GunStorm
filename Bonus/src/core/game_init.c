@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 16:01:16 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/17 23:23:50 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/21 03:28:56 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,16 @@ static void	game_init_mlx_assets(t_game *gunstorm, mlx_t *mlx)
 	mlx_image_to_window(mlx, menu, 0, 0);
 	mlx_image_to_window(mlx, welcome_screen, 0, 0);
 	mlx_set_cursor_mode(mlx, MLX_MOUSE_HIDDEN);
+	tex = mlx_load_png("./assets/sky.png");
+	if (!tex)
+		(free_all(gunstorm)),
+			fatal_error("Asset failed to load", NULL);
 	gunstorm->mlx_data.door_msg = mlx_put_string(gunstorm->mlx_data.mlx,
 			"Press E to open/close the door", WIDTH / 2, 300);
 	gunstorm->mlx_data.menu = menu;
 	gunstorm->mlx_data.circle = circle;
 	gunstorm->mlx_data.welcome_screen = welcome_screen;
+	gunstorm->texture.sky = tex;
 }
 
 static void	game_init_mlx(t_game *gunstorm)

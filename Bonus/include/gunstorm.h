@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/17 23:22:50 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/21 03:16:41 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ typedef struct s_texture
 	mlx_texture_t	*west;
 	mlx_texture_t	*east;
 	mlx_texture_t	*door;
+	mlx_texture_t	*sky;
 }					t_texture;
 
 typedef struct s_mlx
@@ -188,18 +189,18 @@ typedef struct s_game
 
 typedef struct s_thread
 {
-	t_game	*gunstorm;
-	int		index;
-	int		start;
-	int		end;
+	t_game			*gunstorm;
+	int				index;
+	int				start;
+	int				end;
 }					t_thread;
-
 
 // ======================
 // GAME INITIALIZATION
 // ======================
 
-void				game_init_gunsound(t_gunsound *sound_system, t_game *gunstorm);
+void				game_init_gunsound(t_gunsound *sound_system,
+						t_game *gunstorm);
 void				game_init_animations(t_game *game, t_player_anim *anim);
 void				game_init_soundtrack(t_game *gunstorm, t_sound *sound);
 void				game_init_lookup_t(t_game *gunstorm);
@@ -209,7 +210,9 @@ void				game_init(t_game *gunstorm);
 // GAME LOOP AND HOOKS
 // ======================
 
-void				player_attack(mouse_key_t button, action_t action, modifier_key_t mods, void *param);
+void				player_attack(mouse_key_t button, action_t action,
+						modifier_key_t mods, void *param);
+void				mouse_rotate_pov(t_game *gunstorm, float delta_time);
 void				game_hooks(mlx_key_data_t key, void *param);
 void				game_fps(t_game *gunstorm);
 void				game_loop(void *param);
@@ -227,14 +230,18 @@ void				gun_up(t_game *gunstorm);
 // RAYCASTING AND RENDERING
 // ======================
 
-void				ray_render(t_game *gunstorm, t_raycaster *ray, int x, mlx_texture_t *texture);
-void				ray_draw_line(t_game *gunstorm, mlx_image_t *img, float x, float y);
-void				threaded_render(t_game *gunstorm, void *(*func) (void *));
+void				ray_render(t_game *gunstorm, t_raycaster *ray, int x,
+						mlx_texture_t *texture);
+void				ray_draw_line(t_game *gunstorm, mlx_image_t *img, float x,
+						float y);
+void				threaded_render(t_game *gunstorm, void *(*func)(void *));
 void				ray_draw_wall(t_game *gunstorm, t_raycaster ray, int x);
 void				ray_wall_bounds(t_game *gunstorm, t_raycaster *ray);
 void				ray_cast(int width, t_game *gunstorm, bool map_2d);
 void				ray_cast_dda(t_game *gunstorm, t_raycaster *ray);
+void				*draw_floor(void *arg);
 void				*ray_caster(void *arg);
+void				*draw_sky(void *arg);
 
 // ======================
 // MAP AND MINIMAP
@@ -252,10 +259,14 @@ size_t				map_width(t_map map);
 // GRAPHICS AND DRAWING
 // ======================
 
-int					texture_pixel_color(mlx_texture_t *texture, int x, int y, float ray_dist);
-void				draw_player_icon(mlx_image_t *img, t_pair pos, int length, float angle);
-void				rotate_and_translate_points(t_pair points[3], t_pair pos, float angle);
-void				fill_triangle(mlx_image_t *img, t_pair pts[3], uint32_t color);
+int					texture_pixel_color(mlx_texture_t *texture, int x, int y,
+						float ray_dist);
+void				draw_player_icon(mlx_image_t *img, t_pair pos, int length,
+						float angle);
+void				rotate_and_translate_points(t_pair points[3], t_pair pos,
+						float angle);
+void				fill_triangle(mlx_image_t *img, t_pair pts[3],
+						uint32_t color);
 int					apply_brightness(t_rgb colors, int alpha, float brightness);
 bool				is_within_circle(t_pair c, int px, int py);
 void				sort_points_by_y(t_pair points[3]);
@@ -280,8 +291,10 @@ void				menu(t_game *gunstorm);
 // ERROR HANDLING
 // ======================
 
-void				map_error_split(char *error_msg, t_game *gunstorm, char *map);
-void				puterror(char *prefix, char *err1, char *err2, char *suffix);
+void				map_error_split(char *error_msg, t_game *gunstorm,
+						char *map);
+void				puterror(char *prefix, char *err1, char *err2,
+						char *suffix);
 void				map_error(char *error_msg, t_game *gunstorm, char *map);
 void				fatal_error(char *error, char *msg);
 void				blocked_areas_warning(void);
@@ -315,8 +328,8 @@ bool				player_char(char a);
 // STRING UTILS
 // ======================
 
-void				check_color(t_game *gunstorm, char *map, char *id, bool *key_flag);
-int					rgba_color(t_rgb colors, int alpha, int y);
+void				check_color(t_game *gunstorm, char *map, char *id,
+						bool *key_flag);
 int					find(char *str, char *substr);
 int					check_line(char *line, int s);
 bool				empty_line(char *line, int s);

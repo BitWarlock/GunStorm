@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/18 05:52:59 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/21 03:29:19 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	free_game(t_game *gunstorm)
 	mlx_delete_texture(gunstorm->texture.south);
 	mlx_delete_texture(gunstorm->texture.west);
 	mlx_delete_texture(gunstorm->texture.door);
+	mlx_delete_texture(gunstorm->texture.sky);
 	free(gunstorm);
 }
 

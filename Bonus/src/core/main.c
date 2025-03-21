@@ -6,11 +6,23 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/17 22:29:53 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/21 03:25:04 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/gunstorm.h"
+
+void	game_fps(t_game *gunstorm)
+{
+	gunstorm->move_speed = 30.0 * gunstorm->mlx_data.mlx->delta_time;
+	gunstorm->frames++;
+	if (mlx_get_time() - gunstorm->start_time >= 1)
+	{
+		printf("FPS: %d\n", gunstorm->frames);
+		gunstorm->frames = 0;
+		gunstorm->start_time = mlx_get_time();
+	}
+}
 
 void	game_init_lookup_t(t_game *gunstorm)
 {
@@ -25,19 +37,6 @@ void	game_init_lookup_t(t_game *gunstorm)
 		gunstorm->sin_table[i] = sin(angle);
 		i++;
 	}
-}
-
-void	print_gunstorm(t_game *gunstorm)
-{
-	int	i;
-
-	i = -1;
-	printf("Ceiling color:\t(%3d, %3d, %3d)\n", gunstorm->ceiling.r,
-		gunstorm->ceiling.g, gunstorm->ceiling.b);
-	printf("Floor color:\t(%3d, %3d, %3d)\n", gunstorm->floor.r,
-		gunstorm->floor.g, gunstorm->floor.b);
-	while (gunstorm->map.rows[++i])
-		printf("Row %3d =>\t%s\n", i, gunstorm->map.rows[i]);
 }
 
 void	input_validation(char *argv[])

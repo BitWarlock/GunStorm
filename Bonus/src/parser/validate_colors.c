@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/18 05:52:16 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/21 02:54:44 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static t_rgb	get_color_values(char *line)
 		return ((t_rgb){-1, -1, -1});
 	colors = ft_split(line, ',');
 	if (!colors)
-		return (free(line)), (t_rgb){-1, -1, -1};
+		return ((free(line)), (t_rgb){-1, -1, -1});
 	if (!colors[0] || !colors[1] || !colors[2])
 		return (free(line), free_split(colors), (t_rgb){-1, -1, -1});
 	values.r = color_value(colors[0]);

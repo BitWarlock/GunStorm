@@ -6,88 +6,44 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:04:03 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/17 20:29:56 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/21 03:25:08 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/gunstorm.h"
 
-void	game_fps(t_game *gunstorm)
+static void	game_menu(t_game *gunstorm)
 {
-	gunstorm->move_speed = 30.0 * gunstorm->mlx_data.mlx->delta_time;
-	gunstorm->frames++;
-	if (mlx_get_time() - gunstorm->start_time >= 1)
-	{
-		printf("FPS: %d\n", gunstorm->frames);
-		gunstorm->frames = 0;
-		gunstorm->start_time = mlx_get_time();
-	}
+	gunstorm->mlx_data.door_msg->enabled = false;
+	menu(gunstorm);
+	if (gunstorm->menu)
+		display_menu(gunstorm);
 }
 
-int	rgba_color(t_rgb colors, int alpha, int y)
+static void	game_state(t_game *gunstorm)
 {
-	float	brightness;
-	float	distance_from_center;
-
-	distance_from_center = fabsf((HEIGHT * 0.5f) - (float)y) / (HEIGHT * 0.5f);
-	brightness = distance_from_center * 1.0;
-	if (brightness < 0.2f)
-		brightness = 0.2f;
-	if (brightness > 1.0f)
-		brightness = 1.0f;
-	return (apply_brightness(colors, alpha, brightness));
+	gun_up(gunstorm);
+	update_player_anim(gunstorm, &gunstorm->player_anim);
+	mlx_set_cursor_mode(gunstorm->mlx_data.mlx, MLX_MOUSE_HIDDEN);
+	gunstorm->mlx_data.menu->enabled = false;
+	gunstorm->mlx_data.circle->enabled = true;
+	if (gunstorm->game_has_doors && is_infront_door(gunstorm->map, gunstorm))
+		gunstorm->mlx_data.door_msg->enabled = true;
 }
 
-static void	*clear_window(void *arg)
+static void	game_player_actions(t_game *gunstorm)
 {
-	int			x;
-	int			y;
-	t_game		*gunstorm;
-	t_thread	*thread;
-
-	thread = (t_thread *)arg;
-	gunstorm = thread->gunstorm;
-	x = thread->start;
-	while (x < thread->end)
-	{
-		y = 0;
-		while (y < HEIGHT)
-		{
-			if (y <= HEIGHT / 2)
-				mlx_put_pixel(gunstorm->mlx_data.img, x, y,
-					rgba_color(gunstorm->ceiling, 255, y));
-			else
-				mlx_put_pixel(gunstorm->mlx_data.img, x, y,
-					rgba_color(gunstorm->floor, 255, y));
-			y++;
-		}
-		x++;
-	}
-	return (NULL);
+	mouse_rotate_pov(gunstorm, gunstorm->mlx_data.mlx->delta_time);
+	player_movement(gunstorm, &gunstorm->player);
+	game_fps(gunstorm);
 }
 
-void	mouse_rotate_pov(t_game *gunstorm, float delta_time)
+static void	game_render(t_game *gunstorm)
 {
-	static int		prev_x;
-	static int		prev_y;
-	static double	accum_dx;
-	int				x;
-	int				y;
-
-	mlx_get_mouse_pos(gunstorm->mlx_data.mlx, &x, &y);
-	if (x <= 0 || x >= WIDTH || y <= 0 || y >= HEIGHT)
-	{
-		mlx_set_mouse_pos(gunstorm->mlx_data.mlx, WIDTH / 2, HEIGHT / 2);
-		prev_x = WIDTH / 2;
-		prev_y = HEIGHT / 2;
-		accum_dx = 0.0;
-		return ;
-	}
-	accum_dx = accum_dx * 0.6 + (x - prev_x) * 0.00052 * delta_time * 20.0f;
-	gunstorm->player.angle += accum_dx;
-	update_angle(&gunstorm->player);
-	prev_x = x;
-	prev_y = y;
+	threaded_render(gunstorm, draw_floor);
+	threaded_render(gunstorm, draw_sky);
+	threaded_render(gunstorm, ray_caster);
+	minimap(gunstorm);
 }
 
 void	game_loop(void *param)
@@ -97,22 +53,10 @@ void	game_loop(void *param)
 	gunstorm = (t_game *)param;
 	if (!gunstorm->start_game)
 		return ;
-	gunstorm->mlx_data.door_msg->enabled = false;
-	menu(gunstorm);
+	game_menu(gunstorm);
 	if (gunstorm->menu)
-		return (display_menu(gunstorm));
-	gun_up(gunstorm);
-	update_player_anim(gunstorm, &gunstorm->player_anim);
-	mlx_set_cursor_mode(gunstorm->mlx_data.mlx, MLX_MOUSE_HIDDEN);
-	gunstorm->mlx_data.menu->enabled = false;
-	gunstorm->mlx_data.circle->enabled = true;
-	if (gunstorm->game_has_doors
-		&& is_infront_door(gunstorm->map, gunstorm))
-		gunstorm->mlx_data.door_msg->enabled = true;
-	mouse_rotate_pov(gunstorm, gunstorm->mlx_data.mlx->delta_time);
-	player_movement(gunstorm, &gunstorm->player);
-	game_fps(gunstorm);
-	threaded_render(gunstorm, clear_window);
-	threaded_render(gunstorm, ray_caster);
-	minimap(gunstorm);
+		return ;
+	game_state(gunstorm);
+	game_player_actions(gunstorm);
+	game_render(gunstorm);
 }

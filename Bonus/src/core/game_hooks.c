@@ -6,11 +6,35 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:42:54 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/17 21:11:37 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/21 02:58:05 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/gunstorm.h"
+
+void	mouse_rotate_pov(t_game *gunstorm, float delta_time)
+{
+	static int		prev_x;
+	static int		prev_y;
+	static double	accum_dx;
+	int				x;
+	int				y;
+
+	mlx_get_mouse_pos(gunstorm->mlx_data.mlx, &x, &y);
+	if (x <= 0 || x >= WIDTH || y <= 0 || y >= HEIGHT)
+	{
+		mlx_set_mouse_pos(gunstorm->mlx_data.mlx, WIDTH / 2, HEIGHT / 2);
+		prev_x = WIDTH / 2;
+		prev_y = HEIGHT / 2;
+		accum_dx = 0.0;
+		return ;
+	}
+	accum_dx = accum_dx * 0.6 + (x - prev_x) * 0.00052 * delta_time * 20.0f;
+	gunstorm->player.angle += accum_dx;
+	update_angle(&gunstorm->player);
+	prev_x = x;
+	prev_y = y;
+}
 
 static void	game_movement_hooks(mlx_key_data_t key, t_game *gunstorm)
 {
