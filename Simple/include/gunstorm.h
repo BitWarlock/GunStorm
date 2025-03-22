@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/01/27 13:58:55 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/22 05:54:30 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include <string.h>
 # include <math.h>
 # include <sys/time.h>
-# include "../libft/libft.h"
+# include "../../libft/libft.h"
 # include "../../MLX42/include/MLX42/MLX42.h"
 
 # define WIDTH 1920
