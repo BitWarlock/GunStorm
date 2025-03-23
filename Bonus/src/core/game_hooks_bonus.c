@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:42:54 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/22 02:43:55 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/23 03:46:13 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	mouse_rotate_pov(t_game *gunstorm, float delta_time)
 	}
 	accum_dx = accum_dx * 0.6 + (x - prev_x) * 0.00052 * delta_time * 20.0f;
 	gunstorm->player.angle += accum_dx;
+	gunstorm->sky_offset += accum_dx * 70;
 	update_angle(&gunstorm->player);
 	prev_x = x;
 	prev_y = y;

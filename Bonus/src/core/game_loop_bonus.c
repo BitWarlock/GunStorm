@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:04:03 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/22 02:43:55 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/23 03:51:37 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static void	game_menu(t_game *gunstorm)
 
 static void	game_state(t_game *gunstorm)
 {
+	gunstorm->sky_offset += 0.3;
 	gun_up(gunstorm);
 	update_player_anim(gunstorm, &gunstorm->player_anim);
 	mlx_set_cursor_mode(gunstorm->mlx_data.mlx, MLX_MOUSE_HIDDEN);

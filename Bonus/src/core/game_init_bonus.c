@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 16:01:16 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/22 02:43:55 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/23 03:35:47 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static void	game_init_vars(t_game *gunstorm)
 	gunstorm->start_game = false;
 	gunstorm->menu = false;
 	gunstorm->frames = 0;
+	gunstorm->sky_offset = 0;
 }
 
 static mlx_image_t	*init_texture(char *path, mlx_t *mlx, t_game *gunstorm)
@@ -62,7 +63,7 @@ static void	game_init_mlx_assets(t_game *gunstorm, mlx_t *mlx)
 	mlx_image_to_window(mlx, menu, 0, 0);
 	mlx_image_to_window(mlx, welcome_screen, 0, 0);
 	mlx_set_cursor_mode(mlx, MLX_MOUSE_HIDDEN);
-	tex = mlx_load_png("./assets/sky.png");
+	tex = mlx_load_png("./assets/universe.png");
 	if (!tex)
 		(free_all(gunstorm)),
 			fatal_error("Asset failed to load", NULL);

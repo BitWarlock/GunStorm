@@ -70,7 +70,7 @@ define PRINT_LOADING
 	@printf "\n\033[2K\r$(GREEN)Compiling $*... $(RESET)\n"
 	@# Determine the sleep duration based on the file name
 	@if echo "$*" | grep -q "src/core/game_sound"; then \
-		sleep_duration=0.6; \
+		sleep_duration=0.7; \
 	else \
 		sleep_duration=0.001; \
 	fi; \

@@ -6,16 +6,16 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/22 05:53:50 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/23 03:54:27 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GUNSTORM_H
+#ifndef GUNSTORM_BONUS_H
 
-# define GUNSTORM_H
+# define GUNSTORM_BONUS_H
 
 # include "../../MLX42/include/MLX42/MLX42.h"
-# include "../libft/libft.h"
+# include "../../libft/libft.h"
 # include "miniaudio_types_bonus.h"
 # include <errno.h>
 # include <fcntl.h>
@@ -185,6 +185,7 @@ typedef struct s_game
 	bool			start_game;
 	bool			game_has_doors;
 	int				frames;
+	float			sky_offset;
 }					t_game;
 
 typedef struct s_thread
@@ -346,4 +347,4 @@ bool				is_space(char c);
 
 void				game_core(char *map_file);
 
-#endif // !GUNSTORM_H
+#endif // !GUNSTORM_BONUS_H

@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 03:14:18 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/22 02:44:15 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/23 03:54:50 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,8 @@ void	*draw_sky(void *arg)
 		while (y < HEIGHT / 2)
 		{
 			color = get_pixel_color(gunstorm->texture.sky,
-					(int)gunstorm->texture.sky->width, x, y);
+					(int)(gunstorm->texture.sky->width
+						+ gunstorm->sky_offset), x, y);
 			mlx_put_pixel(gunstorm->mlx_data.img, x, y, color);
 			y++;
 		}
