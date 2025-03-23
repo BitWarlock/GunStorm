@@ -2,7 +2,7 @@ NO ./assets/texture/brick1.png
 SO ./assets/texture/brick2.png
 WE ./assets/texture/brick3.png
 EA ./assets/texture/brick4.png
-F 1, 69 ,	22
+F 0, 9 ,	22
 C 127,206,238
 
         1111111111111111111111111      11111111111

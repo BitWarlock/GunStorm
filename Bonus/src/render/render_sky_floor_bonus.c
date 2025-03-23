@@ -6,24 +6,27 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 03:14:18 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/23 03:54:50 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/23 07:19:47 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/gunstorm_bonus.h"
 
-static int	rgba_color(t_rgb colors, int alpha, int y)
+static int	rgba_color(t_rgb colors, int y, bool shine)
 {
 	float	brightness;
 	float	distance_from_center;
 
 	distance_from_center = fabsf((HEIGHT * 0.5f) - (float)y) / (HEIGHT * 0.5f);
+	if (shine)
+		return (colors.r << 24 | colors.g << 16
+			| colors.b | 255);
 	brightness = distance_from_center * 1.0;
 	if (brightness < 0.2f)
 		brightness = 0.2f;
 	if (brightness > 1.0f)
 		brightness = 1.0f;
-	return (apply_brightness(colors, alpha, brightness));
+	return (apply_brightness(colors, 255, brightness));
 }
 
 void	*draw_floor(void *arg)
@@ -43,10 +46,10 @@ void	*draw_floor(void *arg)
 		{
 			if (y <= HEIGHT / 2)
 				mlx_put_pixel(gunstorm->mlx_data.img, x, y,
-					rgba_color(gunstorm->ceiling, 255, y));
+					rgba_color(gunstorm->ceiling, y, gunstorm->brightness));
 			else
 				mlx_put_pixel(gunstorm->mlx_data.img, x, y,
-					rgba_color(gunstorm->floor, 255, y));
+					rgba_color(gunstorm->floor, y, gunstorm->brightness));
 			y++;
 		}
 		x++;

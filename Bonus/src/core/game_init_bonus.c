@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 16:01:16 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/23 03:35:47 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/23 07:07:40 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static void	game_init_vars(t_game *gunstorm)
 	gunstorm->menu = false;
 	gunstorm->frames = 0;
 	gunstorm->sky_offset = 0;
+	gunstorm->brightness = false;
 }
 
 static mlx_image_t	*init_texture(char *path, mlx_t *mlx, t_game *gunstorm)

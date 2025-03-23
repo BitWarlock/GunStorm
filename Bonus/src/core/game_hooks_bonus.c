@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:42:54 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/23 03:46:13 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/23 07:13:24 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ void	game_hooks(mlx_key_data_t key, void *param)
 		gunstorm->player_anim.frames[current_frame]->enabled = true;
 		gunstorm->menu = !gunstorm->menu;
 	}
+	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_B))
+		gunstorm->brightness = !gunstorm->brightness;
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_LEFT))
 		gunstorm->player.angle -= 0.1;
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_RIGHT))

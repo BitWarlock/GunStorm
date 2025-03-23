@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:27:11 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/22 03:48:18 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/23 07:30:22 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,25 @@ static int	texture_pixel_dim(uint8_t *pixel, float ray_dist)
 		| (uint8_t)(pixel[2] * brightness) << 8 | pixel[3]);
 }
 
-int	texture_pixel_color(mlx_texture_t *texture,
-				int x, int y, float ray_dist)
+int	texture_pixel_color(mlx_texture_t *texture, int y,
+						t_raycaster *ray, bool brightness)
 {
+	int		x;
 	int		position;
 	uint8_t	*pixel;
 
+	x = ray->texture_x;
 	if (x < 0 || x >= (int)texture->width
 		|| y < 0 || y >= (int)texture->height)
 		return (0);
 	position = y * texture->width + x;
 	position *= texture->bytes_per_pixel;
 	pixel = &texture->pixels[position];
-	return (texture_pixel_dim(pixel, ray_dist));
+	if (brightness)
+		return (pixel[0] << 24
+			| pixel[1] << 16
+			| pixel[2] << 8 | pixel[3]);
+	return (texture_pixel_dim(pixel, ray->perp_wall));
 }
 
 static void	ray_texture_coords(t_raycaster *ray, mlx_texture_t *texture)
@@ -102,8 +108,8 @@ void	ray_render(t_game *gunstorm, t_raycaster *ray,
 			texture_y = texture->height - 1;
 		ray->texture_pos += ray->texture_step;
 		mlx_put_pixel(gunstorm->mlx_data.img, x, y,
-			texture_pixel_color(texture, ray->texture_x,
-				texture_y, ray->perp_wall));
+			texture_pixel_color(texture,
+				texture_y, ray, gunstorm->brightness));
 		y++;
 	}
 }

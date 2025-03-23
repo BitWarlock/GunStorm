@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:29 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/23 03:54:27 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/23 07:12:24 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,7 @@ typedef struct s_game
 	double			start_time;
 	float			move_speed;
 	bool			menu;
+	bool			brightness;
 	bool			start_game;
 	bool			game_has_doors;
 	int				frames;
@@ -260,8 +261,6 @@ size_t				map_width(t_map map);
 // GRAPHICS AND DRAWING
 // ======================
 
-int					texture_pixel_color(mlx_texture_t *texture, int x, int y,
-						float ray_dist);
 void				draw_player_icon(mlx_image_t *img, t_pair pos, int length,
 						float angle);
 void				rotate_and_translate_points(t_pair points[3], t_pair pos,
