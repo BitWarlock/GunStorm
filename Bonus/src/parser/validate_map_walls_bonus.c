@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:14 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/22 03:43:53 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/24 02:38:20 by agaladi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ static void	validate_player_access(t_game *gunstorm, t_map *map)
 				blocked_areas_warning();
 			if (map->rows[y][x] == 'x')
 				map->rows[y][x] = '0';
+			if (map->rows[y][x] == 'd')
+				map->rows[y][x] = 'D';
 			x++;
 		}
 		y++;

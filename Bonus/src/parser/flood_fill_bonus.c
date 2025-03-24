@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/22 02:44:10 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/24 02:38:49 by agaladi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static bool	is_invalid_cell(t_map *map, int x, int y)
 	char	cell;
 
 	cell = map->rows[y][x];
-	if (cell == '1' || cell == 'x')
+	if (cell == '1' || cell == 'x' || cell == 'd')
 		return (true);
 	if (cell != '0' && !player_char(cell)
 		&& cell != 'D')
@@ -74,6 +74,8 @@ void	flood_fill(t_game *gunstorm, t_map *map, int x, int y)
 			gunstorm, NULL);
 	if (map->rows[y][x] == '0')
 		map->rows[y][x] = 'x';
+	if (map->rows[y][x] == 'D')
+		map->rows[y][x] = 'd';
 	flood_fill(gunstorm, map, x - 1, y);
 	flood_fill(gunstorm, map, x + 1, y);
 	flood_fill(gunstorm, map, x, y - 1);

@@ -6,7 +6,7 @@
 /*   By: agaladi <agaladi@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:04:03 by agaladi           #+#    #+#             */
-/*   Updated: 2025/03/22 03:49:23 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/24 03:20:51 by agaladi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	door_open_close(t_map *map, t_game *gunstorm)
 	x = floor(gunstorm->player.position.x / CELL_SIZE);
 	y = floor(gunstorm->player.position.y / CELL_SIZE);
 	x += (int)round(gunstorm->cos_table[gunstorm->player.angle_degree]);
-	y -= (int)round(gunstorm->sin_table[gunstorm->player.angle_degree]);
+	y += (int)round(gunstorm->sin_table[gunstorm->player.angle_degree]);
 	if (map->rows[y][x] == 'D')
 		map->rows[y][x] = 'O';
 	else if (map->rows[y][x] == 'O')
@@ -81,7 +81,7 @@ bool	is_infront_door(t_map map, t_game *gunstorm)
 	x = floor(gunstorm->player.position.x / CELL_SIZE);
 	y = floor(gunstorm->player.position.y / CELL_SIZE);
 	x += (int)round(gunstorm->cos_table[gunstorm->player.angle_degree]);
-	y -= (int)round(gunstorm->sin_table[gunstorm->player.angle_degree]);
+	y += (int)round(gunstorm->sin_table[gunstorm->player.angle_degree]);
 	cell = map.rows[y][x];
 	return (cell == 'D' || cell == 'O');
 }

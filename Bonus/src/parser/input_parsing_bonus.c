@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 11:10:02 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/22 03:44:56 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/24 02:47:44 by agaladi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 static float	player_angle(char direction)
 {
 	if (direction == 'S')
-		return (3 * M_PI / 2);
-	if (direction == 'N')
 		return (M_PI / 2);
+	if (direction == 'N')
+		return (3 * M_PI / 2);
 	if (direction == 'W')
 		return (M_PI);
 	return (0);
