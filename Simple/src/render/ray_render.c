@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:27:11 by mrezki            #+#    #+#             */
-/*   Updated: 2025/03/18 21:55:12 by mrezki           ###   ########.fr       */
+/*   Updated: 2025/03/25 04:02:38 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static void	ray_texture_coords(t_raycaster *ray, mlx_texture_t *texture)
 		|| (ray->side == 1 && ray->ray_diry < 0))
 		texture_x = texture->width - texture_x - 1;
 	ray->texture_x = texture_x;
-	ray->texture_step = 1.0 * texture->height / ray->wall_height;
+	ray->texture_step = texture->height / ray->wall_height;
 	ray->texture_pos = (ray->wall_start - (float)HEIGHT / 2
 			+ ray->wall_height / 2) * ray->texture_step;
 }

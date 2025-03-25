@@ -42,9 +42,8 @@ B_SOURCES 		= src/parser/validate_colors_bonus.c src/parser/validate_identifiers
 				  src/render/minimap_bonus.c \
 				  src/render/draw_triangle_bonus.c src/render/player_animation_bonus.c \
 				  src/render/menu_and_door_bonus.c src/core/player_movement_bonus.c \
-				  src/core/game_init_bonus.c src/render/render_sky_floor_bonus.c
-
-SOUND_SOURCES	= Bonus/src/core/game_sound_bonus.c
+				  src/core/game_init_bonus.c src/render/render_sky_floor_bonus.c \
+				  src/core/game_sound_bonus.c
 
 MAIN_SOURCES	= $(addprefix Simple/, $(SOURCES))
 
@@ -57,8 +56,6 @@ B_OBJS_DIR		= b_objs
 MAIN_OBJ 		= $(addprefix $(OBJS_DIR)/, $(MAIN_SOURCES:.c=.o))
 
 BONUS_OBJ 		= $(addprefix $(B_OBJS_DIR)/, $(BONUS_SOURCES:.c=.o))
-
-SOUND_OBJ 		= $(addprefix $(OBJS_DIR)/, $(SOUND_SOURCES:.c=.o))
 
 HEADER 			= Simple/include/gunstorm.h
 
@@ -120,11 +117,6 @@ $(OBJS_DIR)/%.o: %.c $(HEADER) Makefile
 
 $(NAME): $(MAIN_OBJ) $(LIBFT)
 	@cc $^ MLX42/build/libmlx42.a $(MLXFLAGS) -o $@ $(CFLAGS)
-
-$(B_OBJS_DIR)/Bonus/src/core/game_sound_bonus.o: $(SOUND_SOURCES)
-	@mkdir -p $(dir $@)
-	$(PRINT_LOADING)
-	@cc -c $< -o $@ $(CFLAGS)
 
 $(B_OBJS_DIR)/%.o: %.c $(B_HEADER) Makefile
 	@mkdir -p $(dir $@)
