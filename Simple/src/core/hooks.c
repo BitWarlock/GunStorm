@@ -100,7 +100,7 @@ void	game_hooks(mlx_key_data_t key, void *param)
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(gunstorm->mlx_data.mlx);
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_LEFT))
-		gunstorm->player.angle -= 0.1;
+		gunstorm->player.angle -= 0.2;
 	if (mlx_is_key_down(gunstorm->mlx_data.mlx, MLX_KEY_RIGHT))
-		gunstorm->player.angle += 0.1;
+		gunstorm->player.angle += 0.2;
 }

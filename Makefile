@@ -9,7 +9,7 @@ PURPLE			= \033[38;5;92;1m
 BOLD			= \033[1m
 RESET			= \033[0m
 CFLAGS			= -Ofast -Wall -Wextra -Werror
-MLXFLAGS		= -lm -lpthread -lglfw
+MLXFLAGS		= -lm -lpthread -lglfw -L$(HOME)/.brew/lib
 NAME			= cub3D
 NAME2			= cub3D_BONUS
 LIB_DIR			= ./libft
@@ -67,7 +67,7 @@ define PRINT_LOADING
 	@printf "\n\033[2K\r$(GREEN)Compiling $*... $(RESET)\n"
 	@# Determine the sleep duration based on the file name
 	@if echo "$*" | grep -q "src/core/game_sound"; then \
-		sleep_duration=0.7; \
+		sleep_duration=0.9; \
 	else \
 		sleep_duration=0.001; \
 	fi; \
@@ -124,7 +124,7 @@ $(B_OBJS_DIR)/%.o: %.c $(B_HEADER) Makefile
 	@cc -c $< -o $@ $(CFLAGS)
 
 $(NAME2): $(BONUS_OBJ) $(SOUND_OBJ) $(LIBFT)
-	@cc $^ MLX42/build/libmlx42.a $(MLXFLAGS) -o $@ $(CFLAGS)
+	@cc $^ MLX42/build/libmlx42.a  $(MLXFLAGS) -o $@ $(CFLAGS)
 
 bonus: $(NAME2)
 	@printf "\n$(GREEN)"

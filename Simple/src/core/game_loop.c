@@ -17,7 +17,7 @@ void	game_fps(t_game *gunstorm)
 	float	fps;
 
 	fps = 1.0 / gunstorm->mlx_data.mlx->delta_time;
-	gunstorm->move_speed = gunstorm->mlx_data.mlx->delta_time * 50.0;
+	gunstorm->move_speed = gunstorm->mlx_data.mlx->delta_time * 80.0;
 	gunstorm->frames++;
 	if (mlx_get_time() - gunstorm->start_time >= 1)
 	{
